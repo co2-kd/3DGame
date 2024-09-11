@@ -172,6 +172,10 @@ private:
 	// ゲーム終了フラグ trueで終了する
 	bool			m_endFlag = false;
 
+	KdTexture Tex;
+	Math::Rectangle Rect;
+	Math::Color Color;
+	float angle = 0.0f;
 //=====================================================
 // シングルトンパターン
 //=====================================================

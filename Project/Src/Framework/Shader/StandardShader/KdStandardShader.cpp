@@ -31,6 +31,9 @@ void KdStandardShader::BeginLit()
 		KdShaderManager::Instance().SetPSConstantBuffer(2, m_cb2_Material.GetAddress());
 	}
 
+	//ボーン情報をセット（スキンメッシュ対応）
+	KdShaderManager::Instance().SetVSConstantBuffer(3, m_cb3_Bone.GetAddress());
+
 	// シャドウマップのテクスチャをセット
 	KdDirect3D::Instance().WorkDevContext()->PSSetShaderResources(10, 1, m_depthMapFromLightRTPack.m_RTTexture->WorkSRViewAddress());
 
@@ -98,6 +101,9 @@ void KdStandardShader::BeginGenerateDepthMapFromLight()
 		KdShaderManager::Instance().SetVSConstantBuffer(0, m_cb0_Obj.GetAddress());
 		KdShaderManager::Instance().SetVSConstantBuffer(1, m_cb1_Mesh.GetAddress());
 	}
+
+	//ボーン情報をセット（スキンメッシュ対応）
+	KdShaderManager::Instance().SetVSConstantBuffer(3, m_cb3_Bone.GetAddress());
 
 	if (KdShaderManager::Instance().SetPixelShader(m_PS_GenDepthFromLight))
 	{
@@ -178,19 +184,19 @@ void KdStandardShader::DrawModel(const KdModelData& rModel, const Math::Matrix& 
 	for (auto& nodeIdx : rModel.GetDrawMeshNodeIndices())
 	{
 		// 描画
-		DrawMesh(dataNodes[nodeIdx].m_spMesh.get(), dataNodes[nodeIdx].m_worldTransform * mWorld, 
+		DrawMesh(dataNodes[nodeIdx].m_spMesh.get(), dataNodes[nodeIdx].m_worldTransform * mWorld,
 			rModel.GetMaterials(), colRate, emissive);
 	}
 
 	// 定数に変更があった場合は自動的に初期状態に戻す
-	if(m_dirtyCBObj)
+	if (m_dirtyCBObj)
 	{
 		ResetCBObject();
 	}
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
-// モデルワークを描画（ダイナミック(アニメーションをしない)なモデルに対応
+// モデルワークを描画（ダイナミック(アニメーションをする)なモデルに対応
 // ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 // データに所属する全ての描画用メッシュをワークの3D行列に従って描画する
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -215,8 +221,36 @@ void KdStandardShader::DrawModel(KdModelWork& rModel, const Math::Matrix& mWorld
 		m_cb0_Obj.Write();
 	}
 
+	//オブジェクト単位の情報転送（スキンメッシュ対応）
+	SetIsSkinMeshObj(data->IsSkinMesh());
+	if (m_dirtyCBObj)
+	{
+		m_cb0_Obj.Write();
+	}
+
 	auto& workNodes = rModel.GetNodes();
 	auto& dataNodes = data->GetOriginalNodes();
+
+	//スキンメッシュモデルの場合：ボーン情報を書き込み（スキンメッシュ対応）
+	if (data->IsSkinMesh())
+	{
+		//ノード内からボーン情報を取得
+		for (auto&& nodeIdx : data->GetBoneNodeIndices())
+		{
+			if (nodeIdx >= KdStandardShader::maxboneNufferSize)
+			{
+				assert(0 && "転送できるボーンの上限数を超えました");
+				return;
+			}
+
+			auto& dataNode = dataNodes[nodeIdx];
+			auto& workNode = workNodes[nodeIdx];
+
+			m_cb3_Bone.Work().m_Bones[dataNode.m_boneIndex] = dataNode.m_boneInverseWorldMatrix * workNode.m_worldTransform;
+			m_cb3_Bone.Write();
+		}
+
+	}
 
 	// 全描画用メッシュノードを描画
 	for (auto& nodeIdx : data->GetDrawMeshNodeIndices())
@@ -398,6 +432,8 @@ bool KdStandardShader::Init()
 			{ "COLOR",    0, DXGI_FORMAT_R8G8B8A8_UNORM,		0, 20, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,		0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT,		0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "SKININDEX",  0, DXGI_FORMAT_R16G16B16A16_UINT,	0, 48, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "SKINWEIGHT",  0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 
 		// 頂点入力レイアウト作成
@@ -457,8 +493,8 @@ bool KdStandardShader::Init()
 			Release();
 			return false;
 		}
-	} 
-	
+	}
+
 	{
 #include "KdStandardShader_PS_UnLit.shaderInc"
 
@@ -474,6 +510,8 @@ bool KdStandardShader::Init()
 	m_cb0_Obj.Create();
 	m_cb1_Mesh.Create();
 	m_cb2_Material.Create();
+	//スキンメッシュ対応
+	m_cb3_Bone.Create();
 
 	std::shared_ptr<KdTexture> ds = std::make_shared<KdTexture>();
 	ds->CreateDepthStencil(1024, 1024);
@@ -503,7 +541,7 @@ void KdStandardShader::Release()
 	KdSafeRelease(m_VS_UnLit);
 
 	KdSafeRelease(m_inputLayout);
-	
+
 	KdSafeRelease(m_PS_Lit);
 	KdSafeRelease(m_PS_GenDepthFromLight);
 	KdSafeRelease(m_PS_UnLit);
@@ -511,6 +549,9 @@ void KdStandardShader::Release()
 	m_cb0_Obj.Release();
 	m_cb1_Mesh.Release();
 	m_cb2_Material.Release();
+
+	//スキンメッシュ対応
+	m_cb3_Bone.Release();
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////

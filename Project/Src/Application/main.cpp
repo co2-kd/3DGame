@@ -305,6 +305,8 @@ void Application::Execute()
 		//=========================================
 
 		m_fpsController.Update();
+		std::string titleBer = "仮" + std::to_string(m_fpsController.m_nowfps) + "fps";
+		SetWindowTextA(m_window.GetWndHandle(), titleBer.c_str());
 	}
 
 	//===================================================================
@@ -368,12 +370,14 @@ void Application::ImGuiProcess()
 	//===========================================================
 
 	// デバッグウィンドウ
-	//if (ImGui::Begin("Debug Window"))
-	//{
-	//	// FPS
-	//	ImGui::Text("FPS : %d", m_fpsController.m_nowfps);
-	//}
-	//ImGui::End();
+	if (ImGui::Begin("Debug Window"))
+	{
+		SceneManager::Instance().ImguiUpdate();
+		// FPS
+		ImGui::Text("FPS : %d", m_fpsController.m_nowfps);
+		//ImGui::SliderFloat((const char*)u8"画像角度:%.0f", &angle, 0, 360);
+	}
+	ImGui::End();
 
 	// ログウィンドウ
 	m_log.Draw("Log Window");

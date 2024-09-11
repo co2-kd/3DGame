@@ -86,6 +86,23 @@ public:
 		DrawTex(tex.lock().get(), x, y, tex.lock().get()->GetInfo().Width, tex.lock().get()->GetInfo().Height, srcRect, color, pivot);
 	}
 
+	// 2D画像描画(Begin～End間で実行すると、処理効率が上がる)
+	// ・tex			… 描画するテクスチャ(Texture)
+	// ・x				… x座標(ピクセル)
+	// ・y				… y座標(ピクセル)
+	// ・w				… w座標(ピクセル)
+	// ・h				… h座標(ピクセル)
+	// ・angle			… 描画する半径（float）
+	// ・srcRect		… 元画像のRECT nullptrで全体
+	// ・color			… 色(RGBA) nullptrで色はセットしない(前回の描画時の色が使用される)
+	// ・pivot			… 基準点 0.0～1.0の範囲で指定する
+	void DrawTexAnime(const KdTexture* tex, int x, int y, int w, int h, float angle, const Math::Rectangle* srcRect = nullptr, const Math::Color* color = &kWhiteColor, const Math::Vector2& pivot = { 0.5, 0.5f });
+	void DrawTexAnime(const KdTexture* tex, int x, int y, float angle, const Math::Rectangle* srcRect = nullptr, const Math::Color* color = &kWhiteColor, const Math::Vector2& pivot = { 0.5, 0.5f })
+	{
+		if (tex == nullptr)return;
+		DrawTexAnime(tex, x, y, srcRect->width, srcRect->height, angle, srcRect, color, pivot);
+	}
+
 	// 点を描画
 	// ・x				… 点のX座標
 	// ・y				… 点のY座標
@@ -142,6 +159,12 @@ private:
 	struct cbSprite {
 		Math::Matrix		mTransform;
 		Math::Vector4		Color = { 1, 1, 1, 1 };
+		float				Angle = 0;//円形描画用角度
+
+		//シェーダの仕様上、定数バッファは16バイトアライメント(16の倍数)にする必要がある
+		//詳細：https://kakashibata.hatenablog.jp/entry/2019/12/09/004655
+		//以下書かないと描画してくれないので書いてください。
+		float dummy[3] = { 0,0,0 };
 	};
 	KdConstantBuffer<cbSprite>	m_cb0;
 

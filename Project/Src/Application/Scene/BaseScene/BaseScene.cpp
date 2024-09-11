@@ -1,4 +1,5 @@
 ﻿#include "BaseScene.h"
+#include"../../main.h"
 
 void BaseScene::PreUpdate()
 {
@@ -45,6 +46,7 @@ void BaseScene::PostUpdate()
 	{
 		obj->PostUpdate();
 	}
+
 }
 
 void BaseScene::PreDraw()
@@ -128,6 +130,14 @@ void BaseScene::DrawDebug()
 		}
 	}
 	KdShaderManager::Instance().m_StandardShader.EndUnLit();
+}
+
+void BaseScene::ImguiUpdate()
+{
+	for (auto& obj : m_objList)
+	{
+		obj->ImguiUpdate();
+	}
 }
 
 void BaseScene::Event()

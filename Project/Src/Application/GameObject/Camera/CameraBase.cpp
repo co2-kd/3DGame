@@ -10,18 +10,19 @@ void CameraBase::Init()
 	m_FixMousePos.x = 640;
 	m_FixMousePos.y = 360;
 }
-
-void CameraBase::Update()
-{
-	if (!m_spCamera) { return; }
-
-	m_spCamera->SetCameraMatrix(m_mWorld);
-}
+//
+//void CameraBase::Update()
+//{
+//	if (!m_spCamera) { return; }
+//
+//	m_spCamera->SetCameraMatrix(m_mWorld);
+//}
 
 void CameraBase::PreDraw()
 {
 	if (!m_spCamera) { return; }
 
+	m_spCamera->SetCameraMatrix(m_mWorld);
 	m_spCamera->SetToShader();
 }
 
@@ -45,8 +46,16 @@ void CameraBase::UpdateRotateByMouse()
 	SetCursorPos(m_FixMousePos.x, m_FixMousePos.y);
 
 	// 実際にカメラを回転させる処理(0.15はただの補正値)
-	m_DegAng.x += _mouseMove.y * 0.15f;
-	m_DegAng.y += _mouseMove.x * 0.15f;
+	if(GetAsyncKeyState(VK_CONTROL))
+	{
+		m_DegAng.x += _mouseMove.y * 0.03f;
+		m_DegAng.y += _mouseMove.x * 0.03f;
+	}
+	else
+	{
+		m_DegAng.x += _mouseMove.y * 0.15f;
+		m_DegAng.y += _mouseMove.x * 0.15f;
+	}
 
 	// 回転制御
 	m_DegAng.x = std::clamp(m_DegAng.x, -45.f, 45.f);

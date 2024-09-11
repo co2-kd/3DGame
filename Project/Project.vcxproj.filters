@@ -82,6 +82,21 @@
     <Filter Include="Src\Application\GameObject\Camera\TPSCamera">
       <UniqueIdentifier>{c8cf7720-4d00-4c0b-a1cf-bc64280b295f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Ground">
+      <UniqueIdentifier>{62dc0c73-548d-4454-aced-a5b2ed45b02f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara">
+      <UniqueIdentifier>{a052ff01-ee42-4bf7-ba30-09e56d986636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Player">
+      <UniqueIdentifier>{0f520c61-8e49-47b8-bf74-46b025a3913c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy">
+      <UniqueIdentifier>{8bead235-239d-4397-baf9-b192707324d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Back">
+      <UniqueIdentifier>{fcfa478b-2a77-4c82-8118-02ee79d140e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -258,6 +273,21 @@
     <ClInclude Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.h">
       <Filter>Src\Application\GameObject\Camera\FPSCamera</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Ground\Ground.h">
+      <Filter>Src\Application\GameObject\Ground</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\CharaBase.h">
+      <Filter>Src\Application\GameObject\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Player\Player.h">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Enemy.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Back\Back.h">
+      <Filter>Src\Application\GameObject\Back</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -406,6 +436,21 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.cpp">
       <Filter>Src\Application\GameObject\Camera\FPSCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Ground\Ground.cpp">
+      <Filter>Src\Application\GameObject\Ground</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\CharaBase.cpp">
+      <Filter>Src\Application\GameObject\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Player\Player.cpp">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Enemy.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Back\Back.cpp">
+      <Filter>Src\Application\GameObject\Back</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

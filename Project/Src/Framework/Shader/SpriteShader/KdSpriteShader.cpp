@@ -199,6 +199,72 @@ void KdSpriteShader::DrawTex(const KdTexture* tex, int x, int y, int w, int h, c
 	if (!bBgn)End();
 }
 
+void KdSpriteShader::DrawTexAnime(const KdTexture* tex, int x, int y, int w, int h, float angle, const Math::Rectangle* srcRect, const Math::Color* color, const Math::Vector2& pivot)
+{
+	if (tex == nullptr)return;
+
+	if (angle >= 360)return;
+
+	// もし開始していない場合は開始する(最後にEnd())
+	bool bBgn = m_isBegin;
+	if (!bBgn)Begin();
+
+	// テクスチャ(ShaderResourceView)セット
+	KdDirect3D::Instance().WorkDevContext()->PSSetShaderResources(0, 1, tex->WorkSRViewAddress());
+
+	// 色
+	if (color) {
+		m_cb0.Work().Color = *color;
+	}
+	float m_angle = DirectX::XMConvertToRadians(angle);
+	m_cb0.Work().Angle = m_angle;
+	m_cb0.Write();
+
+	// UV
+	Math::Vector2 uvMin = { 0, 0 };
+	Math::Vector2 uvMax = { 1, 1 };
+	if (srcRect)
+	{
+		uvMin.x = srcRect->x / (float)tex->GetInfo().Width;
+		uvMin.y = srcRect->y / (float)tex->GetInfo().Height;
+
+		uvMax.x = (srcRect->x + srcRect->width) / (float)tex->GetInfo().Width;
+		uvMax.y = (srcRect->y + srcRect->height) / (float)tex->GetInfo().Height;
+	}
+
+	// 頂点作成
+	float x1 = (float)x;
+	float y1 = (float)y;
+	float x2 = (float)(x + w);
+	float y2 = (float)(y + h);
+
+	// 基準点(Pivot)ぶんずらす
+	x1 -= pivot.x * w;
+	x2 -= pivot.x * w;
+	y1 -= pivot.y * h;
+	y2 -= pivot.y * h;
+
+	Vertex vertex[] = {
+		{ {x1, y1, 0},	{uvMin.x, uvMax.y} },
+		{ {x1, y2, 0},	{uvMin.x, uvMin.y} },
+		{ {x2, y1, 0},	{uvMax.x, uvMax.y} },
+		{ {x2, y2, 0},	{uvMax.x, uvMin.y} }
+
+	};
+
+	// 描画
+	KdDirect3D::Instance().DrawVertices(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, 4, vertex, sizeof(Vertex));
+
+	// セットしたテクスチャを解除しておく
+	ID3D11ShaderResourceView* srv = nullptr;
+	KdDirect3D::Instance().WorkDevContext()->PSSetShaderResources(0, 1, &srv);
+
+	m_cb0.Work().Angle = 0.0f;
+
+	// この関数でBeginした場合は、Endしておく
+	if (!bBgn)End();
+}
+
 void KdSpriteShader::DrawPoint(int x, int y, const Math::Color* color)
 {
 	// もし開始していない場合は開始する(最後にEnd())

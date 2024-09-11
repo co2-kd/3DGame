@@ -1,4 +1,5 @@
 ﻿#include "SceneManager.h"
+#include"../main.h"
 
 #include "BaseScene/BaseScene.h"
 #include "TitleScene/TitleScene.h"
@@ -18,6 +19,8 @@ void SceneManager::PreUpdate()
 void SceneManager::Update()
 {
 	m_currentScene->Update();
+	Application::Instance().m_log.Clear();
+	Application::Instance().m_log.AddLog("SceneType%d\n", m_currentSceneType);
 }
 
 void SceneManager::PostUpdate()
@@ -53,6 +56,11 @@ const std::list<std::shared_ptr<KdGameObject>>& SceneManager::GetObjList()
 void SceneManager::AddObject(const std::shared_ptr<KdGameObject>& obj)
 {
 	m_currentScene->AddObject(obj);
+}
+
+void SceneManager::ImguiUpdate()
+{
+	m_currentScene->ImguiUpdate();
 }
 
 void SceneManager::ChangeScene(SceneType sceneType)

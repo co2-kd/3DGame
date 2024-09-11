@@ -3,6 +3,7 @@ cbuffer cbSprite : register(b0)
 {
     row_major float4x4  g_mTransform;    // 変換行列
     float4              g_color;
+    float               g_angle;
 };
 
 cbuffer cbProjection : register(b1)
