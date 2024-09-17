@@ -6,7 +6,7 @@ void TPSCamera::Init()
 	CameraBase::Init();
 
 	// 注視点
-	m_mLocalPos = Math::Matrix::CreateTranslation(0, 4.0f, -10.0f);
+	m_mLocalPos = Math::Matrix::CreateTranslation(0, 3.0f, -8.0f);
 
 	SetCursorPos(m_FixMousePos.x, m_FixMousePos.y);
 }

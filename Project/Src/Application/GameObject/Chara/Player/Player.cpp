@@ -1,9 +1,8 @@
 ﻿#include "Player.h"
-
 #include "../../../main.h"
 #include"../../Camera/CameraBase.h"
 
-
+//初期化
 void Player::Init()
 {
 	if (!m_spModel)
@@ -16,15 +15,18 @@ void Player::Init()
 
 		//初期のアニメ―ション
 		m_spAnimator = std::make_shared<KdAnimator>();
-		m_spAnimator->SetAnimation(m_spModel->GetData()->GetAnimation("Idle"),true);
 
 	}
 
 	m_boostbackTex.Load("Asset/Textures/boost_bar_back.png");
 	m_boostflontTex.Load("Asset/Textures/boost_bar_flont.png");
 	m_boostTex.Load("Asset/Textures/boost_bar2.png");
+
+	//初期状態を「待機状態」へ設定
+	ChangeActionState(std::make_shared<ActionIdle>());
 }
 
+//更新
 void Player::Update()
 {
 
@@ -39,44 +41,50 @@ void Player::Update()
 	}
 	m_moveVec = Math::Vector3::Zero;
 
-	//ドライブブースト
-	if (GetAsyncKeyState(VK_CONTROL))
+	//現在の状態の更新呼び出し
+	if (m_nowAction)
 	{
-
-		waitdrivetime--;
-		if (waitdrivetime<=0)
-		{
-			waitdrivetime = 0;
-		}
-		if (waitdrivetime <= 0)
-		{
-			if (!m_driveFlg)
-			{
-				m_drivespeed = m_drivespeedPow;
-
-				m_driveFlg = true;
-			}
-			else
-			{
-				m_driveboostspeed = m_driveboostspeedPow;
-				if (m_drivespeed > 0)
-				{
-					m_drivespeed -= 1.0f;
-				}
-			}
-		}
-		m_moveVec.z = 1.0f;
-
-		m_speed = m_drivespeed + m_driveboostspeed + 0.01f;
-
-		//ブースト回復
-		if (m_boostgauge < m_boostgaugeMax)
-		{
-			m_boostgauge += 1;
-		}
+		m_nowAction->Update(*this);
 	}
+
+	//ドライブブースト
+	//if (GetAsyncKeyState(VK_CONTROL))
+	//{
+
+	//	waitdrivetime--;
+	//	if (waitdrivetime<=0)
+	//	{
+	//		waitdrivetime = 0;
+	//	}
+	//	if (waitdrivetime <= 0)
+	//	{
+	//		if (!m_driveFlg)
+	//		{
+	//			m_drivespeed = m_drivespeedPow;
+
+	//			m_driveFlg = true;
+	//		}
+	//		else
+	//		{
+	//			m_driveboostspeed = m_driveboostspeedPow;
+	//			if (m_drivespeed > 0)
+	//			{
+	//				m_drivespeed -= 1.0f;
+	//			}
+	//		}
+	//	}
+	//	m_moveVec.z = 1.0f;
+
+	//	m_speed = m_drivespeed + m_driveboostspeed + 0.01f;
+
+	//	//ブースト回復
+	//	if (m_boostgauge < m_boostgaugeMax)
+	//	{
+	//		m_boostgauge += 1;
+	//	}
+	//}
 	//非ドライブブースト
-	else
+	//else
 	{
 		waitdrivetime = 60;
 		m_driveFlg = false;
@@ -89,84 +97,84 @@ void Player::Update()
 
 
 
-		if (GetAsyncKeyState('D')) { m_moveVec.x = 1.0f; }
-		if (GetAsyncKeyState('A')) { m_moveVec.x = -1.0f; }
-		if (GetAsyncKeyState('W')) { m_moveVec.z = 1.0f; }
-		if (GetAsyncKeyState('S')) { m_moveVec.z = -1.0f; }
-		m_speed = m_hoverspeed;
+		//if (GetAsyncKeyState('D')) { m_moveVec.x += 1.0f; }
+		//if (GetAsyncKeyState('A')) { m_moveVec.x += -1.0f; }
+		//if (GetAsyncKeyState('W')) { m_moveVec.z += 1.0f; }
+		//if (GetAsyncKeyState('S')) { m_moveVec.z += -1.0f; }
+		//m_speed = m_hoverspeed;
 
-		//ステップ・ブースト
-		if (GetAsyncKeyState(VK_SHIFT) && !m_overheatFlg)
-		{
-			if (!m_stepFlg)
-			{
-				m_stepspeed = m_stepspeedPow;
+		////ステップ・ブースト
+		//if (GetAsyncKeyState(VK_SHIFT) && !m_overheatFlg)
+		//{
+		//	if (!m_stepFlg)
+		//	{
+		//		m_stepspeed = m_stepspeedPow;
 
-				//ブースト消費
-				if (m_boostgauge > 0)
-				{
-					m_boostgauge -= 50;
-					m_boostFlg = true;
-				}
-				m_stepFlg = true;
-			}
-			else
-			{
-				m_boostspeed = m_boostspeedPow;
-				if (m_stepspeed > 0)
-				{
-					m_stepspeed -= 0.5f;
-				}
+		//		//ブースト消費
+		//		if (m_boostgauge > 0)
+		//		{
+		//			m_boostgauge -= 50;
+		//			m_boostFlg = true;
+		//		}
+		//		m_stepFlg = true;
+		//	}
+		//	else
+		//	{
+		//		m_boostspeed = m_boostspeedPow;
+		//		if (m_stepspeed > 0)
+		//		{
+		//			m_stepspeed -= 0.5f;
+		//		}
 
-				//ブースト消費
-				if (m_boostgauge > 0)
-				{
-					m_boostgauge -= 1;
-					m_boostFlg = true;
-				}
-			}
-			m_speed = m_stepspeed + m_boostspeed;
-		}
-		else
-		{
-			m_stepFlg = false;
-			if (m_stepspeed > 0)
-			{
-				m_stepspeed -= 0.5f;
-			}
-			if (m_boostspeed > 0)
-			{
-				m_boostspeed -= 0.05f;
-			}
-			m_speed = m_stepspeed + m_boostspeed + m_hoverspeed;
-		}
+		//		//ブースト消費
+		//		if (m_boostgauge > 0)
+		//		{
+		//			m_boostgauge -= 1;
+		//			m_boostFlg = true;
+		//		}
+		//	}
+		//	m_speed = m_stepspeed + m_boostspeed;
+		//}
+		//else
+		//{
+		//	m_stepFlg = false;
+		//	if (m_stepspeed > 0)
+		//	{
+		//		m_stepspeed -= 0.5f;
+		//	}
+		//	if (m_boostspeed > 0)
+		//	{
+		//		m_boostspeed -= 0.05f;
+		//	}
+		//	m_speed = m_stepspeed + m_boostspeed + m_hoverspeed;
+		//}
 
-		//ジャンプ
-		if (GetAsyncKeyState(VK_SPACE) && !m_overheatFlg)
-		{
-			if (m_jumpspeed <= m_jumpspeedMax)
-			{
-				m_jumpspeed += m_jumpspeedPow;
-			}
+		////ジャンプ
+		//if (GetAsyncKeyState(VK_SPACE) && !m_overheatFlg)
+		//{
+		//	if (m_jumpspeed <= m_jumpspeedMax)
+		//	{
+		//		m_jumpspeed += m_jumpspeedPow;
+		//	}
 
-			//ブースト消費
-			if (m_boostgauge > 0)
-			{
-				m_boostgauge -= 1;
-				m_boostFlg = true;
-			}
-			m_gravity = -m_jumpspeed;
-		}
-		else
-		{
-			if (m_jumpspeed >= 0)
-			{
-				m_jumpspeed -= m_jumpspeedPow / 5;
-			}
+		//	//ブースト消費
+		//	if (m_boostgauge > 0)
+		//	{
+		//		m_boostgauge -= 1;
+		//		m_boostFlg = true;
+		//	}
+		//	m_gravity = -m_jumpspeed;
+		//}
+		//else
+		//{
+		//	if (m_jumpspeed >= 0)
+		//	{
+		//		m_jumpspeed -= m_jumpspeedPow / 5;
+		//	}
 
-		}
+		//}
 	}
-
+	//カメラ取得
 	const std::shared_ptr<const CameraBase> _spCamera = m_wpCamera.lock();
 	if (_spCamera)
 	{
@@ -182,14 +190,12 @@ void Player::Update()
 
 	// キャラクターのワールド行列を創る処理
 	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
-	m_mWorld = Math::Matrix::CreateScale(0.3) * _rotation * Math::Matrix::CreateTranslation(m_pos);
-
-	// キャラクターの座標が確定してからコリジョンによる位置補正を行う
-	UpdateCollision();
+	m_mWorld = Math::Matrix::CreateScale(0.2) * _rotation * Math::Matrix::CreateTranslation(m_pos);
 
 
 }
 
+//後更新
 void Player::PostUpdate()
 {
 
@@ -221,16 +227,20 @@ void Player::PostUpdate()
 		{
 			if (m_boostgauge < m_boostgaugeMax)
 			{
-				m_boostgauge += 3;
+				m_boostgauge += 2;
 			}
 		}
 	}
+
+	// キャラクターの座標が確定してからコリジョンによる位置補正を行う
+	UpdateCollision();
 
 	//アニメーションの更新
 	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
 	m_spModel->CalcNodeMatrices();
 }
 
+//モデル描画
 void Player::DrawLit()
 {
 	if (!m_spModel) return;
@@ -238,6 +248,7 @@ void Player::DrawLit()
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
+//影描画
 void Player::GenerateDepthMapFromLight()
 {
 	if (!m_spModel) return;
@@ -245,6 +256,7 @@ void Player::GenerateDepthMapFromLight()
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
+//画像描画
 void Player::DrawSprite()
 {
 	m_boostbackRc = { 0,0,500,100 };
@@ -260,12 +272,15 @@ void Player::DrawSprite()
 
 }
 
+//imguiの更新
 void Player::ImguiUpdate()
 {
 	ImGui::Text("boostgauge : %d", m_boostgauge);
 	ImGui::Text("overhert : %d", m_overheatFlg);
+	ImGui::Text("NowAction : %s", *m_nowAction);
 }
 
+//カメラから見た移動方向に向く処理
 void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 {
 	// 何も入力が無い場合は処理しない
@@ -301,6 +316,7 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 	m_worldRot.y += rotateAng;
 }
 
+//当たり判定
 void Player::UpdateCollision()
 {
 	// 地面判定
@@ -384,4 +400,240 @@ void Player::UpdateCollision()
 			}
 		}
 	}
+}
+
+void Player::UpdateJump()
+{
+	//ジャンプ
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !m_overheatFlg)
+	{
+		if (m_jumpFlg = false)
+		{
+			m_jumpspeed = -m_gravity;
+			m_jumpFlg = true;
+		}
+
+		if (m_jumpspeed <= m_jumpspeedMax)
+		{
+			m_jumpspeed += m_jumpspeedPow;
+		}
+
+		//ブースト消費
+		if (m_boostgauge > 0)
+		{
+			m_boostgauge -= 3;
+			m_boostFlg = true;
+		}
+		m_gravity = -m_jumpspeed;
+	}
+	else
+	{
+		m_jumpspeed = 0;
+		m_jumpFlg = false;
+	}
+}
+
+//---------------------------------------------------------------------------------------
+//ここから下はステートパターン関係
+//---------------------------------------------------------------------------------------
+void Player::ChangeActionState(std::shared_ptr<ActionStateBase> nextState)
+{
+	if (m_nowAction)m_nowAction->Exit(*this);
+	m_nowAction = nextState;
+	m_nowAction->Enter(*this);
+}
+//待機状態
+void Player::ActionIdle::Enter(Player& owner)
+{
+	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Idle"), true);
+}
+
+void Player::ActionIdle::Update(Player& owner)
+{
+	if (GetAsyncKeyState('D') || GetAsyncKeyState('A') || GetAsyncKeyState('W') || GetAsyncKeyState('S'))
+	{
+		owner.ChangeActionState(std::make_shared<ActionMove>());
+		return;
+	}
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
+	{
+		owner.ChangeActionState(std::make_shared<ActionJump>());
+		return;
+	}
+}
+
+void Player::ActionIdle::Exit(Player& owner)
+{
+}
+
+void Player::ActionJump::Enter(Player& owner)
+{
+
+	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Jump"), false);
+}
+
+void Player::ActionJump::Update(Player& owner)
+{
+
+	//ジャンプ
+	owner.UpdateJump();
+
+
+	if (GetAsyncKeyState('D') || GetAsyncKeyState('A') || GetAsyncKeyState('W') || GetAsyncKeyState('S'))
+	{
+		owner.ChangeActionState(std::make_shared<ActionMove>());
+		return;
+	}
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
+	{
+		
+	}
+	else
+	{
+		owner.ChangeActionState(std::make_shared<ActionIdle>());
+		return;
+	}
+}
+
+void Player::ActionJump::Exit(Player& owner)
+{
+}
+
+void Player::ActionMove::Enter(Player& owner)
+{
+	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Forward"),false);
+}
+
+void Player::ActionMove::Update(Player& owner)
+{
+
+	//ジャンプ
+	owner.UpdateJump();
+
+	if (GetAsyncKeyState('D')) { owner.m_moveVec.x += 1.0f; }
+	if (GetAsyncKeyState('A')) { owner.m_moveVec.x += -1.0f; }
+	if (GetAsyncKeyState('W')) { owner.m_moveVec.z += 1.0f; }
+	if (GetAsyncKeyState('S')) { owner.m_moveVec.z += -1.0f; }
+
+	if (owner.m_moveVec.LengthSquared() == 0)
+	{
+		owner.ChangeActionState(std::make_shared<ActionIdle>());
+		return;
+	}
+
+	owner.m_speed = owner.m_hoverspeed;
+
+
+}
+
+void Player::ActionMove::Exit(Player& owner)
+{
+}
+
+void Player::ActionStep::Enter(Player& owner)
+{
+	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Idle"), true);
+}
+
+void Player::ActionStep::Update(Player& owner)
+{
+	//ステップ・ブースト
+	if (GetAsyncKeyState(VK_SHIFT) && !owner.m_overheatFlg)
+	{
+		if (!owner.m_stepFlg)
+		{
+			owner.m_stepspeed = owner.m_stepspeedPow;
+
+			//ブースト消費
+			if (owner.m_boostgauge > 0)
+			{
+				owner.m_boostgauge -= 50;
+				owner.m_boostFlg = true;
+			}
+			owner.m_stepFlg = true;
+		}
+		else
+		{
+			owner.m_boostspeed = owner.m_boostspeedPow;
+			if (owner.m_stepspeed > 0)
+			{
+				owner.m_stepspeed -= 0.5f;
+			}
+
+			//ブースト消費
+			if (owner.m_boostgauge > 0)
+			{
+				owner.m_boostgauge -= 1;
+				owner.m_boostFlg = true;
+			}
+		}
+		owner.m_speed = owner.m_stepspeed + owner.m_boostspeed;
+	}
+	else
+	{
+		owner.m_stepFlg = false;
+		if (owner.m_stepspeed > 0)
+		{
+			owner.m_stepspeed -= 0.5f;
+		}
+		if (owner.m_boostspeed > 0)
+		{
+			owner.m_boostspeed -= 0.05f;
+		}
+		owner.m_speed = owner.m_stepspeed + owner.m_boostspeed + owner.m_hoverspeed;
+	}
+}
+
+void Player::ActionStep::Exit(Player& owner)
+{
+}
+
+void Player::ActionDrive::Enter(Player& owner)
+{
+	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Idle"), true);
+}
+
+void Player::ActionDrive::Update(Player& owner)
+{
+	if (GetAsyncKeyState(VK_CONTROL))
+	{
+
+		owner.waitdrivetime--;
+		if (owner.waitdrivetime <= 0)
+		{
+			owner.waitdrivetime = 0;
+		}
+		if (owner.waitdrivetime <= 0)
+		{
+			if (!owner.m_driveFlg)
+			{
+				owner.m_drivespeed = owner.m_drivespeedPow;
+
+				owner.m_driveFlg = true;
+			}
+			else
+			{
+				owner.m_driveboostspeed = owner.m_driveboostspeedPow;
+				if (owner.m_drivespeed > 0)
+				{
+					owner.m_drivespeed -= 1.0f;
+				}
+			}
+		}
+		owner.m_moveVec.z = 1.0f;
+
+		owner.m_speed = owner.m_drivespeed + owner.m_driveboostspeed + 0.01f;
+
+		//ブースト回復
+		if (owner.m_boostgauge < owner.m_boostgaugeMax)
+		{
+			owner.m_boostgauge += 1;
+		}
+	}
+}
+
+void Player::ActionDrive::Exit(Player& owner)
+{
 }

@@ -31,7 +31,7 @@
 			"translation":[
 				0,
 				0,
-				-1.52587890625e-05
+				-3.0517578125e-05
 			]
 		},
 		{
@@ -163,6 +163,49 @@
 					"input":27,
 					"interpolation":"STEP",
 					"output":29
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":4,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":4,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":4,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"Jump",
+			"samplers":[
+				{
+					"input":30,
+					"interpolation":"LINEAR",
+					"output":31
+				},
+				{
+					"input":32,
+					"interpolation":"STEP",
+					"output":33
+				},
+				{
+					"input":32,
+					"interpolation":"STEP",
+					"output":34
 				}
 			]
 		}
@@ -523,6 +566,48 @@
 			"componentType":5126,
 			"count":2,
 			"type":"VEC3"
+		},
+		{
+			"bufferView":30,
+			"componentType":5126,
+			"count":20,
+			"max":[
+				0.6666666666666666
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":31,
+			"componentType":5126,
+			"count":20,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":32,
+			"componentType":5126,
+			"count":2,
+			"max":[
+				0.6666666666666666
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":33,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":34,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -695,6 +780,31 @@
 			"buffer":0,
 			"byteLength":24,
 			"byteOffset":61856
+		},
+		{
+			"buffer":0,
+			"byteLength":80,
+			"byteOffset":61880
+		},
+		{
+			"buffer":0,
+			"byteLength":240,
+			"byteOffset":61960
+		},
+		{
+			"buffer":0,
+			"byteLength":8,
+			"byteOffset":62200
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":62208
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":62240
 		}
 	],
 	"samplers":[
@@ -705,7 +815,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":61880,
+			"byteLength":62264,
 			"uri":"Player3.bin"
 		}
 	]

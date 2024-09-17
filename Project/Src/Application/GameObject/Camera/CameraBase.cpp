@@ -10,13 +10,13 @@ void CameraBase::Init()
 	m_FixMousePos.x = 640;
 	m_FixMousePos.y = 360;
 }
-//
-//void CameraBase::Update()
-//{
-//	if (!m_spCamera) { return; }
-//
-//	m_spCamera->SetCameraMatrix(m_mWorld);
-//}
+
+void CameraBase::Update()
+{
+	if (!m_spCamera) { return; }
+
+	m_spCamera->SetCameraMatrix(m_mWorld);
+}
 
 void CameraBase::PreDraw()
 {

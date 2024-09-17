@@ -4,14 +4,6 @@ class CameraBase;
 class Player : public KdGameObject
 {
 public:
-	enum DirType
-	{
-		Up = 1 << 0,		//上
-		Down = 1 << 1,	//下
-		Left = 1 << 2,	//左
-		Right = 1 << 3,	//右
-		None = 1 << 4
-	};
 
 	Player()						{}
 	~Player()			override	{}
@@ -43,6 +35,8 @@ private:
 	// 衝突判定とそれに伴う座標の更新
 	void UpdateCollision();
 
+	void UpdateJump();
+
 	KdTexture m_boostTex;
 	KdTexture m_boostbackTex;
 	KdTexture m_boostflontTex;
@@ -66,15 +60,16 @@ private:
 	Math::Vector3 m_pos = Math::Vector3::Zero;
 
 	float m_gravity = 0;
-	const float m_gravityPow = 0.2f;
-	const float m_gravityMax = 10.0f;
+	const float m_gravityPow = 0.15f;
+	const float m_gravityMax = 5.0f;
 
 	//ホバー
 	const float m_hoverspeed = 0.6f;
 	
 	//ジャンプ
+	bool m_jumpFlg = false;
 	float m_jumpspeed = 0;
-	const float m_jumpspeedPow = 3.0f;
+	const float m_jumpspeedPow = 0.3f;
 	const float m_jumpspeedMax = 3.0f;
 
 	//ステップ・ブースト
@@ -105,4 +100,77 @@ private:
 	bool m_overheatFlg = false;
 
 	bool m_boostFlg = false;
+
+
+//ステートパターン関係
+private:
+	class ActionStateBase
+	{
+	public:
+		virtual ~ActionStateBase() {}
+
+		virtual void Enter(Player& owner) {}
+		virtual void Update(Player& owner) {}
+		virtual void Exit(Player& owner) {}
+	};
+	
+	//待機状態
+	class ActionIdle : public ActionStateBase
+	{
+	public:
+		~ActionIdle() {}
+
+		void Enter(Player& owner) override;
+		void Update(Player& owner) override;
+		void Exit(Player& owner) override;
+	};
+
+	//ジャンプ状態
+	class ActionJump : public ActionStateBase
+	{
+	public:
+		~ActionJump() {}
+
+		void Enter(Player& owner) override;
+		void Update(Player& owner) override;
+		void Exit(Player& owner) override;
+	};
+
+	//前進状態
+	class ActionMove : public ActionStateBase
+	{
+	public:
+		~ActionMove() {}
+
+		void Enter(Player& owner) override;
+		void Update(Player& owner) override;
+		void Exit(Player& owner) override;
+	};
+
+	//ステップ状態
+	class ActionStep : public ActionStateBase
+	{
+	public:
+		~ActionStep() {}
+
+		void Enter(Player& owner) override;
+		void Update(Player& owner) override;
+		void Exit(Player& owner) override;
+	};
+
+	//ドライブブースト状態
+	class ActionDrive : public ActionStateBase
+	{
+	public:
+		~ActionDrive() {}
+
+		void Enter(Player& owner) override;
+		void Update(Player& owner) override;
+		void Exit(Player& owner) override;
+	};
+
+
+	void ChangeActionState(std::shared_ptr<ActionStateBase> nextState);
+	std::shared_ptr<ActionStateBase> m_nowAction = nullptr;
+
 };

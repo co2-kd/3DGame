@@ -7,7 +7,7 @@ public:
 	virtual ~CameraBase()	override	{}
 
 	void Init()				override;
-	//void Update()			override;
+	void Update()			override;
 	void PreDraw()			override;
 
 	void SetTarget(const std::shared_ptr<KdGameObject>& target);

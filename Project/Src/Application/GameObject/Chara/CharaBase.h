@@ -6,8 +6,8 @@ public:
 	CharaBase() {}
 	virtual ~CharaBase()override {}
 
-	void DrawLit()override;
-	void GenerateDepthMapFromLight()override;
+	virtual void DrawLit()override;
+	virtual void GenerateDepthMapFromLight()override;
 
 protected:
 	//モデル情報
