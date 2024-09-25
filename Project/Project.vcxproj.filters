@@ -288,6 +288,9 @@
     <ClInclude Include="Src\Application\GameObject\Back\Back.h">
       <Filter>Src\Application\GameObject\Back</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Battery.h">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -451,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Back\Back.cpp">
       <Filter>Src\Application\GameObject\Back</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Battery.cpp">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

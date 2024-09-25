@@ -1,7 +1,9 @@
 ﻿#pragma once
+#include"../CharaBase.h"
 
 class CameraBase;
-class Player : public KdGameObject
+class Player_Battery;
+class Player : public CharaBase
 {
 public:
 
@@ -12,12 +14,13 @@ public:
 	void Update()			override;
 	void PostUpdate()		override;
 
-	void DrawLit()			override;
-	void GenerateDepthMapFromLight() override;
+	//void DrawLit()			override;
+	//void GenerateDepthMapFromLight() override;
 	void DrawSprite()       override;
 
 	void ImguiUpdate()override;
 
+	//セッター
 	void SetCamera(const std::shared_ptr<CameraBase>& camera)
 	{
 		m_wpCamera = camera;
@@ -27,6 +30,14 @@ public:
 	{
 		m_wpHitObjectList.push_back(object);
 	}
+
+	void SetBattery(const std::shared_ptr<Player_Battery>& battery)
+	{
+		m_wpBattery = battery;
+	}
+
+	//ゲッター
+	const Math::Matrix GetAPBatteryMatrix()const { return m_APBatteryMat; }//アタッチポイント
 
 private:
 
@@ -46,7 +57,7 @@ private:
 
 	Math::Matrix m_boostMat;
 
-	std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
+	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 	std::weak_ptr<CameraBase>			m_wpCamera;
 	std::vector<std::weak_ptr<KdGameObject>>	m_wpHitObjectList{};
@@ -100,6 +111,11 @@ private:
 	bool m_overheatFlg = false;
 
 	bool m_boostFlg = false;
+
+	//アタッチポイント関係
+	std::weak_ptr<Player_Battery> m_wpBattery;
+	Math::Matrix m_APBatteryMat = {};
+	KdModelWork::Node* m_pNode = nullptr;
 
 
 //ステートパターン関係

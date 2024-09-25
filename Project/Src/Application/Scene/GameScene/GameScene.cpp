@@ -2,6 +2,7 @@
 #include"../SceneManager.h"
 
 #include"../../GameObject/Chara/Player/Player.h"
+#include"../../GameObject/Chara/Player/Player_Battery.h"
 #include"../../GameObject/Chara/Enemy/Enemy.h"
 #include"../../GameObject/Ground/Ground.h"
 #include"../../GameObject/Back/Back.h"
@@ -58,6 +59,12 @@ void GameScene::Init()
 	_player->Init();
 	AddObject(_player);
 
+	//プレイヤー砲台
+	std::shared_ptr<Player_Battery> _player_battery;
+	_player_battery = std::make_shared<Player_Battery>();
+	_player_battery->Init();
+	AddObject(_player_battery);
+
 	//エネミー
 	std::shared_ptr<Enemy> _enemy;
 	_enemy = std::make_shared<Enemy>();
@@ -75,5 +82,6 @@ void GameScene::Init()
 	_camera->RegistHitObject(_ground);
 	_player->RegistHitObject(_ground);
 	_player->SetCamera(_camera);
-
+	_player->SetBattery(_player_battery);
+	_player_battery->SetParent(_player);
 }

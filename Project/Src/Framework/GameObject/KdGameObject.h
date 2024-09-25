@@ -78,6 +78,7 @@ public:
 	
 	virtual void ImguiUpdate() {}
 	ObjectType GetObjectType()const { return m_objectType; }
+	virtual std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
 
 protected:
 
