@@ -3,6 +3,9 @@
 
 #include"../../GameObject/Chara/Player/Player.h"
 #include"../../GameObject/Chara/Player/Player_Battery.h"
+#include"../../GameObject/Chara/Player/Player_Cannon.h"
+#include"../../GameObject/Chara/Player/Player_Minigun.h"
+#include"../../GameObject/Chara/Player/Player_Nuke-tube.h"
 #include"../../GameObject/Chara/Enemy/Enemy.h"
 #include"../../GameObject/Ground/Ground.h"
 #include"../../GameObject/Back/Back.h"
@@ -65,6 +68,21 @@ void GameScene::Init()
 	_player_battery->Init();
 	AddObject(_player_battery);
 
+	std::shared_ptr<Player_Cannon> _player_cannon;
+	_player_cannon = std::make_shared<Player_Cannon>();
+	_player_cannon->Init();
+	AddObject(_player_cannon);
+
+	std::shared_ptr<Player_Minigun> _player_minigun;
+	_player_minigun = std::make_shared<Player_Minigun>();
+	_player_minigun->Init();
+	AddObject(_player_minigun);
+
+	std::shared_ptr<Player_Nuketube> _player_nuketube;
+	_player_nuketube = std::make_shared<Player_Nuketube>();
+	_player_nuketube->Init();
+	AddObject(_player_nuketube);
+
 	//エネミー
 	std::shared_ptr<Enemy> _enemy;
 	_enemy = std::make_shared<Enemy>();
@@ -77,11 +95,17 @@ void GameScene::Init()
 	_camera->Init();
 	m_objList.push_back(_camera);
 
-
+	//セッター関連
 	_camera->SetTarget(_player);
 	_camera->RegistHitObject(_ground);
 	_player->RegistHitObject(_ground);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
 	_player_battery->SetParent(_player);
+	_player_battery->SetCannon(_player_cannon);
+	_player_battery->SetMinigun(_player_minigun);
+	_player_battery->SetNuketube(_player_nuketube);
+	_player_cannon->SetParent(_player_battery);
+	_player_minigun->SetParent(_player_battery);
+	_player_nuketube->SetParent(_player_battery);
 }

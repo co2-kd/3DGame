@@ -2,6 +2,9 @@
 #include"../CharaBase.h"
 
 class CameraBase;
+class Player_Cannon;
+class Player_Minigun;
+class Player_Nuketube;
 class Player_Battery : public CharaBase
 {
 public:
@@ -28,6 +31,26 @@ public:
 		m_localMat = _localMat;
 	}
 
+	void SetCannon(const std::shared_ptr<Player_Cannon>& cannon)
+	{
+		m_wpCannon = cannon;
+	}
+
+	void SetMinigun(const std::shared_ptr<Player_Minigun>& minigun)
+	{
+		m_wpMinigun = minigun;
+	}
+
+	void SetNuketube(const std::shared_ptr<Player_Nuketube>& nuketube)
+	{
+		m_wpNuketube = nuketube;
+	}
+
+	//ゲッター
+	const Math::Matrix GetAPCannonMatrix()const { return m_APCannonMat; }//アタッチポイント
+	const Math::Matrix GetAPMinigunMatrix()const { return m_APMinigunMat; }//アタッチポイント
+	const Math::Matrix GetAPNuketubeMatrix()const { return m_APNuketubeMat; }//アタッチポイント
+
 private:
 
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
@@ -49,6 +72,14 @@ private:
 
 	Math::Vector3 m_pos = Math::Vector3::Zero;
 
+
+	//アタッチポイント関係
+	std::weak_ptr<Player_Cannon> m_wpCannon;
+	Math::Matrix m_APCannonMat = {};
+	std::weak_ptr<Player_Minigun> m_wpMinigun;
+	Math::Matrix m_APMinigunMat = {};
+	std::weak_ptr<Player_Nuketube> m_wpNuketube;
+	Math::Matrix m_APNuketubeMat = {};
 
 //ステートパターン関係
 private:

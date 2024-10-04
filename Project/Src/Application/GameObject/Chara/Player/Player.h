@@ -115,7 +115,6 @@ private:
 	//アタッチポイント関係
 	std::weak_ptr<Player_Battery> m_wpBattery;
 	Math::Matrix m_APBatteryMat = {};
-	KdModelWork::Node* m_pNode = nullptr;
 
 
 //ステートパターン関係

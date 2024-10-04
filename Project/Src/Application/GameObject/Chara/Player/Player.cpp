@@ -201,6 +201,7 @@ void Player::ImguiUpdate()
 	ImGui::Text("boostgauge : %d", m_boostgauge);
 	ImGui::Text("overhert : %d", m_overheatFlg);
 	ImGui::Text("NowAction : %s", *m_nowAction);
+	ImGui::Text("rotate : %f", m_worldRot.y);
 }
 
 //カメラから見た移動方向に向く処理
@@ -237,6 +238,14 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 
 	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
 	m_worldRot.y += rotateAng;
+	if (m_worldRot.y >= 360)
+	{
+		m_worldRot.y -= 360;
+	}
+	else if(m_worldRot.y < 0)
+	{
+		m_worldRot.y += 360;
+	}
 }
 
 //当たり判定

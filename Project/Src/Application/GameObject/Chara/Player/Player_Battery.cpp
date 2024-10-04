@@ -2,6 +2,10 @@
 #include "../../../main.h"
 #include"../../Camera/CameraBase.h"
 
+#include"../Player/Player_Cannon.h"
+#include"../Player/Player_Minigun.h"
+#include"../Player/Player_Nuke-tube.h"
+
 //初期化
 void Player_Battery::Init()
 {
@@ -16,25 +20,40 @@ void Player_Battery::Init()
 
 	}
 
-	//Math::Matrix _parentMat = Math::Matrix::Identity;
-	//const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
-	//if (_spParent)
-	//{
-	//	_parentMat = m_localMat * _spParent->GetMatrix();
-	//}
+
+	//「AttachPoint」ノードを取得する
+	if (m_spModel)
+	{
+		//blenderで作成したNULLポイントノードを探して取得
+		const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
+		m_APCannonMat = _pNodeCannon->m_worldTransform;
+		
+		const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
+		m_APMinigunMat = _pNodeMinigun->m_worldTransform;
+		
+		const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
+		m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
+
+	}
 
 
-	//if (m_spModel)
-	//{
-	//	//blenderで作成したNULLポイントノードを探して取得
-	//	const KdModelWork::Node* _pNode = m_spModel->FindNode("AttachPoint");
+	//子オブジェクトにAPの座標渡し
+	std::shared_ptr<Player_Cannon> _spCannon = m_wpCannon.lock();
+	if (_spCannon)
+	{
+		_spCannon->SetAPMatrix(m_APCannonMat);
+	}
+	std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
+	if (_spMinigun)
+	{
+		_spMinigun->SetAPMatrix(m_APMinigunMat);
+	}
+	std::shared_ptr<Player_Nuketube> _spNuketube = m_wpNuketube.lock();
+	if (_spNuketube)
+	{
+		_spNuketube->SetAPMatrix(m_APNuketubeMat);
+	}
 
-	//	//指定ノードが取得出来たら
-	//	if (_pNode)
-	//	{
-	//		m_localMat = _pNode->m_worldTransform;
-	//	}
-	//}
 	//デバッグ用
 	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 }
@@ -42,31 +61,8 @@ void Player_Battery::Init()
 //更新
 void Player_Battery::Update()
 {
-	//m_moveVec = Math::Vector3::Zero;
 
-	////現在の状態の更新呼び出し
-	//if (m_nowAction)
-	//{
-	//	m_nowAction->Update(*this);
-	//}
-
-	////カメラ取得
-	//const std::shared_ptr<const CameraBase> _spCamera = m_wpCamera.lock();
-	//if (_spCamera)
-	//{
-	//	m_moveVec = m_moveVec.TransformNormal(m_moveVec, _spCamera->GetRotationYMatrix());
-	//}
-	//m_moveVec.Normalize();
-
-	//// キャラクターの回転行列を創る
-	//m_dir = m_moveVec;
-	//UpdateRotate(m_dir);
-
-	//// キャラクターのワールド行列を創る処理
-	//Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
-	//m_mWorld = Math::Matrix::CreateScale(0.2) * _rotation * Math::Matrix::CreateTranslation(m_pos);
-
-	CharaBase::Update();
+	//CharaBase::Update();
 }
 
 //後更新
@@ -81,10 +77,61 @@ void Player_Battery::PostUpdate()
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
 	{
-		_Mat = m_localMat * _spParent->GetMatrix();
+		_Mat = Math::Matrix::CreateTranslation(m_localMat.Translation()) * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
+		//_Mat = m_localMat * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
+		//_Mat = m_localMat * _spParent->GetMatrix();
 	}
 
-	m_mWorld = _Mat;
+
+	//カメラ取得
+	m_dir.z = 1.0f;
+	const std::shared_ptr<const CameraBase> _spCamera = m_wpCamera.lock();
+	if (_spCamera)
+	{
+		m_dir = m_dir.TransformNormal(m_dir, _spCamera->GetRotationYMatrix());
+	}
+	m_dir.Normalize();
+	// キャラクターの回転行列を創る
+	UpdateRotate(m_dir);
+
+	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
+
+	m_mWorld = _rotation * _Mat;
+	//m_mWorld = _Mat;
+
+
+
+	//「AttachPoint」ノードを取得する
+	if (m_spModel)
+	{
+		//blenderで作成したNULLポイントノードを探して取得
+		const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
+		m_APCannonMat = _pNodeCannon->m_worldTransform;
+
+		const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
+		m_APMinigunMat = _pNodeMinigun->m_worldTransform;
+
+		const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
+		m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
+
+	}
+
+	//子オブジェクトにAPの座標渡し
+	std::shared_ptr<Player_Cannon> _spCannon = m_wpCannon.lock();
+	if (_spCannon)
+	{
+		_spCannon->SetAPMatrix(m_APCannonMat);
+	}
+	std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
+	if (_spMinigun)
+	{
+		_spMinigun->SetAPMatrix(m_APMinigunMat);
+	}
+	std::shared_ptr<Player_Nuketube> _spNuketube = m_wpNuketube.lock();
+	if (_spNuketube)
+	{
+		_spNuketube->SetAPMatrix(m_APNuketubeMat);
+	}
 }
 
 ////モデル描画
@@ -106,16 +153,18 @@ void Player_Battery::PostUpdate()
 //imguiの更新
 void Player_Battery::ImguiUpdate()
 {
-	ImGui::Text("local : %f", m_mWorld.Translation().x);
-	ImGui::Text("local : %f", m_mWorld.Translation().y);
-	ImGui::Text("local : %f", m_mWorld.Translation().z);
+	ImGui::Text("localx : %f", m_mWorld.Translation().x);
+	ImGui::Text("localy : %f", m_mWorld.Translation().y);
+	ImGui::Text("localz : %f", m_mWorld.Translation().z);
+
+	ImGui::Text("rotate : %f", m_worldRot.y);
 }
 
 //カメラから見た移動方向に向く処理
 void Player_Battery::UpdateRotate(const Math::Vector3& srcMoveVec)
 {
 	// 何も入力が無い場合は処理しない
-	if (srcMoveVec.LengthSquared() == 0.0f/* || (waitdrivetime >= 1 && GetAsyncKeyState(VK_CONTROL))*/) { return; }
+	if (srcMoveVec.LengthSquared() == 0.0f) { return; }
 
 	// キャラの正面方向のベクトル
 	Math::Vector3 _nowDir = GetMatrix().Backward();
@@ -145,6 +194,14 @@ void Player_Battery::UpdateRotate(const Math::Vector3& srcMoveVec)
 
 	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
 	m_worldRot.y += rotateAng;
+	if (m_worldRot.y >= 360)
+	{
+		m_worldRot.y -= 360;
+	}
+	else if (m_worldRot.y < 0)
+	{
+		m_worldRot.y += 360;
+	}
 }
 
 //当たり判定

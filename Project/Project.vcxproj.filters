@@ -291,6 +291,15 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Battery.h">
       <Filter>Src\Application\GameObject\Chara\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Cannon.h">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Minigun.h">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.h">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -456,6 +465,15 @@
       <Filter>Src\Application\GameObject\Back</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Battery.cpp">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Cannon.cpp">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Minigun.cpp">
+      <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.cpp">
       <Filter>Src\Application\GameObject\Chara\Player</Filter>
     </ClCompile>
   </ItemGroup>
