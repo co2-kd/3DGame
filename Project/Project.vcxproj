@@ -157,10 +157,13 @@
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\GameObject\Back\Back.h" />
+    <ClInclude Include="Src\Application\GameObject\Bullet\BulletBase.h" />
+    <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\CameraBase.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\CharaBase.h" />
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Enemy.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Battery.h" />
@@ -219,10 +222,13 @@
     <ClCompile Include="..\Library\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\GameObject\Back\Back.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Bullet\BulletBase.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\CameraBase.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\CharaBase.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Enemy.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Battery.cpp" />

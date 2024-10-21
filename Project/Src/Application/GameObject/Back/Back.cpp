@@ -6,8 +6,10 @@ void Back::Init()
 	{
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Back/Back.gltf");
+		m_pCollider = std::make_unique<KdCollider>();
+		m_pCollider->RegisterCollisionShape("Back", m_spModel, KdCollider::TypeGround);
 
-		m_mWorld = Math::Matrix::CreateScale(100.0f) * Math::Matrix::CreateTranslation(0,0,0);
+		m_mWorld = Math::Matrix::CreateScale(1000.0f) * Math::Matrix::CreateTranslation(0,0,0);
 	}
 }
 

@@ -51,6 +51,7 @@ private:
 	KdTexture m_boostTex;
 	KdTexture m_boostbackTex;
 	KdTexture m_boostflontTex;
+	KdTexture m_tex;
 
 	Math::Rectangle m_boostRc;
 	Math::Rectangle m_boostbackRc;
@@ -63,34 +64,37 @@ private:
 	std::vector<std::weak_ptr<KdGameObject>>	m_wpHitObjectList{};
 	Math::Vector3						m_worldRot;
 
+	//プレイヤー座標補正
+	const float m_adjustHeight = 1.0f;
+
 	//キャラが向いている方向
 	Math::Vector3 m_dir = Math::Vector3::Zero;
 
 	float m_speed = 0;
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
-	Math::Vector3 m_pos = Math::Vector3::Zero;
 
-	float m_gravity = 0;
-	const float m_gravityPow = 0.15f;
-	const float m_gravityMax = 5.0f;
+	const float m_gravity = 1.0f;
+	const float m_floatingWeak = 0.05f;
+	const float m_floatingMin = 0.0f;
+	float m_floating = 0;
 
 	//ホバー
-	const float m_hoverspeed = 0.6f;
+	const float m_hoverspeed = 0.3f;
 	
 	//ジャンプ
 	bool m_jumpFlg = false;
 	float m_jumpspeed = 0;
-	const float m_jumpspeedPow = 0.3f;
-	const float m_jumpspeedMax = 3.0f;
+	const float m_jumpspeedPow = 0.1f;
+	const float m_jumpspeedMax = 1.5f;
 
 	//ステップ・ブースト
 	bool m_stepFlg = false;
 
 	float m_stepspeed = 0;
-	const float m_stepspeedPow = 15.0f;
+	const float m_stepspeedPow = 1.5f;
 
 	float m_boostspeed = 0;
-	const float m_boostspeedPow = 3.0f;
+	const float m_boostspeedPow = 0.8f;
 
 	//ドライブブースト
 	bool m_driveFlg = false;

@@ -11,11 +11,19 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				1
+				2
 			]
 		}
 	],
 	"nodes":[
+		{
+			"name":"APm_muzzle",
+			"translation":[
+				0.493569552898407,
+				0.024661660194396973,
+				-1.140602946281433
+			]
+		},
 		{
 			"mesh":0,
 			"name":"Dreadnaught-minigun-barrels",
@@ -27,7 +35,8 @@
 		},
 		{
 			"children":[
-				0
+				0,
+				1
 			],
 			"mesh":1,
 			"name":"Dreadnaught-minigun"
@@ -41,10 +50,14 @@
 					"specularFactor":0
 				}
 			},
-			"name":"01 - Default",
+			"name":"\u30de\u30c6\u30ea\u30a2\u30eb",
+			"normalTexture":{
+				"index":0,
+				"scale":0.5
+			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"roughnessFactor":0.858578622341156
 			}
@@ -84,9 +97,18 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
 		}
 	],
 	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"Dreadnaught01normal",
+			"uri":"Dreadnaught01normal.png"
+		},
 		{
 			"mimeType":"image/png",
 			"name":"Dreadnaught01",

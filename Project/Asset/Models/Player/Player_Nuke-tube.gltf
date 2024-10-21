@@ -29,10 +29,14 @@
 					"specularFactor":0
 				}
 			},
-			"name":"01 - Default",
+			"name":"\u30de\u30c6\u30ea\u30a2\u30eb",
+			"normalTexture":{
+				"index":0,
+				"scale":0.5
+			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":0
+					"index":1
 				},
 				"roughnessFactor":0.858578622341156
 			}
@@ -58,9 +62,18 @@
 		{
 			"sampler":0,
 			"source":0
+		},
+		{
+			"sampler":0,
+			"source":1
 		}
 	],
 	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"Dreadnaught01normal",
+			"uri":"Dreadnaught01normal.png"
+		},
 		{
 			"mimeType":"image/png",
 			"name":"Dreadnaught01",

@@ -97,6 +97,15 @@
     <Filter Include="Src\Application\GameObject\Back">
       <UniqueIdentifier>{fcfa478b-2a77-4c82-8118-02ee79d140e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\Drone">
+      <UniqueIdentifier>{e98c2ad7-a4c8-49f4-8d89-88cd56f8e48f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Bullet">
+      <UniqueIdentifier>{1352c937-82db-4504-8046-e2a0ba60c95f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Bullet\P_BulletM">
+      <UniqueIdentifier>{8b402274-d78b-4cea-8d5f-413e5187f78d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -300,6 +309,15 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.h">
       <Filter>Src\Application\GameObject\Chara\Player</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Drone</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Bullet\BulletBase.h">
+      <Filter>Src\Application\GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.h">
+      <Filter>Src\Application\GameObject\Bullet\P_BulletM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -475,6 +493,15 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.cpp">
       <Filter>Src\Application\GameObject\Chara\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Drone</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Bullet\BulletBase.cpp">
+      <Filter>Src\Application\GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.cpp">
+      <Filter>Src\Application\GameObject\Bullet\P_BulletM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

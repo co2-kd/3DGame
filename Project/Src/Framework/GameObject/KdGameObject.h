@@ -11,6 +11,8 @@ public:
 		None,
 		Player,
 		Enemy,
+		P_Bullet,
+		E_Bullet,
 		Ground,
 		MAX
 	};
@@ -79,6 +81,8 @@ public:
 	virtual void ImguiUpdate() {}
 	ObjectType GetObjectType()const { return m_objectType; }
 	virtual std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
+
+	virtual void OnHit(){}
 
 protected:
 

@@ -147,7 +147,7 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// ウィンドウ作成
 	//===================================================================
-	if (m_window.Create(w, h, "3D GameProgramming", "Window") == false) {
+	if (m_window.Create(w, h, "起動中", "Window") == false) {
 		MessageBoxA(nullptr, "ウィンドウ作成に失敗", "エラー", MB_OK);
 		return false;
 	}
@@ -305,7 +305,7 @@ void Application::Execute()
 		//=========================================
 
 		m_fpsController.Update();
-		std::string titleBer = "仮" + std::to_string(m_fpsController.m_nowfps) + "fps";
+		std::string titleBer = "Anti-Gravity Fortress" + std::to_string(m_fpsController.m_nowfps) + "fps";
 		SetWindowTextA(m_window.GetWndHandle(), titleBer.c_str());
 	}
 

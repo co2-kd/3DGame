@@ -27,13 +27,14 @@ public:
 	{
 		m_localMat = _localMat;
 	}
+	void ShotBullet();
 
 private:
 
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
 
 	// 当たり判定と
-	void UpdateCollision();
+	//void UpdateCollision();
 
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
@@ -46,9 +47,10 @@ private:
 	//キャラが向いている方向
 	Math::Vector3 m_dir = Math::Vector3::Zero;
 
+	//本体から銃口へのローカル行列
+	Math::Matrix m_localmuzzleMat;
 
-	Math::Vector3 m_pos = Math::Vector3::Zero;
-
+	bool m_shotFlg = false;
 
 //ステートパターン関係
 private:

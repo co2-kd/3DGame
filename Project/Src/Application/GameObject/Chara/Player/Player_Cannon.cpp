@@ -7,6 +7,7 @@ void Player_Cannon::Init()
 {
 	if (!m_spModel)
 	{
+		m_objectType = ObjectType::Player;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Player/Player_Cannon.gltf");
 
@@ -16,25 +17,25 @@ void Player_Cannon::Init()
 
 	}
 
-	//Math::Matrix _parentMat = Math::Matrix::Identity;
-	//const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
-	//if (_spParent)
-	//{
-	//	_parentMat = m_localMat * _spParent->GetMatrix();
-	//}
+	Math::Matrix _parentMat = Math::Matrix::Identity;
+	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
+	if (_spParent)
+	{
+		_parentMat = m_localMat * _spParent->GetMatrix();
+	}
 
 
-	//if (m_spModel)
-	//{
-	//	//blenderで作成したNULLポイントノードを探して取得
-	//	const KdModelWork::Node* _pNode = m_spModel->FindNode("AttachPoint");
+	if (m_spModel)
+	{
+		//blenderで作成したNULLポイントノードを探して取得
+		const KdModelWork::Node* _pNode = m_spModel->FindNode("APc_muzzle");
 
-	//	//指定ノードが取得出来たら
-	//	if (_pNode)
-	//	{
-	//		m_localMat = _pNode->m_worldTransform;
-	//	}
-	//}
+		//指定ノードが取得出来たら
+		if (_pNode)
+		{
+			m_localMat = _pNode->m_worldTransform;
+		}
+	}
 	//デバッグ用
 	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 }
@@ -67,15 +68,6 @@ void Player_Cannon::Update()
 	//m_mWorld = Math::Matrix::CreateScale(0.2) * _rotation * Math::Matrix::CreateTranslation(m_pos);
 
 	CharaBase::Update();
-}
-
-//後更新
-void Player_Cannon::PostUpdate()
-{
-
-	//アニメーションの更新
-	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
-	m_spModel->CalcNodeMatrices();
 
 	Math::Matrix _Mat = Math::Matrix::Identity;
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
@@ -87,21 +79,15 @@ void Player_Cannon::PostUpdate()
 	m_mWorld = _Mat;
 }
 
-////モデル描画
-//void Player_Cannon::DrawLit()
-//{
-//	if (!m_spModel) return;
-//
-//	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-//}
-//
-////影描画
-//void Player_Cannon::GenerateDepthMapFromLight()
-//{
-//	if (!m_spModel) return;
-//
-//	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-//}
+//後更新
+void Player_Cannon::PostUpdate()
+{
+
+	//アニメーションの更新
+	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
+	m_spModel->CalcNodeMatrices();
+}
+
 
 //imguiの更新
 void Player_Cannon::ImguiUpdate()
@@ -145,28 +131,6 @@ void Player_Cannon::UpdateRotate(const Math::Vector3& srcMoveVec)
 	m_worldRot.y += rotateAng;
 }
 
-//当たり判定
-void Player_Cannon::UpdateCollision()
-{
-
-	// ①当たり判定(レイ判定)用の情報作成
-	KdCollider::RayInfo rayInfo;
-	// レイの発射位置を設定
-	rayInfo.m_pos = GetPos();
-	// 少し高い所から飛ばす(段差の許容範囲)
-	rayInfo.m_pos.y += 0.4f;
-
-	// レイの発射方向を設定
-	rayInfo.m_dir = Math::Vector3::Down;
-
-	// レイの長さ
-	rayInfo.m_range = 0.2f;
-
-	// 当たり判定をしたいタイプを設定
-	rayInfo.m_type = KdCollider::TypeGround;
-
-	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
-}
 
 //---------------------------------------------------------------------------------------
 //ここから下はステートパターン関係

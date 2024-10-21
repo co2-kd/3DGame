@@ -3,12 +3,11 @@
 void Ground::Init()
 {
 	m_spModel = std::make_shared<KdModelWork>();
-	m_spModel->SetModelData("Asset/Models/Ground/ground.gltf");
-	Math::Matrix scaleMat = Math::Matrix::CreateScale(100);
-	m_mWorld = scaleMat;
-
+	m_spModel->SetModelData("Asset/Models/Ground/Ground.gltf");
 	m_pCollider = std::make_unique<KdCollider>();
-	m_pCollider->RegisterCollisionShape("StageCollison", m_spModel, KdCollider::TypeGround);
+	m_pCollider->RegisterCollisionShape("Ground", m_spModel, KdCollider::TypeGround);
+	m_mWorld = Math::Matrix::CreateScale(10.0f);
+
 }
 
 void Ground::DrawLit()
@@ -18,5 +17,5 @@ void Ground::DrawLit()
 
 void Ground::ImguiUpdate()
 {
-	ImGui::Text("test : %d", m_mWorld.Translation().x);
+	//ImGui::Text("test : %d", m_mWorld.Translation().x);
 }

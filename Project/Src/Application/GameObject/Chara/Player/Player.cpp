@@ -10,9 +10,9 @@ void Player::Init()
 {
 	if (!m_spModel)
 	{
+		m_objectType = ObjectType::Player;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Player/Player_main.gltf");
-		m_pos.y = 10;
 		//デバッグ用
 		m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 
@@ -20,7 +20,8 @@ void Player::Init()
 		m_spAnimator = std::make_shared<KdAnimator>();
 
 	}
-
+	m_pos.y = 30.0f;
+	SetPos(m_pos);
 	//「AttachPoint」ノードを取得する
 	if (m_spModel)
 	{
@@ -41,6 +42,7 @@ void Player::Init()
 	m_boostbackTex.Load("Asset/Textures/boost_bar_back.png");
 	m_boostflontTex.Load("Asset/Textures/boost_bar_flont.png");
 	m_boostTex.Load("Asset/Textures/boost_bar2.png");
+	m_tex.Load("Asset/Textures/Reticle.png");
 
 	//初期状態を「待機状態」へ設定
 	ChangeActionState(std::make_shared<ActionIdle>());
@@ -49,33 +51,27 @@ void Player::Init()
 //更新
 void Player::Update()
 {
-
+	m_pos = GetPos();
 	m_boostFlg = false;
 	
 	//重力
-	m_pos.y -= m_gravity;
+	m_pos.y -= m_gravity - m_floating;
 	//重力加算
-	if (m_gravity <= m_gravityMax)
+	if (m_floating > m_floatingMin)
 	{
-		m_gravity += m_gravityPow;
+		m_floating -= m_floatingWeak;
 	}
 	m_moveVec = Math::Vector3::Zero;
 
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
 	{
+		//移動ベクトル
+		if (GetAsyncKeyState('D')) { m_moveVec.x = 1.0f; }
+		if (GetAsyncKeyState('A')) { m_moveVec.x = -1.0f; }
+		if (GetAsyncKeyState('W')) { m_moveVec.z = 1.0f; }
+		if (GetAsyncKeyState('S')) { m_moveVec.z = -1.0f; }
 		m_nowAction->Update(*this);
-	}
-
-	{
-		waitdrivetime = 60;
-		m_driveFlg = false;
-		if (m_drivespeed > 0)
-		{
-			m_drivespeed -= 1.0f;
-			m_speed = m_drivespeed + m_driveboostspeed;
-		}
-		m_driveboostspeed = 0;
 	}
 	//カメラ取得
 	const std::shared_ptr<const CameraBase> _spCamera = m_wpCamera.lock();
@@ -96,6 +92,10 @@ void Player::Update()
 	// キャラクターのワールド行列を創る処理
 	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
 	m_mWorld = _rotation * Math::Matrix::CreateTranslation(m_pos);
+
+
+	// キャラクターの座標が確定してからコリジョンによる位置補正を行う
+	UpdateCollision();
 }
 
 //後更新
@@ -116,44 +116,24 @@ void Player::PostUpdate()
 		}
 	}
 
-	//ブースト回復
-	if (!m_boostFlg)
-	{
-		if (m_overheatFlg)
-		{
-			if (m_boostgauge < m_boostgaugeMax)
-			{
-				m_boostgauge += 1;
-			}
-		}
-		else
-		{
-			if (m_boostgauge < m_boostgaugeMax)
-			{
-				m_boostgauge += 2;
-			}
-		}
-	}
 
-	// キャラクターの座標が確定してからコリジョンによる位置補正を行う
-	UpdateCollision();
 
 	//アニメーションの更新
 	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
 	m_spModel->CalcNodeMatrices();
 
 
-	//「AttachPoint」ノードを取得する
-	if (m_spModel)
-	{
-		//blenderで作成したNULLポイントノードを探して取得
-		const KdModelWork::Node* _pNode = m_spModel->FindNode("APbattery");
+	////「AttachPoint」ノードを取得する
+	//if (m_spModel)
+	//{
+	//	//blenderで作成したNULLポイントノードを探して取得
+	//	const KdModelWork::Node* _pNode = m_spModel->FindNode("APbattery");
 
-		//m_APBatteryMat = Math::Matrix::CreateTranslation(_pNode->m_worldTransform.Translation());
-		m_APBatteryMat = _pNode->m_worldTransform;
-		//m_APBatteryMat = m_mWorld;
+	//	//m_APBatteryMat = Math::Matrix::CreateTranslation(_pNode->m_worldTransform.Translation());
+	//	m_APBatteryMat = _pNode->m_worldTransform;
+	//	//m_APBatteryMat = m_mWorld;
 
-	}
+	//}
 
 	//子オブジェクトにAPの座標渡し
 	std::shared_ptr<Player_Battery> _spBattery = m_wpBattery.lock();
@@ -162,22 +142,6 @@ void Player::PostUpdate()
 		_spBattery->SetAPMatrix(m_APBatteryMat);
 	}
 }
-
-////モデル描画
-//void Player::DrawLit()
-//{
-//	if (!m_spModel) return;
-//
-//	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-//}
-//
-////影描画
-//void Player::GenerateDepthMapFromLight()
-//{
-//	if (!m_spModel) return;
-//
-//	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-//}
 
 //画像描画
 void Player::DrawSprite()
@@ -193,6 +157,7 @@ void Player::DrawSprite()
 	m_boostbackRc = { 0,0,500,100 };
 	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostflontTex, 0, -300, 500, 100, &m_boostbackRc);
 
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_tex, 0, 0, 64, 64);
 }
 
 //imguiの更新
@@ -253,19 +218,21 @@ void Player::UpdateCollision()
 {
 	// 地面判定
 
+	static const float enableStepHigh = 2.0f;
+
 	// ①当たり判定(レイ判定)用の情報作成
 	KdCollider::RayInfo rayInfo;
 	// レイの発射位置を設定
 	rayInfo.m_pos = GetPos();
 	// 少し高い所から飛ばす(段差の許容範囲)
-	rayInfo.m_pos.y += 0.2f;
+	//rayInfo.m_pos.y += 1.0f;
+	rayInfo.m_pos.y = rayInfo.m_pos.y - m_adjustHeight + enableStepHigh;
 
 	// レイの発射方向を設定
 	rayInfo.m_dir = Math::Vector3::Down;
 
 	// レイの長さ
-	rayInfo.m_range = m_gravity + 0.2f;
-
+	rayInfo.m_range = m_gravity - m_floating + enableStepHigh;
 	// 当たり判定をしたいタイプを設定
 	rayInfo.m_type = KdCollider::TypeGround;
 
@@ -279,7 +246,6 @@ void Player::UpdateCollision()
 		{
 			std::list<KdCollider::CollisionResult> retRayList;
 			spGameObj->Intersects(rayInfo, &retRayList);
-
 			// ③結果を使って座標を補完する
 			// レイに当たったリストから一番近いオブジェクトを検出
 			float maxOverLap = 0;
@@ -299,8 +265,29 @@ void Player::UpdateCollision()
 			// 何かしらの上に乗ってる
 			if (hit)
 			{
-				SetPos(hitPos);
-				m_gravity = 0;
+				//浮力
+				//hitPos.y += m_adjustHeight;
+				//SetPos(hitPos);
+				m_floating += maxOverLap;
+
+				//ブースト回復
+				if (!m_boostFlg)
+				{
+					if (m_overheatFlg)
+					{
+						if (m_boostgauge < m_boostgaugeMax)
+						{
+							m_boostgauge += 1;
+						}
+					}
+					else
+					{
+						if (m_boostgauge < m_boostgaugeMax)
+						{
+							m_boostgauge += 3;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -309,9 +296,9 @@ void Player::UpdateCollision()
 	// ---- ---- ---- ---- ---- ----
 	// ①当たり判定(球判定)用の情報を作成
 	KdCollider::SphereInfo sphereInfo;
-	sphereInfo.m_sphere.Center = m_APBatteryMat.Translation() + GetPos();
-	sphereInfo.m_sphere.Radius = 0.5f;
-	sphereInfo.m_type = KdCollider::TypeBump;
+	sphereInfo.m_sphere.Center = GetPos() + Math::Vector3(0,1.5f,0);
+	sphereInfo.m_sphere.Radius = 2.5f;
+	sphereInfo.m_type = KdCollider::TypeGround;
 
 	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
 
@@ -341,7 +328,7 @@ void Player::UpdateJump()
 	{
 		if (m_jumpFlg = false)
 		{
-			m_jumpspeed = -m_gravity;
+			m_jumpspeed = m_gravity;
 			m_jumpFlg = true;
 		}
 
@@ -353,10 +340,10 @@ void Player::UpdateJump()
 		//ブースト消費
 		if (m_boostgauge > 0)
 		{
-			m_boostgauge -= 3;
+			m_boostgauge -= 2;
 			m_boostFlg = true;
 		}
-		m_gravity = -m_jumpspeed;
+		m_floating = m_jumpspeed;
 	}
 	else
 	{
@@ -382,6 +369,12 @@ void Player::ActionIdle::Enter(Player& owner)
 
 void Player::ActionIdle::Update(Player& owner)
 {
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
+	{
+		owner.ChangeActionState(std::make_shared<ActionJump>());
+		return;
+	}
+
 	if (GetAsyncKeyState(VK_SHIFT) & 0x8000 && !owner.m_overheatFlg)
 	{
 		owner.ChangeActionState(std::make_shared<ActionStep>());
@@ -393,12 +386,6 @@ void Player::ActionIdle::Update(Player& owner)
 		owner.ChangeActionState(std::make_shared<ActionMove>());
 		return;
 	}
-
-	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
-	{
-		owner.ChangeActionState(std::make_shared<ActionJump>());
-		return;
-	}
 }
 
 void Player::ActionIdle::Exit(Player& owner)
@@ -407,7 +394,7 @@ void Player::ActionIdle::Exit(Player& owner)
 
 void Player::ActionJump::Enter(Player& owner)
 {
-	owner.m_jumpspeed = -owner.m_gravity;
+	owner.m_jumpspeed = owner.m_gravity;
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"), false);
 }
 
@@ -417,10 +404,6 @@ void Player::ActionJump::Update(Player& owner)
 	//ジャンプ
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
 	{
-		if (GetAsyncKeyState('D')) { owner.m_moveVec.x = 1.0f; }
-		if (GetAsyncKeyState('A')) { owner.m_moveVec.x = -1.0f; }
-		if (GetAsyncKeyState('W')) { owner.m_moveVec.z = 1.0f; }
-		if (GetAsyncKeyState('S')) { owner.m_moveVec.z = -1.0f; }
 
 		if (owner.m_jumpFlg = false)
 		{
@@ -435,10 +418,10 @@ void Player::ActionJump::Update(Player& owner)
 		//ブースト消費
 		if (owner.m_boostgauge > 0)
 		{
-			owner.m_boostgauge -= 3;
+			owner.m_boostgauge -= 2;
 			owner.m_boostFlg = true;
 		}
-		owner.m_gravity = -owner.m_jumpspeed;
+		owner.m_floating = owner.m_jumpspeed;
 	}
 	else
 	{
@@ -456,11 +439,11 @@ void Player::ActionJump::Update(Player& owner)
 		return;
 	}
 
-	if (GetAsyncKeyState('D') || GetAsyncKeyState('A') || GetAsyncKeyState('W') || GetAsyncKeyState('S'))
-	{
-		owner.ChangeActionState(std::make_shared<ActionMove>());
-		return;
-	}
+	//if (GetAsyncKeyState('D') || GetAsyncKeyState('A') || GetAsyncKeyState('W') || GetAsyncKeyState('S'))
+	//{
+	//	owner.ChangeActionState(std::make_shared<ActionMove>());
+	//	return;
+	//}
 
 	if (!(GetAsyncKeyState(VK_SPACE) & 0x8000) || owner.m_overheatFlg)
 	{
@@ -481,11 +464,6 @@ void Player::ActionMove::Enter(Player& owner)
 void Player::ActionMove::Update(Player& owner)
 {
 
-	if (GetAsyncKeyState('D')) { owner.m_moveVec.x = 1.0f; }
-	if (GetAsyncKeyState('A')) { owner.m_moveVec.x = -1.0f; }
-	if (GetAsyncKeyState('W')) { owner.m_moveVec.z = 1.0f; }
-	if (GetAsyncKeyState('S')) { owner.m_moveVec.z = -1.0f; }
-
 	//入力が無ければ待機状態へ
 	if (owner.m_moveVec.LengthSquared() == 0)
 	{
@@ -494,6 +472,12 @@ void Player::ActionMove::Update(Player& owner)
 	}
 
 	owner.m_speed = owner.m_hoverspeed;
+
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
+	{
+		owner.ChangeActionState(std::make_shared<ActionJump>());
+		return;
+	}
 
 	if (GetAsyncKeyState(VK_SHIFT) & 0x8000 && !owner.m_overheatFlg)
 	{
@@ -509,6 +493,9 @@ void Player::ActionMove::Exit(Player& owner)
 void Player::ActionStep::Enter(Player& owner)
 {
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"), true);
+
+	//SE再生
+	KdAudioManager::Instance().Play("Asset/Sounds/Step.wav", false);
 }
 
 void Player::ActionStep::Update(Player& owner)
@@ -516,10 +503,6 @@ void Player::ActionStep::Update(Player& owner)
 	//ステップ・ブースト
 	if (GetAsyncKeyState(VK_SHIFT) && !owner.m_overheatFlg)
 	{
-		if (GetAsyncKeyState('D')) { owner.m_moveVec.x = 1.0f; }
-		if (GetAsyncKeyState('A')) { owner.m_moveVec.x = -1.0f; }
-		if (GetAsyncKeyState('W')) { owner.m_moveVec.z = 1.0f; }
-		if (GetAsyncKeyState('S')) { owner.m_moveVec.z = -1.0f; }
 
 		if (!owner.m_stepFlg)
 		{

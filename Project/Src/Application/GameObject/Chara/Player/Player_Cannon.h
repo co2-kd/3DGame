@@ -33,7 +33,7 @@ private:
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
 
 	// 当たり判定と
-	void UpdateCollision();
+	//void UpdateCollision();
 
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;

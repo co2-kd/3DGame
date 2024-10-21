@@ -17,13 +17,13 @@
 			"mesh":0,
 			"name":"Cube",
 			"scale":[
-				15,
+				20,
 				1,
-				15
+				20
 			],
 			"translation":[
 				0,
-				-1,
+				-1.6146807670593262,
 				0
 			]
 		}
@@ -36,8 +36,7 @@
 				"baseColorTexture":{
 					"index":0
 				},
-				"metallicFactor":0,
-				"roughnessFactor":0.5
+				"metallicFactor":0
 			}
 		}
 	],
@@ -74,10 +73,10 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":24,
+			"count":213,
 			"max":[
 				1,
-				1,
+				2.918032169342041,
 				1
 			],
 			"min":[
@@ -90,45 +89,45 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":24,
+			"count":213,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":24,
+			"count":213,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":36,
+			"count":480,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":288,
+			"byteLength":2556,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":288,
-			"byteOffset":288,
+			"byteLength":2556,
+			"byteOffset":2556,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":192,
-			"byteOffset":576,
+			"byteLength":1704,
+			"byteOffset":5112,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":72,
-			"byteOffset":768,
+			"byteLength":960,
+			"byteOffset":6816,
 			"target":34963
 		}
 	],
@@ -140,7 +139,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":840,
+			"byteLength":7776,
 			"uri":"ground.bin"
 		}
 	]

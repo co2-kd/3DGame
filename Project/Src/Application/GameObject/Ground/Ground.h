@@ -3,7 +3,7 @@ class Ground : public KdGameObject
 {
 public:
 	Ground() {}
-	~Ground() override{}
+	 virtual~Ground() override{}
 
 	void Init()override;
 	void DrawLit()override;

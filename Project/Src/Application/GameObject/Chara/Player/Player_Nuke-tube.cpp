@@ -7,6 +7,7 @@ void Player_Nuketube::Init()
 {
 	if (!m_spModel)
 	{
+		m_objectType = ObjectType::Player;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Player/Player_Nuke-tube.gltf");
 
@@ -67,15 +68,6 @@ void Player_Nuketube::Update()
 	//m_mWorld = Math::Matrix::CreateScale(0.2) * _rotation * Math::Matrix::CreateTranslation(m_pos);
 
 	CharaBase::Update();
-}
-
-//後更新
-void Player_Nuketube::PostUpdate()
-{
-
-	//アニメーションの更新
-	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
-	m_spModel->CalcNodeMatrices();
 
 	Math::Matrix _Mat = Math::Matrix::Identity;
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
@@ -85,6 +77,15 @@ void Player_Nuketube::PostUpdate()
 	}
 
 	m_mWorld = _Mat;
+}
+
+//後更新
+void Player_Nuketube::PostUpdate()
+{
+
+	//アニメーションの更新
+	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
+	m_spModel->CalcNodeMatrices();
 }
 
 ////モデル描画
@@ -145,28 +146,28 @@ void Player_Nuketube::UpdateRotate(const Math::Vector3& srcMoveVec)
 	m_worldRot.y += rotateAng;
 }
 
-//当たり判定
-void Player_Nuketube::UpdateCollision()
-{
-
-	// ①当たり判定(レイ判定)用の情報作成
-	KdCollider::RayInfo rayInfo;
-	// レイの発射位置を設定
-	rayInfo.m_pos = GetPos();
-	// 少し高い所から飛ばす(段差の許容範囲)
-	rayInfo.m_pos.y += 0.4f;
-
-	// レイの発射方向を設定
-	rayInfo.m_dir = Math::Vector3::Down;
-
-	// レイの長さ
-	rayInfo.m_range = 0.2f;
-
-	// 当たり判定をしたいタイプを設定
-	rayInfo.m_type = KdCollider::TypeGround;
-
-	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
-}
+////当たり判定
+//void Player_Nuketube::UpdateCollision()
+//{
+//
+//	// ①当たり判定(レイ判定)用の情報作成
+//	KdCollider::RayInfo rayInfo;
+//	// レイの発射位置を設定
+//	rayInfo.m_pos = GetPos();
+//	// 少し高い所から飛ばす(段差の許容範囲)
+//	rayInfo.m_pos.y += 0.4f;
+//
+//	// レイの発射方向を設定
+//	rayInfo.m_dir = Math::Vector3::Down;
+//
+//	// レイの長さ
+//	rayInfo.m_range = 0.2f;
+//
+//	// 当たり判定をしたいタイプを設定
+//	rayInfo.m_type = KdCollider::TypeGround;
+//
+//	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
+//}
 
 //---------------------------------------------------------------------------------------
 //ここから下はステートパターン関係

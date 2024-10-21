@@ -11,6 +11,7 @@ void Player_Battery::Init()
 {
 	if (!m_spModel)
 	{
+		m_objectType = ObjectType::Player;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Player/Player_battery.gltf");
 
@@ -62,17 +63,6 @@ void Player_Battery::Init()
 void Player_Battery::Update()
 {
 
-	//CharaBase::Update();
-}
-
-//後更新
-void Player_Battery::PostUpdate()
-{
-
-	//アニメーションの更新
-	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
-	m_spModel->CalcNodeMatrices();
-
 	Math::Matrix _Mat = Math::Matrix::Identity;
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
@@ -84,6 +74,7 @@ void Player_Battery::PostUpdate()
 
 
 	//カメラ取得
+	m_dir = Math::Vector3::Zero;
 	m_dir.z = 1.0f;
 	const std::shared_ptr<const CameraBase> _spCamera = m_wpCamera.lock();
 	if (_spCamera)
@@ -97,24 +88,53 @@ void Player_Battery::PostUpdate()
 	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
 
 	m_mWorld = _rotation * _Mat;
-	//m_mWorld = _Mat;
 
-
-
-	//「AttachPoint」ノードを取得する
-	if (m_spModel)
+	//ミニガン弾発射
+	m_Miniguncount--;
+	if (m_Miniguncount <= 0)
 	{
-		//blenderで作成したNULLポイントノードを探して取得
-		const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
-		m_APCannonMat = _pNodeCannon->m_worldTransform;
-
-		const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
-		m_APMinigunMat = _pNodeMinigun->m_worldTransform;
-
-		const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
-		m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
-
+		m_Miniguncount = 0;
 	}
+	if (m_Miniguncount <= 0)
+	{
+		if (GetAsyncKeyState(VK_RBUTTON) & 0x8000)
+		{
+			std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
+			if (_spMinigun)
+			{
+				_spMinigun->ShotBullet();
+				//発射間隔
+				m_Miniguncount = m_Miniguncool;
+			}
+		}
+	}
+
+	//m_mWorld = _Mat;
+	//CharaBase::Update();
+}
+
+//後更新
+void Player_Battery::PostUpdate()
+{
+
+	//アニメーションの更新
+	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
+	m_spModel->CalcNodeMatrices();
+
+	////「AttachPoint」ノードを取得する
+	//if (m_spModel)
+	//{
+	//	//blenderで作成したNULLポイントノードを探して取得
+	//	const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
+	//	m_APCannonMat = _pNodeCannon->m_worldTransform;
+
+	//	const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
+	//	m_APMinigunMat = _pNodeMinigun->m_worldTransform;
+
+	//	const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
+	//	m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
+
+	//}
 
 	//子オブジェクトにAPの座標渡し
 	std::shared_ptr<Player_Cannon> _spCannon = m_wpCannon.lock();
@@ -204,28 +224,28 @@ void Player_Battery::UpdateRotate(const Math::Vector3& srcMoveVec)
 	}
 }
 
-//当たり判定
-void Player_Battery::UpdateCollision()
-{
-
-	// ①当たり判定(レイ判定)用の情報作成
-	KdCollider::RayInfo rayInfo;
-	// レイの発射位置を設定
-	rayInfo.m_pos = GetPos();
-	// 少し高い所から飛ばす(段差の許容範囲)
-	rayInfo.m_pos.y += 0.4f;
-
-	// レイの発射方向を設定
-	rayInfo.m_dir = Math::Vector3::Down;
-
-	// レイの長さ
-	rayInfo.m_range = 0.2f;
-
-	// 当たり判定をしたいタイプを設定
-	rayInfo.m_type = KdCollider::TypeGround;
-
-	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
-}
+////当たり判定
+//void Player_Battery::UpdateCollision()
+//{
+//
+//	// ①当たり判定(レイ判定)用の情報作成
+//	KdCollider::RayInfo rayInfo;
+//	// レイの発射位置を設定
+//	rayInfo.m_pos = GetPos();
+//	// 少し高い所から飛ばす(段差の許容範囲)
+//	rayInfo.m_pos.y += 0.4f;
+//
+//	// レイの発射方向を設定
+//	rayInfo.m_dir = Math::Vector3::Down;
+//
+//	// レイの長さ
+//	rayInfo.m_range = 0.2f;
+//
+//	// 当たり判定をしたいタイプを設定
+//	rayInfo.m_type = KdCollider::TypeGround;
+//
+//	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
+//}
 
 //---------------------------------------------------------------------------------------
 //ここから下はステートパターン関係

@@ -56,7 +56,7 @@ private:
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
 
 	// 当たり判定と
-	void UpdateCollision();
+	//void UpdateCollision();
 
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
@@ -80,6 +80,10 @@ private:
 	Math::Matrix m_APMinigunMat = {};
 	std::weak_ptr<Player_Nuketube> m_wpNuketube;
 	Math::Matrix m_APNuketubeMat = {};
+
+	const int m_Miniguncool = 4;
+	int m_Miniguncount = 0;
+
 
 //ステートパターン関係
 private:
