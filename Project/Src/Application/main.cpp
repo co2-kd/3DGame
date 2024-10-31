@@ -305,7 +305,7 @@ void Application::Execute()
 		//=========================================
 
 		m_fpsController.Update();
-		std::string titleBer = "Anti-Gravity Fortress" + std::to_string(m_fpsController.m_nowfps) + "fps";
+		std::string titleBer = "Floating Tankar Period" + std::to_string(m_fpsController.m_nowfps) + "fps";
 		SetWindowTextA(m_window.GetWndHandle(), titleBer.c_str());
 	}
 

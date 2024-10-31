@@ -1,6 +1,6 @@
 ﻿#include "BulletBase.h"
 
-void BulletBase::DrawLit()
+void BulletBase::DrawUnLit()
 {
 	if (!m_spModel) return;
 

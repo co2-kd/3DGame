@@ -6,8 +6,13 @@
 #include"../../GameObject/Chara/Player/Player_Cannon.h"
 #include"../../GameObject/Chara/Player/Player_Minigun.h"
 #include"../../GameObject/Chara/Player/Player_Nuke-tube.h"
+
 #include"../../GameObject/Chara/Enemy/Enemy.h"
 #include"../../GameObject/Chara/Enemy/Drone/Drone.h"
+#include"../../GameObject/Chara/Enemy/Turret/T_Pedestal.h"
+#include"../../GameObject/Chara/Enemy/Turret/T_Leg.h"
+#include"../../GameObject/Chara/Enemy/Turret/T_Type/T_Laser/T_Laser.h"
+
 #include"../../GameObject/Ground/Ground.h"
 #include"../../GameObject/Back/Back.h"
 
@@ -16,6 +21,7 @@
 
 void GameScene::Init()
 {
+	ShowCursor(false);
 
 	//地面（仮）
 	std::shared_ptr<Ground> _ground;
@@ -58,7 +64,21 @@ void GameScene::Init()
 	
 	std::shared_ptr<Drone> _drone = std::make_shared<Drone>();
 	_drone->Init();
+	_drone->SetPos({ -20,-50,360 });
 	AddObject(_drone);
+
+	//タレット
+	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
+	_t_pedestal->Init();
+	_t_pedestal->SetPos({0,1,90});
+	AddObject(_t_pedestal);
+	std::shared_ptr<T_Leg> _t_leg = std::make_shared<T_Leg>();
+	_t_leg->Init();
+	AddObject(_t_leg);
+
+	std::shared_ptr<T_Laser> _t_laser = std::make_shared<T_Laser>();
+	_t_laser->Init();
+	AddObject(_t_laser);
 
 
 	//カメラの追加
@@ -69,7 +89,9 @@ void GameScene::Init()
 	//セッター関連
 	_camera->SetTarget(_player);
 	_camera->RegistHitObject(_ground);
+	_camera->RegistHitObject(_t_pedestal);
 	_player->RegistHitObject(_ground);
+	_player->RegistHitObject(_t_pedestal);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
 	_player_battery->SetCamera(_camera);
@@ -81,6 +103,13 @@ void GameScene::Init()
 	_player_minigun->SetParent(_player_battery);
 	_player_minigun->SetCamera(_camera);
 	_player_nuketube->SetParent(_player_battery);
+	_drone->SetTarget(_player);
+	_t_pedestal->SetT_Leg(_t_leg);
+	_t_leg->SetParent(_t_pedestal);
+	_t_leg->SetTarget(_player);
+	_t_leg->SetTurretBase(_t_laser);
+	_t_laser->SetParent(_t_leg);
+	_t_laser->SetTarget(_player);
 
 	//BGM再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Game.wav", true);
@@ -105,7 +134,7 @@ void GameScene::Event()
 		if (!m_keyFlg)
 		{
 			m_keyFlg = true;
-			KdAudioManager::Instance().SoundReset();
+			KdAudioManager::Instance().StopAllSound();
 			SceneManager::Instance().SetNextScene
 			(
 				SceneManager::SceneType::Title

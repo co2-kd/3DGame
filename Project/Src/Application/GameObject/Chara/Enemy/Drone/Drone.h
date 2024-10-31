@@ -16,5 +16,12 @@ public:
 	void OnHit()			override;
 
 private:
+	void UpdateRotate(const Math::Vector3& srcMoveVec);
 
+	//本体から銃口へのローカル行列
+	Math::Matrix m_localmuzzleMat;
+
+	Math::Matrix m_APMuzzleMat;
+
+	int m_hp = 10;
 };

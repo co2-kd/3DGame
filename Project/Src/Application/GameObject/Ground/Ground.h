@@ -12,5 +12,6 @@ public:
 
 private:
 	std::shared_ptr<KdModelWork> m_spModel = nullptr;
+	std::shared_ptr<KdModelWork> m_spModel2 = nullptr;
 
 };

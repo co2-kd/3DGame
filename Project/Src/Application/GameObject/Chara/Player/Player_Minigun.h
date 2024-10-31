@@ -39,13 +39,10 @@ private:
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 	std::weak_ptr<CameraBase>			m_wpCamera;
-	Math::Vector3						m_worldRot;
 
 
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
 
-	//キャラが向いている方向
-	Math::Vector3 m_dir = Math::Vector3::Zero;
 
 	//本体から銃口へのローカル行列
 	Math::Matrix m_localmuzzleMat;
@@ -63,6 +60,8 @@ private:
 		virtual void Update(Player_Minigun& owner) {}
 		virtual void Exit(Player_Minigun& owner) {}
 	};
+
+
 
 
 	void ChangeActionState(std::shared_ptr<ActionStateBase> nextState);

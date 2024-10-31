@@ -189,7 +189,7 @@ void Player_Battery::UpdateRotate(const Math::Vector3& srcMoveVec)
 	// キャラの正面方向のベクトル
 	Math::Vector3 _nowDir = GetMatrix().Backward();
 
-	// 移動方向のベクトル
+	// カメラ方向のベクトル
 	Math::Vector3 _targetDir = srcMoveVec;
 
 	_nowDir.Normalize();

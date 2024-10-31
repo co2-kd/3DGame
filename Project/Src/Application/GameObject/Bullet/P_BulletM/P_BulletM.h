@@ -11,8 +11,6 @@ public:
 
 	void Update()override;
 
-	void DrawLit()override {}
-	void DrawUnLit()override;
 	void DrawBright() override;
 
 	void OnHit()override;

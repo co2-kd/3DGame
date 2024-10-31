@@ -20,7 +20,7 @@ void Player::Init()
 		m_spAnimator = std::make_shared<KdAnimator>();
 
 	}
-	m_pos.y = 30.0f;
+	m_pos.y = 10.0f;
 	SetPos(m_pos);
 	//「AttachPoint」ノードを取得する
 	if (m_spModel)
@@ -42,7 +42,7 @@ void Player::Init()
 	m_boostbackTex.Load("Asset/Textures/boost_bar_back.png");
 	m_boostflontTex.Load("Asset/Textures/boost_bar_flont.png");
 	m_boostTex.Load("Asset/Textures/boost_bar2.png");
-	m_tex.Load("Asset/Textures/Reticle.png");
+	m_tex.Load("Asset/Textures/cross.png");
 
 	//初期状態を「待機状態」へ設定
 	ChangeActionState(std::make_shared<ActionIdle>());
@@ -82,6 +82,12 @@ void Player::Update()
 	m_moveVec.Normalize();
 	m_moveVec *= m_speed;
 	m_pos += m_moveVec;
+	//天井判定(仮)
+	if (m_pos.y > 35.0f)
+	{
+		m_pos.y = 35.0f;
+	}
+
 	//m_moveVec.Normalize();
 	//m_pos += GetMatrix().Backward() * m_speed;
 
@@ -234,9 +240,11 @@ void Player::UpdateCollision()
 	// レイの長さ
 	rayInfo.m_range = m_gravity - m_floating + enableStepHigh;
 	// 当たり判定をしたいタイプを設定
-	rayInfo.m_type = KdCollider::TypeGround;
-
-	m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
+	rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
+	}
 
 	// ②HIT判定対象オブジェクトに総当たり
 	for (std::weak_ptr<KdGameObject> wpGameObj : m_wpHitObjectList)
@@ -284,7 +292,7 @@ void Player::UpdateCollision()
 					{
 						if (m_boostgauge < m_boostgaugeMax)
 						{
-							m_boostgauge += 3;
+							m_boostgauge += 5;
 						}
 					}
 				}
@@ -298,9 +306,12 @@ void Player::UpdateCollision()
 	KdCollider::SphereInfo sphereInfo;
 	sphereInfo.m_sphere.Center = GetPos() + Math::Vector3(0,1.5f,0);
 	sphereInfo.m_sphere.Radius = 2.5f;
-	sphereInfo.m_type = KdCollider::TypeGround;
+	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
-	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
+	}
 
 	// ②HIT対象オブジェクトに総当たり
 	for (std::weak_ptr<KdGameObject> weGameObj : m_wpHitObjectList)

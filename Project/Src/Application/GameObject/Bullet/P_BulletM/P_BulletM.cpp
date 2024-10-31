@@ -22,9 +22,11 @@ void P_BulletM::Update()
 	{
 		//弾消滅
 		m_isExpired = true;
+		return;
 	}
 
-	for (int i = 0; i < 2; i++)
+	//移動回数
+	for (int i = 0; i < 3; i++)
 	{
 		//座標更新
 		//座標 += 向き情報(1.0f) * 移動速度
@@ -38,13 +40,6 @@ void P_BulletM::Update()
 
 		UpdateCollision();
 	}
-}
-
-void P_BulletM::DrawUnLit()
-{
-	if (!m_spModel) return;
-
-	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
 void P_BulletM::DrawBright()
@@ -72,8 +67,10 @@ void P_BulletM::UpdateCollision()
 	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage;
 
 	//デバッグ用
-	//m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
-
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
+	}
 	//全オブジェクトと当たり判定!!!!!
 	for (auto& obj : SceneManager::Instance().GetObjList())
 	{

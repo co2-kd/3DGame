@@ -38,16 +38,9 @@ private:
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 	std::weak_ptr<CameraBase>			m_wpCamera;
-	Math::Vector3						m_worldRot;
 
 
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
-
-	//キャラが向いている方向
-	Math::Vector3 m_dir = Math::Vector3::Zero;
-
-
-	Math::Vector3 m_pos = Math::Vector3::Zero;
 
 
 //ステートパターン関係

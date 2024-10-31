@@ -106,6 +106,24 @@
     <Filter Include="Src\Application\GameObject\Bullet\P_BulletM">
       <UniqueIdentifier>{8b402274-d78b-4cea-8d5f-413e5187f78d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Scene">
+      <UniqueIdentifier>{0d4d0b77-1630-425c-9592-7504b5abe6ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Scene\Title">
+      <UniqueIdentifier>{0c9bbe61-622d-48df-9d46-8db8ede8b015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Scene\ResultScene">
+      <UniqueIdentifier>{758bb479-adf6-449a-840c-edc80be96279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\Turret">
+      <UniqueIdentifier>{a9773003-77d2-4595-8baa-8f4f06131513}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type">
+      <UniqueIdentifier>{daa0a3b5-84e3-40ac-b198-5d0bdb489de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser">
+      <UniqueIdentifier>{dd04a303-c8a0-4e96-998a-ac5a367cb48f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -318,6 +336,24 @@
     <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.h">
       <Filter>Src\Application\GameObject\Bullet\P_BulletM</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Scene\Title\Title.h">
+      <Filter>Src\Application\GameObject\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Scene\ResultScene\ResultScene.h">
+      <Filter>Src\Application\Scene\ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\TurretBase.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -502,6 +538,24 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.cpp">
       <Filter>Src\Application\GameObject\Bullet\P_BulletM</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Scene\Title\Title.cpp">
+      <Filter>Src\Application\GameObject\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Scene\ResultScene\ResultScene.cpp">
+      <Filter>Src\Application\Scene\ResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\TurretBase.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

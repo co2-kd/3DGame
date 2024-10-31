@@ -62,19 +62,15 @@ private:
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 	std::weak_ptr<CameraBase>			m_wpCamera;
 	std::vector<std::weak_ptr<KdGameObject>>	m_wpHitObjectList{};
-	Math::Vector3						m_worldRot;
 
 	//プレイヤー座標補正
 	const float m_adjustHeight = 1.0f;
 
-	//キャラが向いている方向
-	Math::Vector3 m_dir = Math::Vector3::Zero;
-
 	float m_speed = 0;
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
 
-	const float m_gravity = 1.0f;
-	const float m_floatingWeak = 0.05f;
+	const float m_gravity = 1.5f;
+	const float m_floatingWeak = 0.03f;
 	const float m_floatingMin = 0.0f;
 	float m_floating = 0;
 
@@ -85,7 +81,7 @@ private:
 	bool m_jumpFlg = false;
 	float m_jumpspeed = 0;
 	const float m_jumpspeedPow = 0.1f;
-	const float m_jumpspeedMax = 1.5f;
+	const float m_jumpspeedMax = 2.0f;
 
 	//ステップ・ブースト
 	bool m_stepFlg = false;

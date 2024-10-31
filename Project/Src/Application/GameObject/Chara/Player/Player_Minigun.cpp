@@ -63,7 +63,10 @@ void Player_Minigun::Update()
 	_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
 
 	//銃口位置をデバッグ表示
-	m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
+	}
 
 	//弾発射
 	if (m_shotFlg)
@@ -88,9 +91,12 @@ void Player_Minigun::Update()
 		//_rayInfo.m_dir = _parentMat.Backward();
 		_rayInfo.m_range = _range;
 		//_rayInfo.m_range = 10000;
-		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage;
+		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage | KdCollider::TypeBump;
 
-		m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
+		if (!(GetAsyncKeyState('Q') & 0x8000))
+		{
+			m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
+		}
 
 		//衝突情報リスト
 		std::list<KdCollider::CollisionResult> _resultList;

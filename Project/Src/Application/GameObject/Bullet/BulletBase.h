@@ -6,7 +6,7 @@ public:
 	BulletBase() {}
 	virtual ~BulletBase()override {}
 
-	virtual void DrawLit()override;
+	virtual void DrawUnLit()override;
 
 	//void SetParent(const std::shared_ptr<KdGameObject>& parent)
 	//{

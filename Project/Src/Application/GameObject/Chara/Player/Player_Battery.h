@@ -61,16 +61,9 @@ private:
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 	std::weak_ptr<CameraBase>			m_wpCamera;
-	Math::Vector3						m_worldRot;
 
 
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
-
-	//キャラが向いている方向
-	Math::Vector3 m_dir = Math::Vector3::Zero;
-
-
-	Math::Vector3 m_pos = Math::Vector3::Zero;
 
 
 	//アタッチポイント関係
@@ -81,7 +74,7 @@ private:
 	std::weak_ptr<Player_Nuketube> m_wpNuketube;
 	Math::Matrix m_APNuketubeMat = {};
 
-	const int m_Miniguncool = 4;
+	const int m_Miniguncool = 5;
 	int m_Miniguncount = 0;
 
 

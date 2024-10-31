@@ -16,6 +16,11 @@ public:
 		m_wpParent = parent;
 	}
 
+	void SetTarget(const std::shared_ptr<KdGameObject>& target)
+	{
+		m_wpTarget = target;
+	}
+
 	virtual void SetAPMatrix(const Math::Matrix _localMat ={})
 	{
 		m_localMat = {};
@@ -28,9 +33,20 @@ protected:
 	//親（持ち主）の情報
 	std::weak_ptr<KdGameObject> m_wpParent;
 
+	//標的の情報
+	std::weak_ptr<KdGameObject> m_wpTarget;
+
 	//親から本体へローカル行列（相対位置）
 	Math::Matrix m_localMat;
 	
 	//座標
 	Math::Vector3 m_pos;
+
+	//キャラが向きたい方向
+	Math::Vector3 m_dir = Math::Vector3::Zero;
+
+	//回転行列（）
+	Math::Vector3 m_worldRot;
+
+
 };
