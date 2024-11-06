@@ -83,6 +83,7 @@ public:
 	virtual std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
 
 	virtual void OnHit(){}
+	virtual const bool GetSearchFlg()const { return false; }
 
 protected:
 

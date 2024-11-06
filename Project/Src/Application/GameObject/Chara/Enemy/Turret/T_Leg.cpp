@@ -49,7 +49,20 @@ void T_Leg::Update()
 		m_dir = m_pos - _spTarget->GetPos();
 	}
 	// キャラクターの回転行列を創る
-	UpdateRotate(m_dir);
+	//サーチ判定
+	if (m_dir.Length() < m_searchArea)
+	{
+		m_searchFlg = true;
+	}
+	else
+	{
+		m_searchFlg = false;
+	}
+	m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
+	if (m_searchFlg)
+	{
+		UpdateRotate(m_dir);
+	}
 
 	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
 
@@ -98,7 +111,7 @@ void T_Leg::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	float rotateAng = std::clamp(_betweenAng, -1.0f, 1.0f);
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{

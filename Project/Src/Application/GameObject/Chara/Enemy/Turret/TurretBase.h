@@ -22,4 +22,8 @@ protected:
 
 	//本体から銃口へのローカル行列
 	Math::Matrix m_localmuzzleMat;
+
+	bool m_ShotFlg = false;
+	const int m_Shotcool = 0;
+	int m_Shotcount = 0;
 };

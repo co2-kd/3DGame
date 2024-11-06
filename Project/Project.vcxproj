@@ -158,6 +158,7 @@
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
     <ClInclude Include="Src\Application\GameObject\Back\Back.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\BulletBase.h" />
+    <ClInclude Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\CameraBase.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="..\Library\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Src\Application\GameObject\Back\Back.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\BulletBase.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\CameraBase.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.cpp" />

@@ -24,6 +24,7 @@ public:
 	}
 
 	//ゲッター
+	const bool GetSearchFlg()const override { return m_searchFlg; }
 
 private:
 
@@ -35,6 +36,8 @@ private:
 	//std::shared_ptr<KdModelWork>	m_spModel	= nullptr;
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 
+	bool m_searchFlg = false;
+	const float m_searchArea = 50;
 
 	//アタッチポイント関係
 	std::weak_ptr<TurretBase> m_wpTurretBase;

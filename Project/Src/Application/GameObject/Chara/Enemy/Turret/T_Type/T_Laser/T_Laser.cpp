@@ -1,4 +1,6 @@
 ﻿#include "T_Laser.h"
+#include"../../../../../../Scene/SceneManager.h"
+#include"../../../../../Bullet/E_B_Laser/E_B_Laser.h"
 
 void T_Laser::Init()
 {
@@ -28,7 +30,11 @@ void T_Laser::Init()
 void T_Laser::Update()
 {
 	TurretBase::Update();
-	TurretBase::UpdateRotate(m_dir);
+	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
+	if (_spParent->GetSearchFlg())
+	{
+		TurretBase::UpdateRotate(m_dir);
+	}
 
 	Math::Matrix _rotation = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(m_worldRot.x));
 
@@ -41,6 +47,96 @@ void T_Laser::Update()
 	{
 		m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
 	}
+
+	//弾発射
+	if (_spParent->GetSearchFlg())
+	{
+		m_Shotcount--;
+		if (m_Shotcount < 0)
+		{
+			m_Shotcount = 0;
+		}
+		if (m_Shotcount <= 0)
+		{
+			m_ShotFlg = true;
+			m_Shotcount = m_Shotcool;
+		}
+		//弾発射
+		if (m_ShotFlg)
+		{
+			// レイ判定用パラメーター
+			KdCollider::RayInfo _rayInfo;
+
+			//レイの各パラメータを設定
+			_rayInfo.m_pos = _muzzlePos;
+			_rayInfo.m_dir = m_mWorld.Backward();
+			_rayInfo.m_range = 1000.0f;
+			_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage | KdCollider::TypeBump;
+
+			if (!(GetAsyncKeyState('Q') & 0x8000))
+			{
+				m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
+			}
+
+			//衝突情報リスト
+			std::list<KdCollider::CollisionResult> _resultList;
+
+			//作成したレイ情報でオブジェクトリストをと当たり判定
+			for (auto& obj : SceneManager::Instance().GetObjList())
+			{
+				obj->Intersects(_rayInfo, &_resultList);
+			}
+
+			//レイに当たったリストから一番近いオブジェクトを検出
+			bool _ishit = false;
+			float _maxOverLap = 0.0f;
+			Math::Vector3 _hitPos = Math::Vector3::Zero;
+			for (auto& ret : _resultList)
+			{
+				//レイが当たった場合の貫通した長さが一番長いものを探す
+				if (_maxOverLap < ret.m_overlapDistance)
+				{
+					_maxOverLap = ret.m_overlapDistance;
+					_hitPos = ret.m_hitPos;
+					_ishit = true;
+				}
+			}
+			//当たっていたら
+			if (_ishit)
+			{
+				//レイの着弾点を利用して弾を飛ばすベクトルを算出
+				Math::Vector3 _bulletdir = _hitPos - _muzzlePos;
+				_bulletdir.Normalize();
+
+				//発射
+				std::shared_ptr<E_B_Laser> _bullet = std::make_shared<E_B_Laser>();
+				_bullet->Init();
+				_bullet->Shot(_muzzlePos, _bulletdir);
+				SceneManager::Instance().AddObject(_bullet);
+
+				//攻撃SE再生
+				//KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
+			}
+			else
+			{
+				//レイの着弾点を利用して弾を飛ばすベクトルを算出
+				Math::Vector3 _bulletdir = (_rayInfo.m_dir * _rayInfo.m_range) - _muzzlePos;
+				_bulletdir.Normalize();
+				//発射
+				std::shared_ptr<E_B_Laser> _bullet = std::make_shared<E_B_Laser>();
+				_bullet->Init();
+				_bullet->Shot(_muzzlePos, _bulletdir);
+				SceneManager::Instance().AddObject(_bullet);
+
+				//攻撃SE再生
+				//KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
+			}
+
+			//弾の発射が終わったらフラグを未発射に戻す
+			m_ShotFlg = false;
+		}
+	}
+
 }
 
 void T_Laser::PostUpdate()

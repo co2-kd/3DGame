@@ -14,7 +14,6 @@ void TurretBase::Update()
 	{
 		m_dir = m_pos - _spTarget->GetPos();
 	}
-
 }
 
 void TurretBase::UpdateRotate(const Math::Vector3& srcMoveVec)
@@ -49,15 +48,8 @@ void TurretBase::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	float rotateAng = std::clamp(_betweenAng, -1.0f, 1.0f);
 	m_worldRot.x += rotateAng;
-	m_worldRot.x = std::clamp(m_worldRot.x, 0.0f, 90.0f);
-	if (m_worldRot.x >= 360)
-	{
-		m_worldRot.x -= 360;
-	}
-	else if (m_worldRot.x < 0)
-	{
-		m_worldRot.x += 360;
-	}
+	//砲塔の射角の制限
+	m_worldRot.x = std::clamp(m_worldRot.x, -30.0f, 30.0f);
 }

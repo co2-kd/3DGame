@@ -124,6 +124,9 @@
     <Filter Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser">
       <UniqueIdentifier>{dd04a303-c8a0-4e96-998a-ac5a367cb48f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Bullet\E_B_Laser">
+      <UniqueIdentifier>{9f47d2be-14a0-43d8-b98c-9ed3a5c7fc8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -354,6 +357,9 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.h">
       <Filter>Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.h">
+      <Filter>Src\Application\GameObject\Bullet\E_B_Laser</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -556,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.cpp">
       <Filter>Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.cpp">
+      <Filter>Src\Application\GameObject\Bullet\E_B_Laser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

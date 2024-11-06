@@ -13,6 +13,9 @@ void Player::Init()
 		m_objectType = ObjectType::Player;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Player/Player_main.gltf");
+
+		m_pCollider = std::make_unique<KdCollider>();
+		m_pCollider->RegisterCollisionShape("Player", m_spModel, KdCollider::TypeDamage);
 		//デバッグ用
 		m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 
