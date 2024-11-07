@@ -59,4 +59,7 @@ protected:
 
 	// カメラ回転用マウス座標の差分
 	POINT						m_FixMousePos{};
+
+	//カーソル固定解除フラグ（デバッグ）
+	bool m_mouseFlg = false;
 };

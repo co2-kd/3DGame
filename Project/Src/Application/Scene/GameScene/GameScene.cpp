@@ -70,7 +70,7 @@ void GameScene::Init()
 	//タレット
 	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
 	_t_pedestal->Init();
-	_t_pedestal->SetPos({0,1,90});
+	_t_pedestal->SetPos({-70,-54.5f,380});
 	AddObject(_t_pedestal);
 	std::shared_ptr<T_Leg> _t_leg = std::make_shared<T_Leg>();
 	_t_leg->Init();

@@ -23,7 +23,7 @@ private:
 	//本体から銃口へのローカル行列
 	Math::Matrix m_localmuzzleMat;
 
-	const int m_Shotcool = 50;
+	const int m_Shotcool = 60;
 
 
 	//ステートパターン関係

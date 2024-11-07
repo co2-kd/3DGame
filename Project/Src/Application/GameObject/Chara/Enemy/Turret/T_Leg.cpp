@@ -58,7 +58,11 @@ void T_Leg::Update()
 	{
 		m_searchFlg = false;
 	}
-	m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
+
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
+	}
 	if (m_searchFlg)
 	{
 		UpdateRotate(m_dir);

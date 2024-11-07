@@ -22,13 +22,24 @@ void TPSCamera::PostUpdate()
 	}
 
 	// カメラの回転
-	if (!(GetAsyncKeyState(VK_TAB) & 0x8000))
+	if ((GetAsyncKeyState(VK_TAB) & 0x8000))
+	{
+		if (!m_mouseFlg)
+		{
+			m_mouseFlg = true;
+			ShowCursor(true);
+		}
+		else
+		{
+			m_mouseFlg = false;
+			ShowCursor(false);
+		}
+	}
+
+
+	if (!m_mouseFlg)
 	{
 		UpdateRotateByMouse();
-	}
-	else
-	{
-		ShowCursor(true);
 	}
 	m_mRotation = GetRotationMatrix();
 	m_mWorld	= m_mLocalPos * m_mRotation * _targetMat;

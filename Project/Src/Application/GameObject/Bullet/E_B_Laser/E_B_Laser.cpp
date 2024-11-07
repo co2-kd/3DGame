@@ -76,7 +76,7 @@ void E_B_Laser::UpdateCollision()
 	{
 		if (obj->Intersects(sphereInfo, nullptr))
 		{
-			//敵なら当たった判定
+			//プレイヤーなら当たった判定
 			if (obj->GetObjectType() == ObjectType::Player)
 			{
 				obj->OnHit();
