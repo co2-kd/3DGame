@@ -49,11 +49,6 @@ void E_B_Laser::DrawBright()
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
-void E_B_Laser::OnHit()
-{
-	m_isExpired = true;
-}
-
 void E_B_Laser::UpdateCollision()
 {
 
@@ -79,7 +74,7 @@ void E_B_Laser::UpdateCollision()
 			//プレイヤーなら当たった判定
 			if (obj->GetObjectType() == ObjectType::Player)
 			{
-				obj->OnHit();
+				obj->OnHit(m_dmg);
 			}
 			m_timelimit = 0;
 		}

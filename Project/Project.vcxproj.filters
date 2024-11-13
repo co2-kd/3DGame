@@ -127,6 +127,9 @@
     <Filter Include="Src\Application\GameObject\Bullet\E_B_Laser">
       <UniqueIdentifier>{9f47d2be-14a0-43d8-b98c-9ed3a5c7fc8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Bullet\P_BulletC">
+      <UniqueIdentifier>{ee1d3268-c449-4dc3-a6c2-bbd73746c08b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -360,6 +363,9 @@
     <ClInclude Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.h">
       <Filter>Src\Application\GameObject\Bullet\E_B_Laser</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.h">
+      <Filter>Src\Application\GameObject\Bullet\P_BulletC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -565,6 +571,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.cpp">
       <Filter>Src\Application\GameObject\Bullet\E_B_Laser</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.cpp">
+      <Filter>Src\Application\GameObject\Bullet\P_BulletC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

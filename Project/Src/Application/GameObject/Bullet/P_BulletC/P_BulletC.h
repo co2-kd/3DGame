@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include"../BulletBase.h"
 
-class P_BulletM :public BulletBase
+class P_BulletC :public BulletBase
 {
 public:
-	P_BulletM(){}
-	~P_BulletM()override {}
+	P_BulletC(){}
+	~P_BulletC()override {}
 
 	void Init() override;
 
@@ -14,13 +14,18 @@ public:
 	void DrawBright() override;
 
 
-
 private:
 	// 当たり判定
 	void UpdateCollision();
 
-	const float m_speed = 1.0f;
+	//着弾時の爆発
+	void ExpCollision();
+
+	bool m_expFlg = false;
+
+
+	const float m_speed = 2.0f;
 	int m_timelimit;
 
-	const int m_dmg = 1;
+	const int m_dmg = 10;
 };

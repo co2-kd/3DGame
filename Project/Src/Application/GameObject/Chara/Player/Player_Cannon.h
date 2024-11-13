@@ -28,6 +28,8 @@ public:
 		m_localMat = _localMat;
 	}
 
+	void ShotBullet();
+
 private:
 
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
@@ -43,6 +45,14 @@ private:
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
 
 
+	//本体から銃口へのローカル行列
+	Math::Matrix m_localmuzzleMat;
+	Math::Vector3 m_muzzlePos;
+
+
+	bool m_shotFlg = false;
+
+
 //ステートパターン関係
 private:
 	class ActionStateBase
@@ -53,6 +63,27 @@ private:
 		virtual void Enter(Player_Cannon& owner) {}
 		virtual void Update(Player_Cannon& owner) {}
 		virtual void Exit(Player_Cannon& owner) {}
+	};
+
+	//射撃状態
+	class ActionShoting : public ActionStateBase
+	{
+	public:
+		~ActionShoting() {}
+
+		void Enter(Player_Cannon& owner) override;
+		void Update(Player_Cannon& owner) override;
+		void Exit(Player_Cannon& owner) override;
+	};
+	//射撃終了状態
+	class ActionUnShot : public ActionStateBase
+	{
+	public:
+		~ActionUnShot() {}
+
+		void Enter(Player_Cannon& owner) override;
+		void Update(Player_Cannon& owner) override;
+		void Exit(Player_Cannon& owner) override;
 	};
 
 

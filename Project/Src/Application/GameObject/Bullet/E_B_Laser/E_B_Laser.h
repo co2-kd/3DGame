@@ -13,12 +13,12 @@ public:
 
 	void DrawBright() override;
 
-	void OnHit()override;
-
 private:
 	// 当たり判定
 	void UpdateCollision();
 
 	const float m_speed = 1.0f;
 	int m_timelimit;
+
+	const int m_dmg = 1;
 };

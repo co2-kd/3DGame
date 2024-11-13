@@ -36,6 +36,8 @@ public:
 		m_wpBattery = battery;
 	}
 
+	void OnHit(const int _dmg)override;
+
 	//ゲッター
 	const Math::Matrix GetAPBatteryMatrix()const { return m_APBatteryMat; }//アタッチポイント
 
@@ -69,6 +71,9 @@ private:
 	float m_speed = 0;
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
 
+	Math::Vector3 m_velocity;//慣性
+	const float m_inertiaFactor = 0.96f;  // 慣性の強さ、0.9 などで減衰させる
+
 	const float m_gravity = 1.5f;
 	const float m_floatingWeak = 0.03f;
 	const float m_floatingMin = 0.0f;
@@ -85,12 +90,13 @@ private:
 
 	//ステップ・ブースト
 	bool m_stepFlg = false;
+	bool m_stepbeginFlg = false;
 
-	float m_stepspeed = 0;
-	const float m_stepspeedPow = 1.5f;
+	//float m_stepspeed = 0;
+	const float m_stepspeed = 1.0f;
 
-	float m_boostspeed = 0;
-	const float m_boostspeedPow = 0.8f;
+	//float m_boostspeed = 0;
+	const float m_boostspeed = 0.7f;
 
 	//ドライブブースト
 	bool m_driveFlg = false;
@@ -111,6 +117,12 @@ private:
 	bool m_overheatFlg = false;
 
 	bool m_boostFlg = false;
+
+	bool m_groundFlg = false;
+
+	//HP
+	const int m_hpMax = 100;
+	int m_hp = m_hpMax;
 
 	//アタッチポイント関係
 	std::weak_ptr<Player_Battery> m_wpBattery;

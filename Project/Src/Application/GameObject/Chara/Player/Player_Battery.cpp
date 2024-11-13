@@ -108,6 +108,25 @@ void Player_Battery::Update()
 			}
 		}
 	}
+	//キャノン弾発射
+	m_Cannoncount--;
+	if (m_Cannoncount <= 0)
+	{
+		m_Cannoncount = 0;
+	}
+	if (m_Cannoncount <= 0)
+	{
+		if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+		{
+			std::shared_ptr<Player_Cannon> _spCannon = m_wpCannon.lock();
+			if (_spCannon)
+			{
+				_spCannon->ShotBullet();
+				//発射間隔
+				m_Cannoncount = m_Cannoncool;
+			}
+		}
+	}
 
 	//m_mWorld = _Mat;
 	//CharaBase::Update();

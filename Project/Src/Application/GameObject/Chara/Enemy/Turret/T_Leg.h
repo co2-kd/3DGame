@@ -23,6 +23,8 @@ public:
 		m_wpTurretBase = turretbase;
 	}
 
+	void OnHit(const int _dmg)override;
+
 	//ゲッター
 	const bool GetSearchFlg()const override { return m_searchFlg; }
 
@@ -42,6 +44,11 @@ private:
 	//アタッチポイント関係
 	std::weak_ptr<TurretBase> m_wpTurretBase;
 	Math::Matrix m_APTurretMat = {};
+
+
+	//HP
+	const int m_hpMax = 50;
+	int m_hp = m_hpMax;
 
 
 	//ステートパターン関係

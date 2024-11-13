@@ -11,11 +11,25 @@
 		{
 			"name":"Scene",
 			"nodes":[
-				2
+				3
 			]
 		}
 	],
 	"nodes":[
+		{
+			"name":"AP_port",
+			"rotation":[
+				0,
+				0,
+				0.38268348574638367,
+				0.9238795042037964
+			],
+			"translation":[
+				0.6658422350883484,
+				0.09291543066501617,
+				0
+			]
+		},
 		{
 			"name":"APm_muzzle",
 			"translation":[
@@ -27,6 +41,12 @@
 		{
 			"mesh":0,
 			"name":"Dreadnaught-minigun-barrels",
+			"rotation":[
+				0,
+				0,
+				-1,
+				4.371138828673793e-08
+			],
 			"translation":[
 				0.4903331995010376,
 				-0.029246807098388672,
@@ -36,10 +56,142 @@
 		{
 			"children":[
 				0,
-				1
+				1,
+				2
 			],
 			"mesh":1,
 			"name":"Dreadnaught-minigun"
+		}
+	],
+	"animations":[
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":2,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":2,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":2,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"Shotbegin",
+			"samplers":[
+				{
+					"input":9,
+					"interpolation":"STEP",
+					"output":10
+				},
+				{
+					"input":11,
+					"interpolation":"LINEAR",
+					"output":12
+				},
+				{
+					"input":9,
+					"interpolation":"STEP",
+					"output":13
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":2,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":2,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":2,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"Shoting",
+			"samplers":[
+				{
+					"input":14,
+					"interpolation":"STEP",
+					"output":15
+				},
+				{
+					"input":16,
+					"interpolation":"LINEAR",
+					"output":17
+				},
+				{
+					"input":14,
+					"interpolation":"STEP",
+					"output":18
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":2,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":2,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":2,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"Shotend",
+			"samplers":[
+				{
+					"input":19,
+					"interpolation":"STEP",
+					"output":20
+				},
+				{
+					"input":21,
+					"interpolation":"LINEAR",
+					"output":22
+				},
+				{
+					"input":19,
+					"interpolation":"STEP",
+					"output":23
+				}
+			]
 		}
 	],
 	"materials":[
@@ -85,9 +237,10 @@
 					"attributes":{
 						"POSITION":4,
 						"NORMAL":5,
-						"TEXCOORD_0":6
+						"TEXCOORD_0":6,
+						"TEXCOORD_1":7
 					},
-					"indices":7,
+					"indices":8,
 					"material":0
 				}
 			]
@@ -153,7 +306,7 @@
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":244,
+			"count":268,
 			"max":[
 				0.7137792706489563,
 				0.21307256817817688,
@@ -169,20 +322,152 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":244,
+			"count":268,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":244,
+			"count":268,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
+			"componentType":5126,
+			"count":268,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":8,
 			"componentType":5123,
-			"count":480,
+			"count":528,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":9,
+			"componentType":5126,
+			"count":2,
+			"max":[
+				0.5
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":10,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":11,
+			"componentType":5126,
+			"count":15,
+			"max":[
+				0.5
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":12,
+			"componentType":5126,
+			"count":15,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":13,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":14,
+			"componentType":5126,
+			"count":2,
+			"max":[
+				0.6666666666666666
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":15,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":16,
+			"componentType":5126,
+			"count":20,
+			"max":[
+				0.6666666666666666
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":17,
+			"componentType":5126,
+			"count":20,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":18,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":19,
+			"componentType":5126,
+			"count":2,
+			"max":[
+				1
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":20,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":21,
+			"componentType":5126,
+			"count":30,
+			"max":[
+				1
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":22,
+			"componentType":5126,
+			"count":30,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":23,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -212,27 +497,108 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":2928,
+			"byteLength":3216,
 			"byteOffset":3168,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2928,
-			"byteOffset":6096,
+			"byteLength":3216,
+			"byteOffset":6384,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1952,
-			"byteOffset":9024,
+			"byteLength":2144,
+			"byteOffset":9600,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":960,
-			"byteOffset":10976,
+			"byteLength":2144,
+			"byteOffset":11744,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":1056,
+			"byteOffset":13888,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":8,
+			"byteOffset":14944
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":14952
+		},
+		{
+			"buffer":0,
+			"byteLength":60,
+			"byteOffset":14976
+		},
+		{
+			"buffer":0,
+			"byteLength":240,
+			"byteOffset":15036
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":15276
+		},
+		{
+			"buffer":0,
+			"byteLength":8,
+			"byteOffset":15300
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":15308
+		},
+		{
+			"buffer":0,
+			"byteLength":80,
+			"byteOffset":15332
+		},
+		{
+			"buffer":0,
+			"byteLength":320,
+			"byteOffset":15412
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":15732
+		},
+		{
+			"buffer":0,
+			"byteLength":8,
+			"byteOffset":15756
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":15764
+		},
+		{
+			"buffer":0,
+			"byteLength":120,
+			"byteOffset":15788
+		},
+		{
+			"buffer":0,
+			"byteLength":480,
+			"byteOffset":15908
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":16388
 		}
 	],
 	"samplers":[
@@ -243,7 +609,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":11936,
+			"byteLength":16412,
 			"uri":"Player_minigun.bin"
 		}
 	]

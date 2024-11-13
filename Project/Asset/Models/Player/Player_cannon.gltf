@@ -32,6 +32,51 @@
 			"name":"Dreadnaught-cannon"
 		}
 	],
+	"animations":[
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":1,
+						"path":"translation"
+					}
+				},
+				{
+					"sampler":1,
+					"target":{
+						"node":1,
+						"path":"rotation"
+					}
+				},
+				{
+					"sampler":2,
+					"target":{
+						"node":1,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"Shot",
+			"samplers":[
+				{
+					"input":4,
+					"interpolation":"LINEAR",
+					"output":5
+				},
+				{
+					"input":6,
+					"interpolation":"STEP",
+					"output":7
+				},
+				{
+					"input":6,
+					"interpolation":"STEP",
+					"output":8
+				}
+			]
+		}
+	],
 	"materials":[
 		{
 			"doubleSided":true,
@@ -125,6 +170,48 @@
 			"componentType":5123,
 			"count":420,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":4,
+			"componentType":5126,
+			"count":30,
+			"max":[
+				1
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":5,
+			"componentType":5126,
+			"count":30,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":6,
+			"componentType":5126,
+			"count":2,
+			"max":[
+				1
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":7,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC4"
+		},
+		{
+			"bufferView":8,
+			"componentType":5126,
+			"count":2,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -151,6 +238,31 @@
 			"byteLength":840,
 			"byteOffset":8704,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":120,
+			"byteOffset":9544
+		},
+		{
+			"buffer":0,
+			"byteLength":360,
+			"byteOffset":9664
+		},
+		{
+			"buffer":0,
+			"byteLength":8,
+			"byteOffset":10024
+		},
+		{
+			"buffer":0,
+			"byteLength":32,
+			"byteOffset":10032
+		},
+		{
+			"buffer":0,
+			"byteLength":24,
+			"byteOffset":10064
 		}
 	],
 	"samplers":[
@@ -161,7 +273,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":9544,
+			"byteLength":10088,
 			"uri":"Player_cannon.bin"
 		}
 	]

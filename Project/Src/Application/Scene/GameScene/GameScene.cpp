@@ -23,6 +23,11 @@ void GameScene::Init()
 {
 	ShowCursor(false);
 
+	//画面全体が暗いときに触る
+	//環境光(アンビエントライト)※デフォルト値は0.3					  	 ↓↓↓↓
+	KdShaderManager::Instance().WorkAmbientController().SetAmbientLight({ 0.4,0.4,0.4,1 });
+
+
 	//地面（仮）
 	std::shared_ptr<Ground> _ground;
 	_ground = std::make_shared<Ground>();
@@ -90,8 +95,8 @@ void GameScene::Init()
 	_camera->SetTarget(_player);
 	_camera->RegistHitObject(_ground);
 	_camera->RegistHitObject(_t_pedestal);
-	_player->RegistHitObject(_ground);
 	_player->RegistHitObject(_t_pedestal);
+	_player->RegistHitObject(_ground);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
 	_player_battery->SetCamera(_camera);
@@ -100,6 +105,7 @@ void GameScene::Init()
 	_player_battery->SetMinigun(_player_minigun);
 	_player_battery->SetNuketube(_player_nuketube);
 	_player_cannon->SetParent(_player_battery);
+	_player_cannon->SetCamera(_camera);
 	_player_minigun->SetParent(_player_battery);
 	_player_minigun->SetCamera(_camera);
 	_player_nuketube->SetParent(_player_battery);

@@ -14,7 +14,6 @@ public:
 
 	void DrawLit()			override;
 
-	void OnHit()			override;
 
 
 	void SetT_Leg(const std::shared_ptr<T_Leg>& t_leg)

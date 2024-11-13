@@ -8,6 +8,13 @@ void TurretBase::Update()
 	{
 		//m_TransAPMat = Math::Matrix::CreateTranslation(m_localMat.Translation()) * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
 		m_TransAPMat = m_localMat * _spParent->GetMatrix();
+		////生存判定
+		//m_destFlg = _spParent->GetDestFlg();
+		//m_isExpired = m_destFlg;
+	}
+	else
+	{
+		m_isExpired = true;
 	}
 	const std::shared_ptr<const KdGameObject> _spTarget = m_wpTarget.lock();
 	if (_spTarget)

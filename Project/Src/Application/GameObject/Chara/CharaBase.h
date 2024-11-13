@@ -26,6 +26,9 @@ public:
 		m_localMat = {};
 	}
 
+	//ゲッター
+	const bool GetDestFlg()const override { return m_destFlg; }
+
 protected:
 	//モデル情報
 	std::shared_ptr<KdModelWork>m_spModel = nullptr;
@@ -48,5 +51,7 @@ protected:
 	//回転行列（）
 	Math::Vector3 m_worldRot;
 
+	//生存フラグ
+	bool m_destFlg = false;
 
 };

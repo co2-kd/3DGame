@@ -10,7 +10,7 @@ void P_BulletM::Init()
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Bullet/P_BulletM/P_BulletM.gltf");
 	}
-	m_timelimit = 100.0f;
+	m_timelimit = 50.0f;
 	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 }
 
@@ -18,7 +18,7 @@ void P_BulletM::Update()
 {
 	//弾の生存時間
 	m_timelimit--;
-	if (m_timelimit < 0)
+	if (m_timelimit <= 0)
 	{
 		//弾消滅
 		m_isExpired = true;
@@ -39,6 +39,12 @@ void P_BulletM::Update()
 		m_mWorld = m_rotBulletMat * _transMat;
 
 		UpdateCollision();
+		if (m_timelimit <= 0)
+		{
+			//弾消滅
+			m_isExpired = true;
+			return;
+		}
 	}
 }
 
@@ -47,11 +53,6 @@ void P_BulletM::DrawBright()
 	if (!m_spModel) return;
 
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-}
-
-void P_BulletM::OnHit()
-{
-	m_isExpired = true;
 }
 
 void P_BulletM::UpdateCollision()
@@ -76,12 +77,14 @@ void P_BulletM::UpdateCollision()
 	{
 		if (obj->Intersects(sphereInfo, nullptr))
 		{
+			if (obj->GetObjectType() == ObjectType::Player)continue;
 			//敵なら当たった判定
 			if (obj->GetObjectType() == ObjectType::Enemy)
 			{
-				obj->OnHit();
+				obj->OnHit(m_dmg);
 			}
 			m_timelimit = 0;
+			break;
 		}
 	}
 }

@@ -4,8 +4,7 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_emissive_strength",
-		"KHR_materials_specular"
+		"KHR_materials_emissive_strength"
 	],
 	"scene":0,
 	"scenes":[
@@ -19,11 +18,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Bullet",
+			"name":"\u5186\u9310",
 			"scale":[
-				1.5046144723892212,
-				1.5046144723892212,
-				1.5046144723892212
+				1.4341238737106323,
+				1.4341238737106323,
+				1.159363031387329
 			]
 		}
 	],
@@ -31,33 +30,31 @@
 		{
 			"doubleSided":true,
 			"emissiveFactor":[
-				1,
-				0.8387739142977371,
-				0
+				0,
+				0.5332548359064039,
+				1
 			],
 			"extensions":{
 				"KHR_materials_emissive_strength":{
-					"emissiveStrength":10.000240802764893
-				},
-				"KHR_materials_specular":{
-					"specularFactor":0
+					"emissiveStrength":100.00240802764893
 				}
 			},
-			"name":"default_material",
+			"name":"\u30de\u30c6\u30ea\u30a2\u30eb",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
-					1,
-					0.8403046131134033,
 					0,
+					0.5306291580200195,
+					1,
 					1
 				],
-				"roughnessFactor":0.5
+				"metallicFactor":0,
+				"roughnessFactor":0
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"\u30e1\u30c3\u30b7\u30e5.001",
+			"name":"\u5186\u9310",
 			"primitives":[
 				{
 					"attributes":{
@@ -75,68 +72,68 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":34,
+			"count":28,
 			"max":[
-				0.14154919981956482,
-				0.13817866146564484,
-				0.15619245171546936
+				0.5639359951019287,
+				0.5639359951019287,
+				2.7976322174072266
 			],
 			"min":[
-				-0.14191539585590363,
-				-0.13817887008190155,
-				-0.5262482166290283
+				-0.5639359951019287,
+				-0.5639359951019287,
+				-2.7976322174072266
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":34,
+			"count":28,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":34,
+			"count":28,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":162,
+			"count":30,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":408,
+			"byteLength":336,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":408,
-			"byteOffset":408,
+			"byteLength":336,
+			"byteOffset":336,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":272,
-			"byteOffset":816,
+			"byteLength":224,
+			"byteOffset":672,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":324,
-			"byteOffset":1088,
+			"byteLength":60,
+			"byteOffset":896,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1412,
-			"uri":"P_BulletM.bin"
+			"byteLength":956,
+			"uri":"P_BulletC.bin"
 		}
 	]
 }

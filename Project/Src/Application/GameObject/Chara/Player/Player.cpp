@@ -70,10 +70,10 @@ void Player::Update()
 	if (m_nowAction)
 	{
 		//移動ベクトル
-		if (GetAsyncKeyState('D')) { m_moveVec.x = 1.0f; }
-		if (GetAsyncKeyState('A')) { m_moveVec.x = -1.0f; }
-		if (GetAsyncKeyState('W')) { m_moveVec.z = 1.0f; }
-		if (GetAsyncKeyState('S')) { m_moveVec.z = -1.0f; }
+		if (GetAsyncKeyState('D')) { m_moveVec.x += 1.0f; }
+		if (GetAsyncKeyState('A')) { m_moveVec.x -= 1.0f; }
+		if (GetAsyncKeyState('W')) { m_moveVec.z += 1.0f; }
+		if (GetAsyncKeyState('S')) { m_moveVec.z -= 1.0f; }
 		m_nowAction->Update(*this);
 	}
 	//カメラ取得
@@ -84,15 +84,23 @@ void Player::Update()
 	}
 	m_moveVec.Normalize();
 	m_moveVec *= m_speed;
-	m_pos += m_moveVec;
+	//速すぎるので補正して座標に代入
+	if (!m_stepbeginFlg)
+	{
+		// 慣性を考慮して移動速度を計算
+		m_velocity = m_velocity * m_inertiaFactor + m_moveVec * (1.0f - m_inertiaFactor);
+	}
+	else//ステップした瞬間
+	{
+		// 慣性を無視して、直接移動ベクトルを適用
+		m_velocity = m_moveVec;
+	}
+	m_pos += m_velocity;
 	//天井判定(仮)
 	if (m_pos.y > 35.0f)
 	{
 		m_pos.y = 35.0f;
 	}
-
-	//m_moveVec.Normalize();
-	//m_pos += GetMatrix().Backward() * m_speed;
 
 	// キャラクターの回転行列を創る
 	m_dir = m_moveVec;
@@ -122,6 +130,32 @@ void Player::PostUpdate()
 		if (m_boostgauge >= 200)
 		{
 			m_overheatFlg = false;
+		}
+	}
+
+	//ブースト回復
+	if (!m_boostFlg)
+	{
+		if (m_overheatFlg)
+		{
+			if (m_boostgauge < m_boostgaugeMax)
+			{
+				m_boostgauge += 1;
+			}
+		}
+		else
+		{
+			if (m_boostgauge < m_boostgaugeMax)
+			{
+				if (m_groundFlg)
+				{
+					m_boostgauge += 5;
+				}
+				else
+				{
+					m_boostgauge += 1;
+				}
+			}
 		}
 	}
 
@@ -176,6 +210,21 @@ void Player::ImguiUpdate()
 	ImGui::Text("overhert : %d", m_overheatFlg);
 	ImGui::Text("NowAction : %s", *m_nowAction);
 	ImGui::Text("rotate : %f", m_worldRot.y);
+	ImGui::Text("m_velocity.x : %f", m_velocity.x);
+	ImGui::Text("m_velocity.y : %f", m_velocity.y);
+	ImGui::Text("m_velocity.z : %f", m_velocity.z);
+	ImGui::Text("m_groundflg : %d", m_groundFlg);
+	ImGui::Text("m_floating : %f", m_floating);
+
+}
+
+void Player::OnHit(const int _dmg)
+{
+	m_hp -= _dmg;
+	if (m_hp <= 0)
+	{
+		m_isExpired = true;
+	}
 }
 
 //カメラから見た移動方向に向く処理
@@ -243,13 +292,14 @@ void Player::UpdateCollision()
 	// レイの長さ
 	rayInfo.m_range = m_gravity - m_floating + enableStepHigh;
 	// 当たり判定をしたいタイプを設定
-	rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
+	rayInfo.m_type = KdCollider::TypeBump | KdCollider::TypeGround;
 	if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
 	}
 
 	// ②HIT判定対象オブジェクトに総当たり
+	m_groundFlg = false;
 	for (std::weak_ptr<KdGameObject> wpGameObj : m_wpHitObjectList)
 	{
 		std::shared_ptr<KdGameObject> spGameObj = wpGameObj.lock();
@@ -280,25 +330,8 @@ void Player::UpdateCollision()
 				//hitPos.y += m_adjustHeight;
 				//SetPos(hitPos);
 				m_floating += maxOverLap;
-
 				//ブースト回復
-				if (!m_boostFlg)
-				{
-					if (m_overheatFlg)
-					{
-						if (m_boostgauge < m_boostgaugeMax)
-						{
-							m_boostgauge += 1;
-						}
-					}
-					else
-					{
-						if (m_boostgauge < m_boostgaugeMax)
-						{
-							m_boostgauge += 5;
-						}
-					}
-				}
+				m_groundFlg = true;
 			}
 		}
 	}
@@ -307,8 +340,8 @@ void Player::UpdateCollision()
 	// ---- ---- ---- ---- ---- ----
 	// ①当たり判定(球判定)用の情報を作成
 	KdCollider::SphereInfo sphereInfo;
-	sphereInfo.m_sphere.Center = GetPos() + Math::Vector3(0,1.5f,0);
-	sphereInfo.m_sphere.Radius = 2.5f;
+	sphereInfo.m_sphere.Center = GetPos() + Math::Vector3(0,1.0f,0);
+	sphereInfo.m_sphere.Radius = 2.0f;
 	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
 	if (!(GetAsyncKeyState('Q') & 0x8000))
@@ -508,6 +541,8 @@ void Player::ActionStep::Enter(Player& owner)
 {
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"), true);
 
+	owner.m_stepbeginFlg = true;
+
 	//SE再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Step.wav", false);
 }
@@ -517,11 +552,13 @@ void Player::ActionStep::Update(Player& owner)
 	//ステップ・ブースト
 	if (GetAsyncKeyState(VK_SHIFT) && !owner.m_overheatFlg)
 	{
+		if (owner.m_moveVec.LengthSquared() == 0)
+		{
+
+		}
 
 		if (!owner.m_stepFlg)
 		{
-			owner.m_stepspeed = owner.m_stepspeedPow;
-
 			//ブースト消費
 			if (owner.m_boostgauge > 0)
 			{
@@ -529,14 +566,11 @@ void Player::ActionStep::Update(Player& owner)
 				owner.m_boostFlg = true;
 			}
 			owner.m_stepFlg = true;
+			owner.m_speed = owner.m_stepspeed;
 		}
 		else
 		{
-			owner.m_boostspeed = owner.m_boostspeedPow;
-			if (owner.m_stepspeed > 0)
-			{
-				owner.m_stepspeed -= 0.5f;
-			}
+			owner.m_stepbeginFlg = false;
 
 			//ブースト消費
 			if (owner.m_boostgauge > 0)
@@ -544,21 +578,13 @@ void Player::ActionStep::Update(Player& owner)
 				owner.m_boostgauge -= 1;
 				owner.m_boostFlg = true;
 			}
+			owner.m_speed = owner.m_boostspeed;
 		}
-		owner.m_speed = owner.m_stepspeed + owner.m_boostspeed;
 	}
 	else
 	{
+		owner.m_stepbeginFlg = false;
 		owner.m_stepFlg = false;
-		if (owner.m_stepspeed > 0)
-		{
-			owner.m_stepspeed -= 0.5f;
-		}
-		if (owner.m_boostspeed > 0)
-		{
-			owner.m_boostspeed -= 0.05f;
-		}
-		owner.m_speed = owner.m_stepspeed + owner.m_boostspeed + owner.m_hoverspeed;
 		owner.ChangeActionState(std::make_shared<ActionIdle>());
 		return;
 	}

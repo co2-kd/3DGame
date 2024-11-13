@@ -76,6 +76,8 @@ private:
 
 	const int m_Miniguncool = 5;
 	int m_Miniguncount = 0;
+	const int m_Cannoncool = 180;
+	int m_Cannoncount = 0;
 
 
 //ステートパターン関係

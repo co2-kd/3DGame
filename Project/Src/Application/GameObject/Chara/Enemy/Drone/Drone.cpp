@@ -8,7 +8,7 @@ void Drone::Init()
 	{
 		m_objectType = ObjectType::Enemy;
 		m_spModel = std::make_shared<KdModelWork>();
-		m_spModel->SetModelData("Asset/Models/Enemy/Drone/Drone2.gltf");
+		m_spModel->SetModelData("Asset/Models/Enemy/Drone/Drone.gltf");
 
 		m_pCollider = std::make_unique<KdCollider>();
 		m_pCollider->RegisterCollisionShape("Drone", m_spModel, KdCollider::TypeDamage);
@@ -62,10 +62,9 @@ void Drone::DrawLit()
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
-void Drone::OnHit()
+void Drone::OnHit(const int _dmg)
 {
-	m_hp--;
-
+	m_hp -= _dmg;
 	if (m_hp <= 0)
 	{
 		m_isExpired = true;

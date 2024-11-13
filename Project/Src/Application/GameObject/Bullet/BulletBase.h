@@ -15,6 +15,8 @@ public:
 
 	virtual void Shot(const Math::Vector3 _pos, const Math::Vector3 _dir);
 
+	void OnHit(const int _dmg)override;
+
 
 protected:
 	//モデル情報
@@ -29,4 +31,6 @@ protected:
 
 	//照準への回転行列
 	Math::Matrix m_rotBulletMat;
+
+
 };

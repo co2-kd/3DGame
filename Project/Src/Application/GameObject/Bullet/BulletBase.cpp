@@ -33,3 +33,8 @@ void BulletBase::Shot(const Math::Vector3 _pos, const Math::Vector3 _dir)
 	//＝　弾がレティクルの方向を向く
 	m_rotBulletMat = Math::Matrix::CreateFromAxisAngle(_rotAxis, _angle);
 }
+
+void BulletBase::OnHit(const int _dmg)
+{
+	m_isExpired = true;
+}

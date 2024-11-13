@@ -83,6 +83,16 @@ void T_Leg::PostUpdate()
 	}
 }
 
+void T_Leg::OnHit(const int _dmg)
+{
+	m_hp -= _dmg;
+	if (m_hp <= 0)
+	{
+		m_destFlg = true;
+		m_isExpired = true;
+	}
+}
+
 void T_Leg::UpdateRotate(const Math::Vector3& srcMoveVec)
 {
 

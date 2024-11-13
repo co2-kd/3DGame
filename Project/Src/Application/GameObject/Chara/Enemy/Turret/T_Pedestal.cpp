@@ -57,7 +57,3 @@ void T_Pedestal::DrawLit()
 	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
 }
 
-void T_Pedestal::OnHit()
-{
-	
-}

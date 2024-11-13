@@ -13,7 +13,7 @@ public:
 
 	void DrawLit()override;
 
-	void OnHit()			override;
+	void OnHit(const int _dmg)override;
 
 private:
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
@@ -23,5 +23,8 @@ private:
 
 	Math::Matrix m_APMuzzleMat;
 
-	int m_hp = 10;
+
+	//HP
+	const int m_hpMax = 20;
+	int m_hp = m_hpMax;
 };
