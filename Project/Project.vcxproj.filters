@@ -130,6 +130,9 @@
     <Filter Include="Src\Application\GameObject\Bullet\P_BulletC">
       <UniqueIdentifier>{ee1d3268-c449-4dc3-a6c2-bbd73746c08b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\ExpDrone">
+      <UniqueIdentifier>{a57161c0-8656-4aa8-a7d9-bf8f413a1264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -366,6 +369,9 @@
     <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.h">
       <Filter>Src\Application\GameObject\Bullet\P_BulletC</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\ExpDrone</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -574,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.cpp">
       <Filter>Src\Application\GameObject\Bullet\P_BulletC</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\ExpDrone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

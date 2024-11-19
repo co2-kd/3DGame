@@ -130,7 +130,6 @@ void P_BulletC::ExpCollision()
 		//全オブジェクトと当たり判定!!!!!
 		for (auto& obj : SceneManager::Instance().GetObjList())
 		{
-			if (obj->GetObjectType() == ObjectType::Player)continue;
 			if (obj->Intersects(sphereInfo, nullptr))
 			{
 				//敵なら当たった判定

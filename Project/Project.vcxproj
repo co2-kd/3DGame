@@ -167,6 +167,7 @@
     <ClInclude Include="Src\Application\GameObject\Chara\CharaBase.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\TurretBase.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="Src\Application\GameObject\Chara\CharaBase.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Drone\Drone.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\TurretBase.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.cpp" />

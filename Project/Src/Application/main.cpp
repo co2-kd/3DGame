@@ -203,6 +203,11 @@ bool Application::Init(int w, int h)
 	// オーディオ初期化
 	//===================================================================
 	KdAudioManager::Instance().Init();
+	
+	//===================================================================
+	// エフェクシア初期化
+	//===================================================================
+	KdEffekseerManager::GetInstance().Create(w, h);
 
 	return true;
 }
@@ -323,6 +328,8 @@ void Application::Release()
 	KdShaderManager::Instance().Release();
 
 	KdAudioManager::Instance().Release();
+
+	KdEffekseerManager::GetInstance().Release();
 
 	ImGuiRelease();	// ImGui解放処理
 

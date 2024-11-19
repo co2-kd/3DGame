@@ -15,6 +15,7 @@ void Player_Minigun::Init()
 
 		//初期のアニメ―ション
 		m_spAnimator = std::make_shared<KdAnimator>();
+		
 
 	}
 
@@ -75,15 +76,17 @@ void Player_Minigun::PostUpdate()
 	//アニメーションの更新
 	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
 	m_spModel->CalcNodeMatrices();
+
+	KdEffekseerManager::GetInstance().SetCamera(m_wpCamera.lock()->GetCamera());
+	KdEffekseerManager::GetInstance().Update();
+
 }
 
-////モデル描画
-//void Player_Minigun::DrawLit()
-//{
-//	if (!m_spModel) return;
-//
-//	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
-//}
+//モデル描画
+void Player_Minigun::DrawUnLit()
+{
+	KdEffekseerManager::GetInstance().Draw();
+}
 //
 ////影描画
 //void Player_Minigun::GenerateDepthMapFromLight()
@@ -189,6 +192,7 @@ void Player_Minigun::ActionUnShot::Update(Player_Minigun& owner)
 
 void Player_Minigun::ActionUnShot::Exit(Player_Minigun& owner)
 {
+
 }
 
 
@@ -289,11 +293,12 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 
 			//攻撃SE再生
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
+			KdEffekseerManager::GetInstance().Play("muzzleflash.efk", owner.m_muzzlePos,1, 1, false);
 		}
 		else
 		{
 			//レイの着弾点を利用して弾を飛ばすベクトルを算出
-			Math::Vector3 _bulletdir = (_rayInfo.m_dir * _rayInfo.m_range) - owner.m_muzzlePos;
+			Math::Vector3 _bulletdir = (_rayInfo.m_dir * _rayInfo.m_range);
 			_bulletdir.Normalize();
 			//発射
 			std::shared_ptr<P_BulletM> _bullet = std::make_shared<P_BulletM>();
@@ -301,8 +306,9 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 			_bullet->Shot(owner.m_muzzlePos, _bulletdir);
 			SceneManager::Instance().AddObject(_bullet);
 
-			//攻撃SE再生
+			//攻撃SE再生 
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
+			KdEffekseerManager::GetInstance().Play("muzzleflash.efk", owner.m_muzzlePos, 1, 1, false);
 		}
 		//弾の発射が終わったらフラグを未発射に戻す
 		owner.m_shotFlg = false;

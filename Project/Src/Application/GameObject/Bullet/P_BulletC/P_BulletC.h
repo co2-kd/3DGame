@@ -23,9 +23,12 @@ private:
 
 	bool m_expFlg = false;
 
-
+	//速度
 	const float m_speed = 2.0f;
+
+	//生存時間
 	int m_timelimit;
 
+	//ダメージ
 	const int m_dmg = 10;
 };

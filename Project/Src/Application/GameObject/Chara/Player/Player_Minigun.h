@@ -13,7 +13,7 @@ public:
 	void Update()			override;
 	void PostUpdate()		override;
 
-	//void DrawLit()			override;
+	void DrawUnLit()			override;
 	//void GenerateDepthMapFromLight() override;
 
 	void ImguiUpdate()override;

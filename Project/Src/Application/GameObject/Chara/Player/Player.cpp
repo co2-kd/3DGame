@@ -74,6 +74,7 @@ void Player::Update()
 		if (GetAsyncKeyState('A')) { m_moveVec.x -= 1.0f; }
 		if (GetAsyncKeyState('W')) { m_moveVec.z += 1.0f; }
 		if (GetAsyncKeyState('S')) { m_moveVec.z -= 1.0f; }
+		if (m_moveVec.LengthSquared() == 0.0f) { m_speed = 0.0f; }
 		m_nowAction->Update(*this);
 	}
 	//カメラ取得
@@ -83,16 +84,28 @@ void Player::Update()
 		m_moveVec = m_moveVec.TransformNormal(m_moveVec, _spCamera->GetRotationYMatrix());
 	}
 	m_moveVec.Normalize();
-	m_moveVec *= m_speed;
+
 	//速すぎるので補正して座標に代入
 	if (!m_stepbeginFlg)
 	{
 		// 慣性を考慮して移動速度を計算
-		m_velocity = m_velocity * m_inertiaFactor + m_moveVec * (1.0f - m_inertiaFactor);
+		if (m_groundFlg)
+		{
+			m_velocity = m_velocity * m_inertiaFactor + (GetMatrix().Backward() * m_speed) * (1.0f - m_inertiaFactor);
+		}
+		else
+		{
+			m_velocity = m_velocity * m_skyinertiaFactor + (GetMatrix().Backward() * m_speed) * (1.0f - m_skyinertiaFactor);
+		}
 	}
 	else//ステップした瞬間
 	{
 		// 慣性を無視して、直接移動ベクトルを適用
+		m_moveVec *= m_speed;
+		if (m_moveVec.LengthSquared() == 0.0f)
+		{
+			m_moveVec = GetMatrix().Backward() * m_speed;
+		}
 		m_velocity = m_moveVec;
 	}
 	m_pos += m_velocity;
@@ -104,6 +117,7 @@ void Player::Update()
 
 	// キャラクターの回転行列を創る
 	m_dir = m_moveVec;
+	m_dir.Normalize();
 	UpdateRotate(m_dir);
 
 	// キャラクターのワールド行列を創る処理
@@ -214,6 +228,7 @@ void Player::ImguiUpdate()
 	ImGui::Text("m_velocity.y : %f", m_velocity.y);
 	ImGui::Text("m_velocity.z : %f", m_velocity.z);
 	ImGui::Text("m_groundflg : %d", m_groundFlg);
+	ImGui::Text("m_jumpflg : %d", m_jumpFlg);
 	ImGui::Text("m_floating : %f", m_floating);
 
 }
@@ -370,13 +385,19 @@ void Player::UpdateCollision()
 
 void Player::UpdateJump()
 {
-	//ジャンプ
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !m_overheatFlg)
 	{
-		if (m_jumpFlg = false)
+
+		if (!m_jumpFlg)
 		{
-			m_jumpspeed = m_gravity;
 			m_jumpFlg = true;
+
+			//ブースト消費
+			if (m_boostgauge > 0)
+			{
+				m_boostgauge -= 50;
+				m_boostFlg = true;
+			}
 		}
 
 		if (m_jumpspeed <= m_jumpspeedMax)
@@ -396,6 +417,7 @@ void Player::UpdateJump()
 	{
 		m_jumpspeed = 0;
 		m_jumpFlg = false;
+		return;
 	}
 }
 
@@ -452,9 +474,15 @@ void Player::ActionJump::Update(Player& owner)
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
 	{
 
-		if (owner.m_jumpFlg = false)
+		if (!owner.m_jumpFlg)
 		{
 			owner.m_jumpFlg = true;
+			//ブースト消費
+			if (owner.m_boostgauge > 0)
+			{
+				owner.m_boostgauge -= 50;
+				owner.m_boostFlg = true;
+			}
 		}
 
 		if (owner.m_jumpspeed <= owner.m_jumpspeedMax)
@@ -474,33 +502,27 @@ void Player::ActionJump::Update(Player& owner)
 	{
 		owner.m_jumpspeed = 0;
 		owner.m_jumpFlg = false;
-
 		owner.ChangeActionState(std::make_shared<ActionIdle>());
 		return;
 	}
 
 
-	if (GetAsyncKeyState(VK_SHIFT) & 0x8000 && !owner.m_overheatFlg)
+	if (GetAsyncKeyState(VK_SHIFT) & 0x8000 && !owner.m_overheatFlg && !owner.m_stepFlg)
 	{
 		owner.ChangeActionState(std::make_shared<ActionStep>());
 		return;
 	}
 
-	//if (GetAsyncKeyState('D') || GetAsyncKeyState('A') || GetAsyncKeyState('W') || GetAsyncKeyState('S'))
-	//{
-	//	owner.ChangeActionState(std::make_shared<ActionMove>());
-	//	return;
-	//}
-
-	if (!(GetAsyncKeyState(VK_SPACE) & 0x8000) || owner.m_overheatFlg)
+	if (!(GetAsyncKeyState(VK_SHIFT) & 0x8000))
 	{
-		owner.ChangeActionState(std::make_shared<ActionIdle>());
-		return;
+		owner.m_stepFlg = false;
 	}
+
 }
 
 void Player::ActionJump::Exit(Player& owner)
 {
+
 }
 
 void Player::ActionMove::Enter(Player& owner)
@@ -542,6 +564,8 @@ void Player::ActionStep::Enter(Player& owner)
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"), true);
 
 	owner.m_stepbeginFlg = true;
+	owner.m_stepFlg = false;
+	owner.m_stepFlame = owner.m_stepFlamefixed;
 
 	//SE再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Step.wav", false);
@@ -549,12 +573,13 @@ void Player::ActionStep::Enter(Player& owner)
 
 void Player::ActionStep::Update(Player& owner)
 {
+	owner.m_stepFlame--;
 	//ステップ・ブースト
-	if (GetAsyncKeyState(VK_SHIFT) && !owner.m_overheatFlg)
+	if (owner.m_stepFlame > 0 || GetAsyncKeyState(VK_SHIFT) & 0x8000 && !owner.m_overheatFlg)
 	{
 		if (owner.m_moveVec.LengthSquared() == 0)
 		{
-
+			
 		}
 
 		if (!owner.m_stepFlg)
@@ -581,18 +606,37 @@ void Player::ActionStep::Update(Player& owner)
 			owner.m_speed = owner.m_boostspeed;
 		}
 	}
-	else
+
+	//待機状態へ
+	if (owner.m_stepFlame <= 0)
 	{
-		owner.m_stepbeginFlg = false;
-		owner.m_stepFlg = false;
-		owner.ChangeActionState(std::make_shared<ActionIdle>());
-		return;
+		if (!(GetAsyncKeyState(VK_SHIFT) & 0x8000) || owner.m_overheatFlg)
+		{
+			owner.m_stepFlg = false;
+			owner.ChangeActionState(std::make_shared<ActionIdle>());
+			return;
+		}
 	}
 
+	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg && !owner.m_jumpFlg)
+	{
+		if (owner.m_stepFlame <= 0)
+		{
+			owner.ChangeActionState(std::make_shared<ActionJump>());
+			return;
+		}
+	}
+
+	if (!(GetAsyncKeyState(VK_SPACE) & 0x8000))
+	{
+		owner.m_jumpFlg = false;
+	}
 }
 
 void Player::ActionStep::Exit(Player& owner)
 {
+	owner.m_stepbeginFlg = false;
+	owner.m_stepFlame = owner.m_stepFlamefixed;
 }
 
 void Player::ActionDrive::Enter(Player& owner)

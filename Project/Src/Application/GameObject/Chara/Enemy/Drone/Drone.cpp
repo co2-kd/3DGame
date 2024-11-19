@@ -9,6 +9,8 @@ void Drone::Init()
 		m_objectType = ObjectType::Enemy;
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Enemy/Drone/Drone.gltf");
+		m_spLightModel = std::make_shared<KdModelWork>();
+		m_spLightModel->SetModelData("Asset/Models/Enemy/Drone/DroneLight.gltf");
 
 		m_pCollider = std::make_unique<KdCollider>();
 		m_pCollider->RegisterCollisionShape("Drone", m_spModel, KdCollider::TypeDamage);
@@ -47,7 +49,7 @@ void Drone::Update()
 	UpdateRotate(m_dir);
 
 	// キャラクターのワールド行列を創る処理
-	Math::Matrix _rotation = Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
+	Math::Matrix _rotation = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(m_worldRot.x)) * Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
 	m_mWorld = Math::Matrix::CreateScale(2.0f) * _rotation * Math::Matrix::CreateTranslation(m_pos);
 }
 
@@ -55,11 +57,11 @@ void Drone::PostUpdate()
 {
 }
 
-void Drone::DrawLit()
+void Drone::DrawBright()
 {
 	if (!m_spModel) return;
 
-	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel, m_mWorld);
+	KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spLightModel, m_mWorld);
 }
 
 void Drone::OnHit(const int _dmg)
@@ -112,4 +114,27 @@ void Drone::UpdateRotate(const Math::Vector3& srcMoveVec)
 	{
 		m_worldRot.y += 360;
 	}
+
+
+	_nowAng = atan(_nowDir.y);
+	_nowAng = DirectX::XMConvertToDegrees(_nowAng);
+
+	_targetAng = atan(_targetDir.y);
+	_targetAng = DirectX::XMConvertToDegrees(_targetAng);
+
+	// 角度の差分を求める
+	_betweenAng = _targetAng - _nowAng;
+	if (_betweenAng > 180)
+	{
+		_betweenAng -= 360;
+	}
+	else if (_betweenAng < -180)
+	{
+		_betweenAng += 360;
+	}
+
+	rotateAng = std::clamp(_betweenAng, -1.0f, 1.0f);
+	m_worldRot.x += rotateAng;
+	//砲塔の射角の制限
+	m_worldRot.x = std::clamp(m_worldRot.x, -30.0f, 30.0f);
 }

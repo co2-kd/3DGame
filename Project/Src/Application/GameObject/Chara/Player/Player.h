@@ -73,6 +73,7 @@ private:
 
 	Math::Vector3 m_velocity;//慣性
 	const float m_inertiaFactor = 0.96f;  // 慣性の強さ、0.9 などで減衰させる
+	const float m_skyinertiaFactor =0.99f;  // 慣性の強さ、0.9 などで減衰させる
 
 	const float m_gravity = 1.5f;
 	const float m_floatingWeak = 0.03f;
@@ -86,17 +87,20 @@ private:
 	bool m_jumpFlg = false;
 	float m_jumpspeed = 0;
 	const float m_jumpspeedPow = 0.1f;
-	const float m_jumpspeedMax = 2.0f;
+	const float m_jumpspeedMax = 1.8f;
+	const float m_jumpspeedStart = 0.5f;
 
 	//ステップ・ブースト
 	bool m_stepFlg = false;
 	bool m_stepbeginFlg = false;
+	const int m_stepFlamefixed = 15;
+	int m_stepFlame = m_stepFlamefixed;
 
 	//float m_stepspeed = 0;
-	const float m_stepspeed = 1.0f;
+	const float m_stepspeed = 0.8f;
 
 	//float m_boostspeed = 0;
-	const float m_boostspeed = 0.7f;
+	const float m_boostspeed = 0.5f;
 
 	//ドライブブースト
 	bool m_driveFlg = false;

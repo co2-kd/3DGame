@@ -11,17 +11,21 @@ public:
 	void Update()			override;
 	void PostUpdate()		override;
 
-	void DrawLit()override;
+	void DrawBright()override;
 
 	void OnHit(const int _dmg)override;
 
 private:
 	void UpdateRotate(const Math::Vector3& srcMoveVec);
 
+	//モデル情報
+	std::shared_ptr<KdModelWork>m_spLightModel = nullptr;
+	
 	//本体から銃口へのローカル行列
 	Math::Matrix m_localmuzzleMat;
 
 	Math::Matrix m_APMuzzleMat;
+
 
 
 	//HP

@@ -4,8 +4,8 @@ void Enemy::Init()
 {
 	if (!m_spModel)
 	{
-		m_spModel = std::make_shared<KdModelWork>();
-		m_spModel->SetModelData("Asset/Models/Enemy/Enemy2.gltf");
+		//m_spModel = std::make_shared<KdModelWork>();
+		//m_spModel->SetModelData("Asset/Models/Enemy/Enemy2.gltf");
 
 		m_pCollider = std::make_unique<KdCollider>();
 		m_pCollider->RegisterCollisionShape("Enemy", m_spModel, KdCollider::TypeDamage);

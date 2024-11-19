@@ -9,6 +9,7 @@
 
 #include"../../GameObject/Chara/Enemy/Enemy.h"
 #include"../../GameObject/Chara/Enemy/Drone/Drone.h"
+#include"../../GameObject/Chara/Enemy/ExpDrone/ExpDrone.h"
 #include"../../GameObject/Chara/Enemy/Turret/T_Pedestal.h"
 #include"../../GameObject/Chara/Enemy/Turret/T_Leg.h"
 #include"../../GameObject/Chara/Enemy/Turret/T_Type/T_Laser/T_Laser.h"
@@ -63,14 +64,18 @@ void GameScene::Init()
 	AddObject(_player_nuketube);
 
 	//敵
-	//std::shared_ptr<Enemy> _enemy = std::make_shared<Enemy>();
-	//_enemy->Init();
-	//AddObject(_enemy);
-	
+	//ドローン
 	std::shared_ptr<Drone> _drone = std::make_shared<Drone>();
 	_drone->Init();
 	_drone->SetPos({ -20,-50,360 });
 	AddObject(_drone);
+
+	//自爆ドローン
+	std::shared_ptr<ExpDrone> _expdrone = std::make_shared<ExpDrone>();
+	_expdrone->Init();
+	_expdrone->SetPos({ 20,-50,360 });
+	AddObject(_expdrone);
+
 
 	//タレット
 	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
@@ -95,27 +100,39 @@ void GameScene::Init()
 	_camera->SetTarget(_player);
 	_camera->RegistHitObject(_ground);
 	_camera->RegistHitObject(_t_pedestal);
+
 	_player->RegistHitObject(_t_pedestal);
 	_player->RegistHitObject(_ground);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
+
 	_player_battery->SetCamera(_camera);
 	_player_battery->SetParent(_player);
 	_player_battery->SetCannon(_player_cannon);
 	_player_battery->SetMinigun(_player_minigun);
 	_player_battery->SetNuketube(_player_nuketube);
+
 	_player_cannon->SetParent(_player_battery);
 	_player_cannon->SetCamera(_camera);
+
 	_player_minigun->SetParent(_player_battery);
 	_player_minigun->SetCamera(_camera);
+
 	_player_nuketube->SetParent(_player_battery);
+
 	_drone->SetTarget(_player);
+
+	_expdrone->SetTarget(_player);
+
 	_t_pedestal->SetT_Leg(_t_leg);
+
 	_t_leg->SetParent(_t_pedestal);
 	_t_leg->SetTarget(_player);
 	_t_leg->SetTurretBase(_t_laser);
+
 	_t_laser->SetParent(_t_leg);
 	_t_laser->SetTarget(_player);
+
 
 	//BGM再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Game.wav", true);

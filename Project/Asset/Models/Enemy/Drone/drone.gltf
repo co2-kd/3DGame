@@ -4,24 +4,36 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_specular"
+		"KHR_materials_emissive_strength"
 	],
 	"scene":0,
 	"scenes":[
 		{
 			"name":"Scene",
 			"nodes":[
-				4
+				2,
+				3
 			]
 		}
 	],
 	"nodes":[
 		{
 			"name":"APmuzzle",
-			"translation":[
+			"rotation":[
 				0,
-				-0.0003599226474761963,
-				-1.7474863529205322
+				0.7071068286895752,
+				-0.7071068286895752,
+				5.0242962053173926e-15
+			],
+			"scale":[
+				320.51727294921875,
+				320.51727294921875,
+				320.51727294921875
+			],
+			"translation":[
+				-7.35060457373038e-05,
+				486.80841064453125,
+				-1.538238286972046
 			]
 		},
 		{
@@ -29,18 +41,35 @@
 				0
 			],
 			"mesh":0,
-			"name":"HandRailGun"
+			"name":"ws_auto_canon",
+			"rotation":[
+				0,
+				0,
+				1,
+				7.549790126404332e-08
+			],
+			"scale":[
+				0.0031199567019939423,
+				0.0031199567019939423,
+				0.0031199567019939423
+			],
+			"translation":[
+				0,
+				-0.06915723532438278,
+				0.3518340587615967
+			]
 		},
 		{
 			"children":[
 				1
 			],
-			"name":"APgun",
+			"mesh":1,
+			"name":"Robot_Scout_Rockie",
 			"rotation":[
-				-0.2588191032409668,
+				0.7071068286895752,
 				0,
 				0,
-				0.9659258127212524
+				0.7071068286895752
 			],
 			"scale":[
 				2,
@@ -49,50 +78,49 @@
 			],
 			"translation":[
 				0,
-				0.8389676213264465,
-				0.6051756143569946
+				1.0826689004898071,
+				0
 			]
 		},
 		{
-			"mesh":1,
-			"name":"Body_Back",
+			"mesh":2,
+			"name":"Robot_Scout_Rockie.001",
+			"rotation":[
+				0.7071068286895752,
+				0,
+				0,
+				0.7071068286895752
+			],
 			"scale":[
 				2,
 				2,
 				2
-			]
-		},
-		{
-			"children":[
-				2,
-				3
 			],
-			"mesh":2,
-			"name":"Body_Front"
+			"translation":[
+				0,
+				1.0826689004898071,
+				0
+			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularFactor":0
-				}
-			},
-			"name":"HandRailGun",
-			"normalTexture":{
-				"index":0
-			},
+			"name":"weapons_systems_mat",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":0
 				},
-				"roughnessFactor":0.800000011920929
+				"metallicFactor":0,
+				"roughnessFactor":0.5449123978614807
 			}
 		},
 		{
 			"doubleSided":true,
-			"name":"Body_Back",
+			"emissiveTexture":{
+				"index":1
+			},
+			"name":"Robot_Scout_Rockie",
 			"normalTexture":{
 				"index":2
 			},
@@ -106,13 +134,26 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Body_Front",
-			"normalTexture":{
+			"emissiveFactor":[
+				1,
+				1,
+				1
+			],
+			"emissiveTexture":{
 				"index":4
+			},
+			"extensions":{
+				"KHR_materials_emissive_strength":{
+					"emissiveStrength":200
+				}
+			},
+			"name":"Robot_Scout_Rockie.001",
+			"normalTexture":{
+				"index":5
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":5
+					"index":6
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -135,7 +176,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.001",
+			"name":"Cylinder",
 			"primitives":[
 				{
 					"attributes":{
@@ -149,7 +190,7 @@
 			]
 		},
 		{
-			"name":"Cylinder.031",
+			"name":"Cylinder.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -182,220 +223,214 @@
 		},
 		{
 			"sampler":0,
-			"source":4
+			"source":1
 		},
 		{
 			"sampler":0,
-			"source":5
+			"source":2
+		},
+		{
+			"sampler":0,
+			"source":3
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/png",
-			"name":"HandRailGun_low_all1_HandRailGun_Normal",
-			"uri":"HandRailGun_low_all1_HandRailGun_Normal.png"
+			"name":"weapon_systems_Albedo",
+			"uri":"weapon_systems_Albedo.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"HandRailGun_low_all1_HandRailGun_AlbedoTransparency",
-			"uri":"HandRailGun_low_all1_HandRailGun_AlbedoTransparency.png"
+			"name":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_AlbedoTranspare",
+			"uri":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_AlbedoTranspare.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"Robot_Scout_HyperX_Low_Body_Back_Normal_Red",
-			"uri":"Robot_Scout_HyperX_Low_Body_Back_Normal_Red.png"
+			"name":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_Normal",
+			"uri":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_Normal.png"
 		},
 		{
 			"mimeType":"image/png",
-			"name":"Robot_Scout_HyperX_Low_Body_Back_Emission",
-			"uri":"Robot_Scout_HyperX_Low_Body_Back_Emission.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"Robot_Scout_HyperX_Low_Body_Front_Normal_Red",
-			"uri":"Robot_Scout_HyperX_Low_Body_Front_Normal_Red.png"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"Robot_Scout_HyperX_Low_Body_Front_AlbedoTransparency_Red",
-			"uri":"Robot_Scout_HyperX_Low_Body_Front_AlbedoTransparency_Red.png"
+			"name":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_AlbedoTransparency",
+			"uri":"Robot_Scout_Rockie_Unity_Robot_Scout_Rockie_AlbedoTransparency.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":1733,
+			"count":225,
 			"max":[
-				0.21592050790786743,
-				0.21511207520961761,
-				0.11538609862327576
+				46.99658203125,
+				486.8162536621094,
+				46.996612548828125
 			],
 			"min":[
-				-0.22048550844192505,
-				-0.2158941924571991,
-				-1.7900176048278809
+				-46.99658203125,
+				-3.294128894805908,
+				-34.071868896484375
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":1733,
+			"count":225,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":1733,
+			"count":225,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":1734,
+			"count":336,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":4,
 			"componentType":5126,
-			"count":845,
+			"count":934,
 			"max":[
-				0.44015514850616455,
-				1.5042614936828613,
-				0.9831964373588562
+				0.4389350414276123,
+				0.7752712965011597,
+				0.5149385929107666
 			],
 			"min":[
-				-0.43941861391067505,
-				0.4762900173664093,
-				0.014730973169207573
+				-0.43893179297447205,
+				-0.5172255039215088,
+				-0.5154228210449219
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":845,
+			"count":934,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":845,
+			"count":934,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":7,
 			"componentType":5123,
-			"count":2154,
+			"count":2751,
 			"type":"SCALAR"
 		},
 		{
 			"bufferView":8,
 			"componentType":5126,
-			"count":610,
+			"count":94,
 			"max":[
-				0.7901303768157959,
-				3.057485818862915,
-				2.1213572025299072
+				0.4257652163505554,
+				0.5011678338050842,
+				0.22787761688232422
 			],
 			"min":[
-				-0.7901278138160706,
-				0.7482306957244873,
-				-0.8392671942710876
+				-0.42576515674591064,
+				-0.40856871008872986,
+				-0.22830647230148315
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":9,
 			"componentType":5126,
-			"count":610,
+			"count":94,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":10,
 			"componentType":5126,
-			"count":610,
+			"count":94,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":11,
 			"componentType":5123,
-			"count":2154,
+			"count":249,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":20796,
+			"byteLength":2700,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":20796,
-			"byteOffset":20796,
+			"byteLength":2700,
+			"byteOffset":2700,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":13864,
-			"byteOffset":41592,
+			"byteLength":1800,
+			"byteOffset":5400,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3468,
-			"byteOffset":55456,
+			"byteLength":672,
+			"byteOffset":7200,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":10140,
-			"byteOffset":58924,
+			"byteLength":11208,
+			"byteOffset":7872,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":10140,
-			"byteOffset":69064,
+			"byteLength":11208,
+			"byteOffset":19080,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":6760,
-			"byteOffset":79204,
+			"byteLength":7472,
+			"byteOffset":30288,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4308,
-			"byteOffset":85964,
+			"byteLength":5502,
+			"byteOffset":37760,
 			"target":34963
 		},
 		{
 			"buffer":0,
-			"byteLength":7320,
-			"byteOffset":90272,
+			"byteLength":1128,
+			"byteOffset":43264,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":7320,
-			"byteOffset":97592,
+			"byteLength":1128,
+			"byteOffset":44392,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4880,
-			"byteOffset":104912,
+			"byteLength":752,
+			"byteOffset":45520,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":4308,
-			"byteOffset":109792,
+			"byteLength":498,
+			"byteOffset":46272,
 			"target":34963
 		}
 	],
@@ -407,7 +442,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":114100,
+			"byteLength":46772,
 			"uri":"drone.bin"
 		}
 	]
