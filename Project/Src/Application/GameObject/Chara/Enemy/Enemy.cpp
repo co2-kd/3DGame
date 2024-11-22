@@ -16,7 +16,7 @@ void Enemy::Init()
 
 void Enemy::Update()
 {
-
+	
 }
 
 void Enemy::PostUpdate()

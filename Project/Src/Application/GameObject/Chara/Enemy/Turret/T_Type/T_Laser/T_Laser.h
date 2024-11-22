@@ -24,6 +24,8 @@ private:
 	Math::Matrix m_localmuzzleMat;
 
 	const int m_Shotcool = 60;
+	const int m_searchShotcoolMax = 20;
+	int m_searchShotcool = m_searchShotcoolMax;
 
 
 	//ステートパターン関係

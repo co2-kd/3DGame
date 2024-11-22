@@ -15,25 +15,24 @@ void Drone::Init()
 		m_pCollider = std::make_unique<KdCollider>();
 		m_pCollider->RegisterCollisionShape("Drone", m_spModel, KdCollider::TypeDamage);
 
-		//if (m_spModel)
-		//{
-		//	//blenderで作成したNULLポイントノードを探して取得
-		//	const KdModelWork::Node* _pNode = m_spModel->FindNode("APbattery");
+		if (m_spModel)
+		{
+			//blenderで作成したNULLポイントノードを探して取得
+			const KdModelWork::Node* _pNode = m_spModel->FindNode("APmuzzle");
 
-		//	if (m_spModel)
-		//	{
-		//		//blenderで作成したNULLポイントノードを探して取得
-		//		const KdModelWork::Node* _pNode = m_spModel->FindNode("APm_muzzle");
-
-		//		//指定ノードが取得出来たら
-		//		if (_pNode)
-		//		{
-		//			m_localmuzzleMat = _pNode->m_worldTransform;
-		//		}
-		//	}
-
-		//}
+			//指定ノードが取得出来たら
+			if (_pNode)
+			{
+				m_localmuzzleMat = _pNode->m_worldTransform;
+			}
+		}
 	}
+
+	//初期状態を「待機状態」へ設定
+	ChangeActionState(std::make_shared<ActionIdle>());
+
+	//デバッグ用
+	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 }
 
 void Drone::Update()
@@ -45,12 +44,19 @@ void Drone::Update()
 	{
 		m_dir = m_pos - _spTarget->GetPos();
 	}
-
 	UpdateRotate(m_dir);
 
 	// キャラクターのワールド行列を創る処理
 	Math::Matrix _rotation = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(m_worldRot.x)) * Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(m_worldRot.y));
 	m_mWorld = Math::Matrix::CreateScale(2.0f) * _rotation * Math::Matrix::CreateTranslation(m_pos);
+
+	Math::Vector3 _muzzlePos;
+	_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
+
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
+	}
 }
 
 void Drone::PostUpdate()
@@ -137,4 +143,23 @@ void Drone::UpdateRotate(const Math::Vector3& srcMoveVec)
 	m_worldRot.x += rotateAng;
 	//砲塔の射角の制限
 	m_worldRot.x = std::clamp(m_worldRot.x, -30.0f, 30.0f);
+}
+
+void Drone::ChangeActionState(std::shared_ptr<ActionStateBase> nextState)
+{
+	if (m_nowAction)m_nowAction->Exit(*this);
+	m_nowAction = nextState;
+	m_nowAction->Enter(*this);
+}
+
+void Drone::ActionIdle::Enter(Drone& owner)
+{
+}
+
+void Drone::ActionIdle::Update(Drone& owner)
+{
+}
+
+void Drone::ActionIdle::Exit(Drone& owner)
+{
 }

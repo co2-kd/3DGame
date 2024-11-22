@@ -190,7 +190,7 @@ public:
 	void WriteCBCamera(const Math::Matrix& cam, const Math::Matrix& proj);
 
 	void WriteCBFogEnable(bool distance, bool height);
-	void WriteCBDistanceFog(const Math::Vector3& col, float density = 0.001f);
+	void WriteCBDistanceFog(const Math::Vector3& col, float density = 0.01f);
 	void WriteCBHeightFog(const Math::Vector3& col, float top, float bottom, float beginDistance);
 
 	void WriteCBAmbientLight(const Math::Vector4& col);

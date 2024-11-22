@@ -67,20 +67,20 @@ void GameScene::Init()
 	//ドローン
 	std::shared_ptr<Drone> _drone = std::make_shared<Drone>();
 	_drone->Init();
-	_drone->SetPos({ -20,-50,360 });
+	_drone->SetPos({ -80,-50,360 });
 	AddObject(_drone);
 
 	//自爆ドローン
 	std::shared_ptr<ExpDrone> _expdrone = std::make_shared<ExpDrone>();
 	_expdrone->Init();
-	_expdrone->SetPos({ 20,-50,360 });
+	_expdrone->SetPos({ 50,-50,360 });
 	AddObject(_expdrone);
 
 
 	//タレット
 	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
 	_t_pedestal->Init();
-	_t_pedestal->SetPos({-70,-54.5f,380});
+	_t_pedestal->SetPos({-150,-50.0f,150});
 	AddObject(_t_pedestal);
 	std::shared_ptr<T_Leg> _t_leg = std::make_shared<T_Leg>();
 	_t_leg->Init();

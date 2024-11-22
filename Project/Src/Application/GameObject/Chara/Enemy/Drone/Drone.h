@@ -26,9 +26,40 @@ private:
 
 	Math::Matrix m_APMuzzleMat;
 
-
+	//索敵フラグ
+	bool m_searchFlg = false;
+	const float m_searchArea = 100;
 
 	//HP
 	const int m_hpMax = 20;
 	int m_hp = m_hpMax;
+
+
+	//ステートパターン関係
+private:
+	class ActionStateBase
+	{
+	public:
+		virtual ~ActionStateBase() {}
+
+		virtual void Enter(Drone& owner) {}
+		virtual void Update(Drone& owner) {}
+		virtual void Exit(Drone& owner) {}
+	};
+
+	//待機状態
+	class ActionIdle : public ActionStateBase
+	{
+	public:
+		~ActionIdle() {}
+
+		void Enter(Drone& owner) override;
+		void Update(Drone& owner) override;
+		void Exit(Drone& owner) override;
+	};
+
+
+	void ChangeActionState(std::shared_ptr<ActionStateBase> nextState);
+	std::shared_ptr<ActionStateBase> m_nowAction = nullptr;
+
 };

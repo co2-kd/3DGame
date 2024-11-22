@@ -49,6 +49,7 @@ private:
 	Math::Vector3 m_muzzlePos;
 
 	bool m_shotFlg = false;
+	int handle;
 
 //ステートパターン関係
 private:

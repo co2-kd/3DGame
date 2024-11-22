@@ -72,7 +72,7 @@ private:
 	Math::Vector3 m_moveVec = Math::Vector3::Zero;
 
 	Math::Vector3 m_velocity;//慣性
-	const float m_inertiaFactor = 0.96f;  // 慣性の強さ、0.9 などで減衰させる
+	const float m_inertiaFactor = 0.965f;  // 慣性の強さ、0.9 などで減衰させる
 	const float m_skyinertiaFactor =0.99f;  // 慣性の強さ、0.9 などで減衰させる
 
 	const float m_gravity = 1.5f;

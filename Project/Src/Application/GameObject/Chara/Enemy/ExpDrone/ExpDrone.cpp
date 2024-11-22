@@ -36,6 +36,7 @@ void ExpDrone::Update()
 
 	if (m_ascount > 0)
 	{
+		m_searchFlg = true;
 		//デバッグ
 		if (!(GetAsyncKeyState('Q') & 0x8000))
 		{
@@ -44,8 +45,56 @@ void ExpDrone::Update()
 		//サーチ判定
 		if (m_dir.Length() < m_searchArea)
 		{
-			m_searchFlg = true;
-			m_ascount--;
+
+			// レイ判定用パラメーター
+			KdCollider::RayInfo _rayInfo;
+
+			//レイの各パラメータを設定
+			_rayInfo.m_pos = m_pos;
+			_rayInfo.m_dir = m_mWorld.Backward();
+			_rayInfo.m_range = m_dir.Length();
+			_rayInfo.m_type = KdCollider::TypeDamage | KdCollider::TypeGround;
+
+			if (!(GetAsyncKeyState('Q') & 0x8000))
+			{
+				m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
+			}
+
+			//２重ループしている 重くなったら改善
+			std::list<KdCollider::CollisionResult> _resultList;
+			float _maxOverLap = 0.0f;
+			Math::Vector3 _hitPos = Math::Vector3::Zero;
+			bool _ishit = false;
+
+			//作成したレイ情報でオブジェクトリストをと当たり判定
+			for (auto& obj : SceneManager::Instance().GetObjList())
+			{
+				obj->Intersects(_rayInfo, &_resultList);
+				//レイに当たったリストから一番近いオブジェクトを検出
+				for (auto& ret : _resultList)
+				{
+					//レイが当たった場合の貫通した長さが一番長いものを探す
+					if (_maxOverLap < ret.m_overlapDistance)
+					{
+						_maxOverLap = ret.m_overlapDistance;
+						_hitPos = ret.m_hitPos;
+						if (obj->GetObjectType() == ObjectType::Player)
+						{
+							_ishit = true;
+						}
+					}
+				}
+			}
+			//当たっていたら
+			if (_ishit)
+			{
+				m_ascount--;
+			}
+			else
+			{
+				m_ascount = m_ascountMax;
+			}
+
 		}
 		else
 		{
@@ -62,7 +111,13 @@ void ExpDrone::Update()
 	else
 	{
 		//突進
+		UpdateRotate(m_dir);
 		m_pos += GetMatrix().Backward() * m_speed;
+		m_expcount--;
+		if (m_expcount <= 0)
+		{
+			m_expFlg = true;
+		}
 	}
 
 	// キャラクターのワールド行列を創る処理
@@ -117,7 +172,15 @@ void ExpDrone::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	float rotateAng;
+	if (m_ascount > 0)
+	{
+		rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	}
+	else
+	{
+		rotateAng = std::clamp(_betweenAng, -1.0f, 1.0f);
+	}
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{
@@ -147,10 +210,17 @@ void ExpDrone::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	if (m_ascount > 0)
+	{
+		rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	}
+	else
+	{
+		rotateAng = std::clamp(_betweenAng, -1.0f, 1.0f);
+	}
 	m_worldRot.x += rotateAng;
-	//砲塔の射角の制限
-	m_worldRot.x = std::clamp(m_worldRot.x, -30.0f, 30.0f);
+	//射角の制限
+	m_worldRot.x = std::clamp(m_worldRot.x, -90.0f, 90.0f);
 }
 
 void ExpDrone::UpdateCollision()

@@ -35,6 +35,8 @@ private:
 	const int m_ascountMax = 180;
 	int m_ascount = m_ascountMax;
 
+	int m_expcount = 300;
+
 	//HP
 	const int m_hpMax = 20;
 	int m_hp = m_hpMax;

@@ -52,15 +52,21 @@ void Player_Minigun::Update()
 	if (_spParent)
 	{
 		_parentMat = _spParent->GetMatrix();
+		m_worldRot = _spParent->GetWorldRot();
 	}
 
 	m_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
-
 	//銃口位置をデバッグ表示
 	if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
 	}
+
+	//エフェクシアの更新
+	KdEffekseerManager::GetInstance().SetCamera(m_wpCamera.lock()->GetCamera());
+	KdEffekseerManager::GetInstance().SetNowPos(m_muzzlePos);
+	KdEffekseerManager::GetInstance().Update();
+
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
 	{
@@ -76,10 +82,6 @@ void Player_Minigun::PostUpdate()
 	//アニメーションの更新
 	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
 	m_spModel->CalcNodeMatrices();
-
-	KdEffekseerManager::GetInstance().SetCamera(m_wpCamera.lock()->GetCamera());
-	KdEffekseerManager::GetInstance().Update();
-
 }
 
 //モデル描画
@@ -99,7 +101,7 @@ void Player_Minigun::DrawUnLit()
 //imguiの更新
 void Player_Minigun::ImguiUpdate()
 {
-
+	ImGui::Text("handle : %d", handle);
 }
 
 void Player_Minigun::ShotBullet()
@@ -243,7 +245,7 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 
 		//レイの各パラメータを設定
 		_rayInfo.m_pos = _cameraPos;
-		//_rayInfo.m_pos = _muzzlePos;
+		//_rayInfo.m_pos = owner.m_muzzlePos;
 		_rayInfo.m_dir = _dir;
 		//_rayInfo.m_dir = _parentMat.Backward();
 		_rayInfo.m_range = _range;
@@ -293,7 +295,12 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 
 			//攻撃SE再生
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
-			KdEffekseerManager::GetInstance().Play("muzzleflash.efk", owner.m_muzzlePos,1, 1, false);
+			//エフェクト再生
+			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1, false).lock();
+			if (_spEffect)
+			{
+				owner.handle = _spEffect->GetHandle();
+			}
 		}
 		else
 		{
@@ -308,7 +315,7 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 
 			//攻撃SE再生 
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
-			KdEffekseerManager::GetInstance().Play("muzzleflash.efk", owner.m_muzzlePos, 1, 1, false);
+			KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1, false);
 		}
 		//弾の発射が終わったらフラグを未発射に戻す
 		owner.m_shotFlg = false;

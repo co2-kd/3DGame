@@ -26,19 +26,19 @@
 			"doubleSided":true,
 			"emissiveFactor":[
 				1,
-				0.20531171560287476,
+				0.26224506217210786,
 				0
 			],
 			"extensions":{
 				"KHR_materials_emissive_strength":{
-					"emissiveStrength":10
+					"emissiveStrength":50.00120401382446
 				}
 			},
 			"name":"\u30de\u30c6\u30ea\u30a2\u30eb",
 			"pbrMetallicRoughness":{
 				"baseColorFactor":[
 					1,
-					0.2952934503555298,
+					0.2633281350135803,
 					0,
 					1
 				],
@@ -67,14 +67,14 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":28,
+			"count":56,
 			"max":[
-				0.5639359951019287,
+				0.8639360070228577,
 				0.5639359951019287,
 				2.7976322174072266
 			],
 			"min":[
-				-0.5639359951019287,
+				-0.8639360070228577,
 				-0.5639359951019287,
 				-2.7976322174072266
 			],
@@ -83,51 +83,51 @@
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":28,
+			"count":56,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":28,
+			"count":56,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":30,
+			"count":60,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":336,
+			"byteLength":672,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":336,
-			"byteOffset":336,
-			"target":34962
-		},
-		{
-			"buffer":0,
-			"byteLength":224,
+			"byteLength":672,
 			"byteOffset":672,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":60,
-			"byteOffset":896,
+			"byteLength":448,
+			"byteOffset":1344,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":120,
+			"byteOffset":1792,
 			"target":34963
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":956,
+			"byteLength":1912,
 			"uri":"E_B_Laser.bin"
 		}
 	]

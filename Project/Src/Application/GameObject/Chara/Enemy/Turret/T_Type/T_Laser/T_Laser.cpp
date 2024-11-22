@@ -59,10 +59,10 @@ void T_Laser::Update()
 			if (!m_ShotFlg)
 			{
 				m_Shotcount--;
-			}
-			if (m_Shotcount < 0)
-			{
-				m_Shotcount = 0;
+				if (m_Shotcount < 0)
+				{
+					m_Shotcount = 0;
+				}
 			}
 			if (m_Shotcount <= 0)
 			{
@@ -78,37 +78,13 @@ void T_Laser::Update()
 				//レイの各パラメータを設定
 				_rayInfo.m_pos = _muzzlePos;
 				_rayInfo.m_dir = m_mWorld.Backward();
-				_rayInfo.m_range = 1000.0f;
+				_rayInfo.m_range = m_dir.Length();
 				_rayInfo.m_type = KdCollider::TypeDamage | KdCollider::TypeGround;
 
 				if (!(GetAsyncKeyState('Q') & 0x8000))
 				{
 					m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
 				}
-
-				////衝突情報リスト
-				//std::list<KdCollider::CollisionResult> _resultList;
-
-				////作成したレイ情報でオブジェクトリストをと当たり判定
-				//for (auto& obj : SceneManager::Instance().GetObjList())
-				//{
-				//	obj->Intersects(_rayInfo, &_resultList);
-				//}
-
-				////レイに当たったリストから一番近いオブジェクトを検出
-				//float _maxOverLap = 0.0f;
-				//Math::Vector3 _hitPos = Math::Vector3::Zero;
-				//bool _ishit = false;
-				//for (auto& ret : _resultList)
-				//{
-				//	//レイが当たった場合の貫通した長さが一番長いものを探す
-				//	if (_maxOverLap < ret.m_overlapDistance)
-				//	{
-				//		_maxOverLap = ret.m_overlapDistance;
-				//		_hitPos = ret.m_hitPos;
-				//		_ishit = true;
-				//	}
-				//}
 
 				//２重ループしている 重くなったら改善
 				std::list<KdCollider::CollisionResult> _resultList;
@@ -130,7 +106,22 @@ void T_Laser::Update()
 							_hitPos = ret.m_hitPos;
 							if (obj->GetObjectType() == ObjectType::Player)
 							{
-								_ishit = true;
+								if (m_searchShotcool > 0)
+								{
+									m_searchShotcool--;
+								}
+								else
+								{
+									_ishit = true;
+								}
+							}
+							else
+							{
+								m_searchShotcool++;
+								if (m_searchShotcool > m_searchShotcoolMax)
+								{
+									m_searchShotcool = m_searchShotcoolMax;
+								}
 							}
 						}
 					}

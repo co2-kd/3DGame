@@ -1,4 +1,5 @@
-﻿
+﻿#include "KdEffekseerManager.h"
+
 void KdEffekseerManager::Create(int w, int h)
 {
 	// エフェクトのレンダラーの作成
@@ -51,12 +52,13 @@ void KdEffekseerManager::Draw()
 }
 
 std::weak_ptr<KdEffekseerObject> KdEffekseerManager::Play(
-	const std::string& effName, const DirectX::SimpleMath::Vector3& pos, const float size, const float speed, bool isLoop)
+	const std::string& effName, const DirectX::SimpleMath::Vector3& pos, const DirectX::SimpleMath::Vector3& rotate, const float size, const float speed, bool isLoop)
 {
 	PlayEfkInfo info;
 
 	info.FileName = effName;
 	info.Pos = pos;
+	info.Rotate = rotate;
 	info.Size = Math::Vector3(size);
 	info.Speed = speed;
 	info.IsLoop = isLoop;
@@ -120,6 +122,11 @@ void KdEffekseerManager::SetPos(const int handle, const Math::Vector3& pos)
 	Effekseer::Vector3D efkPos = GetEfkVec3D(pos);
 
 	m_efkManager->SetLocation(handle, efkPos);
+}
+
+void KdEffekseerManager::SetNowPos(const Math::Vector3& pos)
+{
+	m_NowPos = pos;
 }
 
 void KdEffekseerManager::SetRotation(const int handle, const Math::Vector3& axis, const float angle)
@@ -248,6 +255,10 @@ void KdEffekseerManager::UpdateEffekseerEffect()
 			if (effObj)
 			{
 				int handle = effObj->GetHandle();
+
+				//ついでに座標を追従できるように仮
+				SetPos(handle,m_NowPos);
+
 				// 再生が終了している
 				if (m_efkManager->GetInstanceCount(handle) == 0)
 				{
@@ -258,6 +269,13 @@ void KdEffekseerManager::UpdateEffekseerEffect()
 					{
 						const PlayEfkInfo& info = effObj->GetPlayEfkInfo();
 						replayList.push_back(info);
+					}
+					//ループ対象外なら再生リストから削除
+					else
+					{
+						// 今の再生リストから除外する
+						efkFoundItr = m_nowEffectPlayList.erase(efkFoundItr);
+						continue;
 					}
 
 					// ハンドル値が変わるので今の再生リストから除外する

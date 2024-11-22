@@ -28,6 +28,7 @@ public:
 
 	//ゲッター
 	const bool GetDestFlg()const override { return m_destFlg; }
+	const Math::Vector3 GetWorldRot() const override { return m_worldRot; }
 
 protected:
 	//モデル情報

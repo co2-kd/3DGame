@@ -22,7 +22,7 @@ public:
 	};
 
 	// Effekseerエフェクト再生
-	std::weak_ptr<KdEffekseerObject> Play(const std::string& effName, const DirectX::SimpleMath::Vector3& pos, const float size = 1, const float speed = 1, const bool isLoop = true);
+	std::weak_ptr<KdEffekseerObject> Play(const std::string& effName, const DirectX::SimpleMath::Vector3& pos, const DirectX::SimpleMath::Vector3& rotate, const float size = 1, const float speed = 1, const bool isLoop = true);
 
 	void StopAllEffect();
 	void StopEffect(const std::string& name);
@@ -36,6 +36,7 @@ public:
 	void Reset();
 
 	void SetPos(const int handle, const Math::Vector3& pos);
+	void SetNowPos(const Math::Vector3& pos);//追従用
 	void SetRotation(const int handle, const Math::Vector3& axis, const float angle);
 	void SetWorldMatrix(const int handle, const Math::Matrix& mWorld);
 
@@ -83,6 +84,7 @@ private:
 	std::weak_ptr<KdCamera> m_wpCamera;
 
 	bool m_isPause = false;
+	Math::Vector3 m_NowPos = Math::Vector3::Zero;
 
 public:
 

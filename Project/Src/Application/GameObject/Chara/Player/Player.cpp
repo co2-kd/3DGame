@@ -274,7 +274,7 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	float rotateAng = std::clamp(_betweenAng, -8.0f, 8.0f);
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{

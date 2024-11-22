@@ -52,6 +52,9 @@ public:
 	virtual void SetPos(const Math::Vector3& pos) { m_mWorld.Translation(pos); }
 	virtual Math::Vector3 GetPos() const { return m_mWorld.Translation(); }
 
+	//回転
+	virtual const Math::Vector3 GetWorldRot() const { return {}; }
+
 	// 拡大率を変更する関数
 	void SetScale(float scalar);
 	virtual void SetScale(const Math::Vector3& scale);
