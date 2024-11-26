@@ -36,7 +36,6 @@ public:
 	void Reset();
 
 	void SetPos(const int handle, const Math::Vector3& pos);
-	void SetNowPos(const Math::Vector3& pos);//追従用
 	void SetRotation(const int handle, const Math::Vector3& axis, const float angle);
 	void SetWorldMatrix(const int handle, const Math::Matrix& mWorld);
 
@@ -55,6 +54,8 @@ public:
 	{
 		m_wpCamera = camera;
 	}
+
+	const std::list<std::shared_ptr<KdEffekseerObject>> const GetnowEffectPlayList();
 
 private:
 
@@ -84,7 +85,6 @@ private:
 	std::weak_ptr<KdCamera> m_wpCamera;
 
 	bool m_isPause = false;
-	Math::Vector3 m_NowPos = Math::Vector3::Zero;
 
 public:
 

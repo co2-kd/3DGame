@@ -95,6 +95,8 @@ void GameScene::Init()
 	std::shared_ptr<TPSCamera> _camera = std::make_shared<TPSCamera>();
 	_camera->Init();
 	m_objList.push_back(_camera);
+	// カメラ情報をセット
+	KdEffekseerManager::GetInstance().SetCamera(_camera->GetCamera());
 
 	//セッター関連
 	_camera->SetTarget(_player);

@@ -36,6 +36,9 @@ void BaseScene::Update()
 		obj->Update();
 	}
 
+	// 全エフェクトの更新
+	KdEffekseerManager::GetInstance().Update();
+
 	// シーン毎のイベント処理
 	Event();
 }
@@ -102,6 +105,9 @@ void BaseScene::Draw()
 		}
 	}
 	KdShaderManager::Instance().m_postProcessShader.EndBright();
+
+	// 全エフェクトの描画
+	KdEffekseerManager::GetInstance().Draw();
 }
 
 void BaseScene::DrawSprite()

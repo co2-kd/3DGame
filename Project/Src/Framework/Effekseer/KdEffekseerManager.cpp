@@ -124,11 +124,6 @@ void KdEffekseerManager::SetPos(const int handle, const Math::Vector3& pos)
 	m_efkManager->SetLocation(handle, efkPos);
 }
 
-void KdEffekseerManager::SetNowPos(const Math::Vector3& pos)
-{
-	m_NowPos = pos;
-}
-
 void KdEffekseerManager::SetRotation(const int handle, const Math::Vector3& axis, const float angle)
 {
 	Effekseer::Vector3D efkAxis = GetEfkVec3D(axis);
@@ -178,6 +173,11 @@ void KdEffekseerManager::SetPause(const int handle, const bool isPause)
 const bool KdEffekseerManager::IsPlaying(const int handle) const
 {
 	return (m_efkManager->GetInstanceCount(handle) != 0);
+}
+
+std::list<std::shared_ptr<KdEffekseerObject>> const KdEffekseerManager::GetnowEffectPlayList()
+{
+	return m_nowEffectPlayList;
 }
 
 std::weak_ptr<KdEffekseerObject> KdEffekseerManager::Play(const PlayEfkInfo& info)
@@ -256,8 +256,8 @@ void KdEffekseerManager::UpdateEffekseerEffect()
 			{
 				int handle = effObj->GetHandle();
 
-				//ついでに座標を追従できるように仮
-				SetPos(handle,m_NowPos);
+				////ついでに座標を追従できるように仮
+				//SetPos(handle,m_NowPos);
 
 				// 再生が終了している
 				if (m_efkManager->GetInstanceCount(handle) == 0)

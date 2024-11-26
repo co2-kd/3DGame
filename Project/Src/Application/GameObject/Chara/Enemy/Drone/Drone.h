@@ -47,11 +47,22 @@ private:
 		virtual void Exit(Drone& owner) {}
 	};
 
-	//待機状態
-	class ActionIdle : public ActionStateBase
+	//未発見状態
+	class ActionSearch : public ActionStateBase
 	{
 	public:
-		~ActionIdle() {}
+		~ActionSearch() {}
+
+		void Enter(Drone& owner) override;
+		void Update(Drone& owner) override;
+		void Exit(Drone& owner) override;
+	};
+	
+	//交戦状態
+	class ActionBattle : public ActionStateBase
+	{
+	public:
+		~ActionBattle() {}
 
 		void Enter(Drone& owner) override;
 		void Update(Drone& owner) override;

@@ -42,6 +42,7 @@ void Player_Minigun::Init()
 void Player_Minigun::Update()
 {
 
+	
 	CharaBase::Update();
 	//m_dir = m_mWorld.Translation() - m_pos;
 	//m_dir.Normalize();
@@ -62,11 +63,6 @@ void Player_Minigun::Update()
 		m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
 	}
 
-	//エフェクシアの更新
-	KdEffekseerManager::GetInstance().SetCamera(m_wpCamera.lock()->GetCamera());
-	KdEffekseerManager::GetInstance().SetNowPos(m_muzzlePos);
-	KdEffekseerManager::GetInstance().Update();
-
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
 	{
@@ -84,11 +80,10 @@ void Player_Minigun::PostUpdate()
 	m_spModel->CalcNodeMatrices();
 }
 
-//モデル描画
-void Player_Minigun::DrawUnLit()
-{
-	KdEffekseerManager::GetInstance().Draw();
-}
+////モデル描画
+//void Player_Minigun::DrawLit()
+//{
+//}
 //
 ////影描画
 //void Player_Minigun::GenerateDepthMapFromLight()
@@ -296,11 +291,19 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 			//攻撃SE再生
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
 			//エフェクト再生
-			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1, false).lock();
+			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false).lock();
 			if (_spEffect)
 			{
 				owner.handle = _spEffect->GetHandle();
 			}
+			//auto _spEfklist = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+			//for(auto efk : _spEfklist)
+			//{
+			//	if (owner.handle == efk->GetHandle())
+			//	{
+			//		efk->SetPos(owner.m_muzzlePos);
+			//	}
+			//}
 		}
 		else
 		{
@@ -315,7 +318,7 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 
 			//攻撃SE再生 
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
-			KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1, false);
+			KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false);
 		}
 		//弾の発射が終わったらフラグを未発射に戻す
 		owner.m_shotFlg = false;

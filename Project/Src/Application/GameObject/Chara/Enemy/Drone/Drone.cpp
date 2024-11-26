@@ -29,7 +29,7 @@ void Drone::Init()
 	}
 
 	//初期状態を「待機状態」へ設定
-	ChangeActionState(std::make_shared<ActionIdle>());
+	ChangeActionState(std::make_shared<ActionSearch>());
 
 	//デバッグ用
 	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
@@ -44,6 +44,14 @@ void Drone::Update()
 	{
 		m_dir = m_pos - _spTarget->GetPos();
 	}
+
+	//現在の状態の更新呼び出し
+	if (m_nowAction)
+	{
+		m_nowAction->Update(*this);
+	}
+
+	m_dir.Normalize();
 	UpdateRotate(m_dir);
 
 	// キャラクターのワールド行列を創る処理
@@ -152,14 +160,26 @@ void Drone::ChangeActionState(std::shared_ptr<ActionStateBase> nextState)
 	m_nowAction->Enter(*this);
 }
 
-void Drone::ActionIdle::Enter(Drone& owner)
+void Drone::ActionSearch::Enter(Drone& owner)
 {
 }
 
-void Drone::ActionIdle::Update(Drone& owner)
+void Drone::ActionSearch::Update(Drone& owner)
 {
 }
 
-void Drone::ActionIdle::Exit(Drone& owner)
+void Drone::ActionSearch::Exit(Drone& owner)
+{
+}
+
+void Drone::ActionBattle::Enter(Drone& owner)
+{
+}
+
+void Drone::ActionBattle::Update(Drone& owner)
+{
+}
+
+void Drone::ActionBattle::Exit(Drone& owner)
 {
 }

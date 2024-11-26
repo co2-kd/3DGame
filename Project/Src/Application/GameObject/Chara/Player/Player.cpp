@@ -116,6 +116,7 @@ void Player::Update()
 	}
 
 	// キャラクターの回転行列を創る
+	//if (m_moveVec.LengthSquared() != 0.0f) { m_dir = m_moveVec; }
 	m_dir = m_moveVec;
 	m_dir.Normalize();
 	UpdateRotate(m_dir);
@@ -274,7 +275,7 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -8.0f, 8.0f);
+	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{
