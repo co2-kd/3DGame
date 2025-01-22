@@ -10,6 +10,7 @@ public:
 	~Player_Minigun()			override	{}
 
 	void Init()				override;
+	void PreUpdate()			override;
 	void Update()			override;
 	void PostUpdate()		override;
 
@@ -28,6 +29,18 @@ public:
 		m_localMat = _localMat;
 	}
 	void ShotBullet();
+
+	// オブジェクトリストを取得
+	const std::list<std::shared_ptr<KdEffekseerObject>>& GetEfkList()
+	{
+		return m_efkList;
+	}
+
+	// オブジェクトリストに追加
+	void AddEffect(const std::shared_ptr<KdEffekseerObject>& efk)
+	{
+		m_efkList.push_back(efk);
+	}
 
 private:
 
@@ -49,7 +62,10 @@ private:
 	Math::Vector3 m_muzzlePos;
 
 	bool m_shotFlg = false;
-	int handle;
+	int m_handle;
+
+	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
+	
 
 //ステートパターン関係
 private:

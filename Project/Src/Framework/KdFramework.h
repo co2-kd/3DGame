@@ -68,6 +68,9 @@
 // デバッグ機能
 #include "Utility/KdDebugWireFrame.h"
 
+// 乱数生成機能
+#include "Utility/KdRandomGenerator.h"
+
 // ゲームオブジェクト関連
 #include "GameObject/KdGameObject.h"
 #include "GameObject/KdGameObjectFactory.h"

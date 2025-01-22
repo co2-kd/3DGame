@@ -30,14 +30,15 @@ void BaseScene::PreUpdate()
 
 void BaseScene::Update()
 {
+	
+	// 全エフェクトの更新
+	KdEffekseerManager::GetInstance().Update();
+
 	// KdGameObjectを継承した全てのオブジェクトの更新 (ポリモーフィズム)
 	for (auto& obj : m_objList)
 	{
 		obj->Update();
 	}
-
-	// 全エフェクトの更新
-	KdEffekseerManager::GetInstance().Update();
 
 	// シーン毎のイベント処理
 	Event();

@@ -1,4 +1,5 @@
 ﻿#include "KdEffekseerManager.h"
+#include"Application/main.h"
 
 void KdEffekseerManager::Create(int w, int h)
 {
@@ -175,11 +176,6 @@ const bool KdEffekseerManager::IsPlaying(const int handle) const
 	return (m_efkManager->GetInstanceCount(handle) != 0);
 }
 
-std::list<std::shared_ptr<KdEffekseerObject>> const KdEffekseerManager::GetnowEffectPlayList()
-{
-	return m_nowEffectPlayList;
-}
-
 std::weak_ptr<KdEffekseerObject> KdEffekseerManager::Play(const PlayEfkInfo& info)
 {
 	// 渡された座標をEffekseerの座標に置き換え
@@ -226,6 +222,7 @@ std::weak_ptr<KdEffekseerObject> KdEffekseerManager::Play(const PlayEfkInfo& inf
 	spEfkObject->SetHandle(handle);
 	spEfkObject->SetPlayEfkInfo(info);
 	m_nowEffectPlayList.emplace_back(spEfkObject);
+	Application::Instance().m_log.AddLog("handle%d\n", handle);
 	return spEfkObject;
 }
 
@@ -256,9 +253,6 @@ void KdEffekseerManager::UpdateEffekseerEffect()
 			{
 				int handle = effObj->GetHandle();
 
-				////ついでに座標を追従できるように仮
-				//SetPos(handle,m_NowPos);
-
 				// 再生が終了している
 				if (m_efkManager->GetInstanceCount(handle) == 0)
 				{
@@ -270,13 +264,7 @@ void KdEffekseerManager::UpdateEffekseerEffect()
 						const PlayEfkInfo& info = effObj->GetPlayEfkInfo();
 						replayList.push_back(info);
 					}
-					//ループ対象外なら再生リストから削除
-					else
-					{
-						// 今の再生リストから除外する
-						efkFoundItr = m_nowEffectPlayList.erase(efkFoundItr);
-						continue;
-					}
+
 
 					// ハンドル値が変わるので今の再生リストから除外する
 					efkFoundItr = m_nowEffectPlayList.erase(efkFoundItr);

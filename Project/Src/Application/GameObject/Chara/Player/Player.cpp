@@ -109,11 +109,6 @@ void Player::Update()
 		m_velocity = m_moveVec;
 	}
 	m_pos += m_velocity;
-	//天井判定(仮)
-	if (m_pos.y > 35.0f)
-	{
-		m_pos.y = 35.0f;
-	}
 
 	// キャラクターの回転行列を創る
 	//if (m_moveVec.LengthSquared() != 0.0f) { m_dir = m_moveVec; }
@@ -198,6 +193,7 @@ void Player::PostUpdate()
 	if (_spBattery)
 	{
 		_spBattery->SetAPMatrix(m_APBatteryMat);
+
 	}
 }
 
@@ -275,7 +271,7 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -10.0f, 10.0f);
+	float rotateAng = std::clamp(_betweenAng, -8.0f, 8.0f);
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{

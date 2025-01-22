@@ -14,7 +14,8 @@
 #include"../../GameObject/Chara/Enemy/Turret/T_Leg.h"
 #include"../../GameObject/Chara/Enemy/Turret/T_Type/T_Laser/T_Laser.h"
 
-#include"../../GameObject/Ground/Ground.h"
+#include"../../GameObject/Ground/Stage1/Stage1.h"
+#include"../../GameObject/Ground/Stage1/Stage1Col.h"
 #include"../../GameObject/Back/Back.h"
 
 #include"../../GameObject/Camera/TPSCamera/TPSCamera.h"
@@ -30,10 +31,15 @@ void GameScene::Init()
 
 
 	//地面（仮）
-	std::shared_ptr<Ground> _ground;
-	_ground = std::make_shared<Ground>();
-	_ground->Init();
-	AddObject(_ground);
+	std::shared_ptr<Stage1> _stage1;
+	_stage1 = std::make_shared<Stage1>();
+	_stage1->Init();
+	AddObject(_stage1);
+	//天井
+	std::shared_ptr<Stage1Col> _stage1col;
+	_stage1col = std::make_shared<Stage1Col>();
+	_stage1col->Init();
+	AddObject(_stage1col);
 
 	//背景（仮）
 	std::shared_ptr<Back> _back;
@@ -66,21 +72,21 @@ void GameScene::Init()
 	//敵
 	//ドローン
 	std::shared_ptr<Drone> _drone = std::make_shared<Drone>();
+	_drone->SetPos({ 0,-80,650 });
 	_drone->Init();
-	_drone->SetPos({ -80,-50,360 });
 	AddObject(_drone);
 
 	//自爆ドローン
 	std::shared_ptr<ExpDrone> _expdrone = std::make_shared<ExpDrone>();
 	_expdrone->Init();
-	_expdrone->SetPos({ 50,-50,360 });
+	_expdrone->SetPos({ 50,-20,360 });
 	AddObject(_expdrone);
 
 
 	//タレット
 	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
 	_t_pedestal->Init();
-	_t_pedestal->SetPos({-150,-50.0f,150});
+	_t_pedestal->SetPos({-150,-25.0f,150});
 	AddObject(_t_pedestal);
 	std::shared_ptr<T_Leg> _t_leg = std::make_shared<T_Leg>();
 	_t_leg->Init();
@@ -95,16 +101,19 @@ void GameScene::Init()
 	std::shared_ptr<TPSCamera> _camera = std::make_shared<TPSCamera>();
 	_camera->Init();
 	m_objList.push_back(_camera);
+
 	// カメラ情報をセット
 	KdEffekseerManager::GetInstance().SetCamera(_camera->GetCamera());
 
 	//セッター関連
 	_camera->SetTarget(_player);
-	_camera->RegistHitObject(_ground);
+	_camera->RegistHitObject(_stage1);
+	_camera->RegistHitObject(_stage1col);
 	_camera->RegistHitObject(_t_pedestal);
 
 	_player->RegistHitObject(_t_pedestal);
-	_player->RegistHitObject(_ground);
+	_player->RegistHitObject(_stage1);
+	_player->RegistHitObject(_stage1col);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
 
@@ -123,6 +132,7 @@ void GameScene::Init()
 	_player_nuketube->SetParent(_player_battery);
 
 	_drone->SetTarget(_player);
+	_drone->RegistHitObject(_stage1);
 
 	_expdrone->SetTarget(_player);
 
@@ -153,7 +163,9 @@ void GameScene::Event()
 	//	Rect = { 0,0,128,128 };
 	//	KdShaderManager::Instance().m_spriteShader.DrawTexAnime(&Tex, 0, 0, 128, 128, angle, &Rect, &Color);
 	//}
-	
+
+
+
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (!m_keyFlg)
@@ -162,7 +174,7 @@ void GameScene::Event()
 			KdAudioManager::Instance().StopAllSound();
 			SceneManager::Instance().SetNextScene
 			(
-				SceneManager::SceneType::Title
+				SceneManager::SceneType::Result
 			);
 		}
 	}

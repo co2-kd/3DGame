@@ -83,7 +83,7 @@ public:
 	
 	virtual void ImguiUpdate() {}
 	ObjectType GetObjectType()const { return m_objectType; }
-	virtual std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
+	virtual const std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
 
 	virtual void OnHit(const int _dmg){}
 	virtual const  bool GetDestFlg()const { return false; }

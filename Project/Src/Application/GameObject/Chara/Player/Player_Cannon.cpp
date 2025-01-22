@@ -26,7 +26,7 @@ void Player_Cannon::Init()
 		//指定ノードが取得出来たら
 		if (_pNode)
 		{
-			m_localmuzzleMat = _pNode->m_worldTransform * m_localMat;
+			m_localmuzzleMat = _pNode->m_worldTransform;
 		}
 	}
 	//デバッグ用
@@ -39,10 +39,6 @@ void Player_Cannon::Init()
 //更新
 void Player_Cannon::Update()
 {
-
-
-	CharaBase::Update();
-
 	Math::Matrix _parentMat = Math::Matrix::Identity;
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
@@ -50,18 +46,28 @@ void Player_Cannon::Update()
 		_parentMat = _spParent->GetMatrix();
 	}
 
-	m_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
+	m_muzzlePos = ((m_localmuzzleMat * m_localMat) * _parentMat).Translation();
 
 	//銃口位置をデバッグ表示
 	if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
 	}
+
+	//デバッグ表示
+	if (!(GetAsyncKeyState('Q') & 0x8000))
+	{
+		m_pDebugWire->AddDebugSphere(GetMatrix().Translation(), 0.1f, kWhiteColor);
+	}
+
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
 	{
 		m_nowAction->Update(*this);
 	}
+
+	CharaBase::Update();
+
 }
 
 //後更新

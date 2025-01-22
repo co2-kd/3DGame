@@ -29,8 +29,8 @@ void Player_Battery::Init()
 		const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
 		m_APCannonMat = _pNodeCannon->m_worldTransform;
 		
-		const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
-		m_APMinigunMat = _pNodeMinigun->m_worldTransform;
+//		const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
+//		m_APMinigunMat = _pNodeMinigun->m_worldTransform;
 		
 		const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
 		m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
@@ -44,11 +44,11 @@ void Player_Battery::Init()
 	{
 		_spCannon->SetAPMatrix(m_APCannonMat);
 	}
-	std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
-	if (_spMinigun)
-	{
-		_spMinigun->SetAPMatrix(m_APMinigunMat);
-	}
+	//std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
+	//if (_spMinigun)
+	//{
+	//	_spMinigun->SetAPMatrix(m_APMinigunMat);
+	//}
 	std::shared_ptr<Player_Nuketube> _spNuketube = m_wpNuketube.lock();
 	if (_spNuketube)
 	{
@@ -67,7 +67,7 @@ void Player_Battery::Update()
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
 	{
-		_Mat = Math::Matrix::CreateTranslation(m_localMat.Translation()) * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
+		_Mat = Math::Matrix::CreateTranslation((_spParent->GetMatrix() * m_localMat).Translation());
 		//_Mat = m_localMat * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
 		//_Mat = m_localMat * _spParent->GetMatrix();
 	}
@@ -140,37 +140,23 @@ void Player_Battery::PostUpdate()
 	m_spAnimator->AdvanceTime(m_spModel->WorkNodes());
 	m_spModel->CalcNodeMatrices();
 
-	////「AttachPoint」ノードを取得する
-	//if (m_spModel)
-	//{
-	//	//blenderで作成したNULLポイントノードを探して取得
-	//	const KdModelWork::Node* _pNodeCannon = m_spModel->FindNode("APcannon");
-	//	m_APCannonMat = _pNodeCannon->m_worldTransform;
-
-	//	const KdModelWork::Node* _pNodeMinigun = m_spModel->FindNode("APminigun");
-	//	m_APMinigunMat = _pNodeMinigun->m_worldTransform;
-
-	//	const KdModelWork::Node* _pNodeNuketube = m_spModel->FindNode("APNuke-tube");
-	//	m_APNuketubeMat = _pNodeNuketube->m_worldTransform;
-
-	//}
-
 	//子オブジェクトにAPの座標渡し
 	std::shared_ptr<Player_Cannon> _spCannon = m_wpCannon.lock();
 	if (_spCannon)
 	{
 		_spCannon->SetAPMatrix(m_APCannonMat);
 	}
-	std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
-	if (_spMinigun)
-	{
-		_spMinigun->SetAPMatrix(m_APMinigunMat);
-	}
+//	std::shared_ptr<Player_Minigun> _spMinigun = m_wpMinigun.lock();
+//	if (_spMinigun)
+//	{
+//		_spMinigun->SetAPMatrix(m_APMinigunMat);
+//	}
 	std::shared_ptr<Player_Nuketube> _spNuketube = m_wpNuketube.lock();
 	if (_spNuketube)
 	{
 		_spNuketube->SetAPMatrix(m_APNuketubeMat);
 	}
+
 }
 
 ////モデル描画

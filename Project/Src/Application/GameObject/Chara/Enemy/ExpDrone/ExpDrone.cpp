@@ -32,9 +32,10 @@ void ExpDrone::Update()
 	if (_spTarget)
 	{
 		m_dir = m_pos - _spTarget->GetPos();
+		m_length = m_dir.Length();
 	}
 
-	if (m_ascount > 0)
+	if (!m_asFlg)
 	{
 		m_searchFlg = true;
 		//デバッグ
@@ -43,7 +44,7 @@ void ExpDrone::Update()
 			m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
 		}
 		//サーチ判定
-		if (m_dir.Length() < m_searchArea)
+		if (m_length < m_searchArea)
 		{
 
 			// レイ判定用パラメーター
@@ -89,6 +90,10 @@ void ExpDrone::Update()
 			if (_ishit)
 			{
 				m_ascount--;
+				if (m_ascount <= 0)
+				{
+					m_asFlg = true;
+				}
 			}
 			else
 			{

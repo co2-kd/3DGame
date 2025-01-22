@@ -1,5 +1,6 @@
 ﻿#include "Player_Minigun.h"
 #include"../../../Scene/SceneManager.h"
+#include"Application/main.h"
 #include"../../Camera/CameraBase.h"
 #include"../../Bullet/P_BulletM/P_BulletM.h"
 
@@ -28,7 +29,7 @@ void Player_Minigun::Init()
 		//指定ノードが取得出来たら
 		if (_pNode)
 		{
-			m_localmuzzleMat = _pNode->m_worldTransform * m_localMat;
+			m_localmuzzleMat = _pNode->m_worldTransform;
 		}
 	}
 	//デバッグ用
@@ -38,25 +39,75 @@ void Player_Minigun::Init()
 	ChangeActionState(std::make_shared<ActionUnShot>());
 }
 
+void Player_Minigun::PreUpdate()
+{
+	// Updateの前の更新処理
+	// オブジェクトリストの整理 ・・・ 無効なオブジェクトを削除
+	auto efklist = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+	auto efkit = efklist.begin();
+
+	while (efkit != efklist.end())
+	{
+		if (!(*efkit)->IsPlaying())	// IsPlaying() ・・・ハンドルが0( 未再生 or 再生終了 )でない場合はTrue, 
+		{
+			auto it = m_efkList.begin();
+			// 無効なエフェクトをリストから削除
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					//it = m_efkList.erase(it);
+					break;
+				}
+				else
+				{
+					++it;	// 次の要素へイテレータを進める
+				}
+			}
+			// 無効なエフェクトをリストから削除
+			efkit = efklist.erase(efkit);
+
+		}
+		else
+		{
+			auto it = m_efkList.begin();
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					KdEffekseerManager::GetInstance().SetPos((*it)->GetHandle(), m_muzzlePos);
+					(*it)->SetPos(m_muzzlePos);
+					
+				}
+				++it;
+			}
+			++efkit;	// 次の要素へイテレータを進める
+		}
+	}
+	//m_efkList = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+
+}
+
 //更新
 void Player_Minigun::Update()
 {
-
-	
-	CharaBase::Update();
-	//m_dir = m_mWorld.Translation() - m_pos;
-	//m_dir.Normalize();
-	//m_pos = GetPos();
-
-	Math::Matrix _parentMat = Math::Matrix::Identity;
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
 	{
-		_parentMat = _spParent->GetMatrix();
+		const KdModelWork::Node* _pNode = _spParent->GetModel()->FindNode("APminigun");
+		if (_pNode)
+		{
+			m_localMat = _pNode->m_worldTransform;
+		}
 		m_worldRot = _spParent->GetWorldRot();
 	}
 
-	m_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
+	//座標を確定
+	CharaBase::Update();
+
+	//銃口の座標を作成
+	Math::Matrix _muzzleMat = m_localmuzzleMat * GetMatrix();
+	m_muzzlePos = _muzzleMat.Translation();
 	//銃口位置をデバッグ表示
 	if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
@@ -68,6 +119,16 @@ void Player_Minigun::Update()
 	{
 		m_nowAction->Update(*this);
 	}
+
+
+	//for (auto& efk : m_efkList)
+	//{
+	//	KdEffekseerManager::GetInstance().SetPos(efk->GetHandle(), m_muzzlePos);
+	//}
+
+	//m_dir = m_mWorld.Translation() - m_pos;
+	//m_dir.Normalize();
+	//m_pos = GetPos();
 
 }
 
@@ -96,7 +157,20 @@ void Player_Minigun::PostUpdate()
 //imguiの更新
 void Player_Minigun::ImguiUpdate()
 {
-	ImGui::Text("handle : %d", handle);
+	ImGui::Text("m_muzzlePosx : %.3f", m_muzzlePos.x);
+	ImGui::Text("m_muzzlePosy: %.3f", m_muzzlePos.y);
+	ImGui::Text("m_muzzlePosz : %.3f", m_muzzlePos.z);
+	auto it = m_efkList.begin();
+	// 無効なオブジェクトをリストから削除
+	while (it != m_efkList.end())
+	{
+		Application::Instance().m_log.AddLog("m_efkListh%d\n",(*it)->GetHandle());
+		Application::Instance().m_log.AddLog("m_efkListh%f\n",(*it)->GetPos().x);
+		++it;
+	}
+	ImGui::Text("m_efkList%d\n", m_efkList.size());
+	ImGui::Text("efklist : %d", KdEffekseerManager::GetInstance().GetnowEffectPlayList().size());
+
 }
 
 void Player_Minigun::ShotBullet()
@@ -292,18 +366,11 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
 			//エフェクト再生
 			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false).lock();
+			KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false);
 			if (_spEffect)
 			{
-				owner.handle = _spEffect->GetHandle();
+				owner.AddEffect(_spEffect);
 			}
-			//auto _spEfklist = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
-			//for(auto efk : _spEfklist)
-			//{
-			//	if (owner.handle == efk->GetHandle())
-			//	{
-			//		efk->SetPos(owner.m_muzzlePos);
-			//	}
-			//}
 		}
 		else
 		{
@@ -323,7 +390,6 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 		//弾の発射が終わったらフラグを未発射に戻す
 		owner.m_shotFlg = false;
 	}
-
 }
 
 void Player_Minigun::ActionShoting::Exit(Player_Minigun& owner)

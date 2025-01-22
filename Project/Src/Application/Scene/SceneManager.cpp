@@ -4,6 +4,7 @@
 #include "BaseScene/BaseScene.h"
 #include "TitleScene/TitleScene.h"
 #include "GameScene/GameScene.h"
+#include"ResultScene/ResultScene.h"
 
 void SceneManager::PreUpdate()
 {
@@ -19,8 +20,6 @@ void SceneManager::PreUpdate()
 void SceneManager::Update()
 {
 	m_currentScene->Update();
-	Application::Instance().m_log.Clear();
-	Application::Instance().m_log.AddLog("SceneType%d\n", m_currentSceneType);
 }
 
 void SceneManager::PostUpdate()
@@ -60,7 +59,9 @@ void SceneManager::AddObject(const std::shared_ptr<KdGameObject>& obj)
 
 void SceneManager::ImguiUpdate()
 {
+	Application::Instance().m_log.Clear();
 	m_currentScene->ImguiUpdate();
+	Application::Instance().m_log.AddLog("SceneType%d\n", m_currentSceneType);
 }
 
 void SceneManager::ChangeScene(SceneType sceneType)
@@ -74,6 +75,10 @@ void SceneManager::ChangeScene(SceneType sceneType)
 	case SceneType::Game:
 		m_currentScene = std::make_shared<GameScene>();
 		break;
+	case SceneType::Result:
+		m_currentScene = std::make_shared<ResultScene>();
+		break;
+
 	}
 
 	// 現在のシーン情報を更新

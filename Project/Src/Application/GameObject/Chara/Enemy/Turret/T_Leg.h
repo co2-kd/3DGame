@@ -39,7 +39,7 @@ private:
 	std::shared_ptr<KdAnimator> m_spAnimator = nullptr;
 
 	bool m_searchFlg = false;
-	const float m_searchArea = 100;
+	const float m_searchArea = 300;
 
 	//アタッチポイント関係
 	std::weak_ptr<TurretBase> m_wpTurretBase;

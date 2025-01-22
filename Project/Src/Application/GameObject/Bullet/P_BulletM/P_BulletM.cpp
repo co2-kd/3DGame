@@ -10,7 +10,7 @@ void P_BulletM::Init()
 		m_spModel = std::make_shared<KdModelWork>();
 		m_spModel->SetModelData("Asset/Models/Bullet/P_BulletM/P_BulletM.gltf");
 	}
-	m_timelimit = 50.0f;
+
 	m_pDebugWire = std::make_unique<KdDebugWireFrame>();
 }
 

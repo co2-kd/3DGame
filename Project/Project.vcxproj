@@ -159,6 +159,7 @@
     <ClInclude Include="Src\Application\GameObject\Back\Back.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\BulletBase.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.h" />
+    <ClInclude Include="Src\Application\GameObject\Bullet\E_D_Bullet\E_D_Bullet.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.h" />
     <ClInclude Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.h" />
     <ClInclude Include="Src\Application\GameObject\Camera\CameraBase.h" />
@@ -178,6 +179,8 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Minigun.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.h" />
     <ClInclude Include="Src\Application\GameObject\Ground\Ground.h" />
+    <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1.h" />
+    <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.h" />
     <ClInclude Include="Src\Application\GameObject\Scene\Title\Title.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Application\Scene\BaseScene\BaseScene.h" />
@@ -212,6 +215,7 @@
     <ClInclude Include="Src\Framework\Utility\KdCSVData.h" />
     <ClInclude Include="Src\Framework\Utility\KdDebugWireFrame.h" />
     <ClInclude Include="Src\Framework\Utility\KdFPSController.h" />
+    <ClInclude Include="Src\Framework\Utility\KdRandomGenerator.h" />
     <ClInclude Include="src\Pch.h" />
     <ClInclude Include="Src\Framework\Math\KdAnimation.h" />
     <ClInclude Include="Src\Framework\Math\KdCollision.h" />
@@ -233,6 +237,7 @@
     <ClCompile Include="Src\Application\GameObject\Back\Back.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\BulletBase.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\E_B_Laser\E_B_Laser.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Bullet\E_D_Bullet\E_D_Bullet.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletC\P_BulletC.cpp" />
     <ClCompile Include="Src\Application\GameObject\Bullet\P_BulletM\P_BulletM.cpp" />
     <ClCompile Include="Src\Application\GameObject\Camera\CameraBase.cpp" />
@@ -252,6 +257,8 @@
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Minigun.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Nuke-tube.cpp" />
     <ClCompile Include="Src\Application\GameObject\Ground\Ground.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.cpp" />
     <ClCompile Include="Src\Application\GameObject\Scene\Title\Title.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Application\Scene\BaseScene\BaseScene.cpp" />
@@ -287,6 +294,7 @@
     <ClCompile Include="Src\Framework\Utility\KdCSVData.cpp" />
     <ClCompile Include="Src\Framework\Utility\KdDebugWireFrame.cpp" />
     <ClCompile Include="Src\Framework\Utility\KdFPSController.cpp" />
+    <ClCompile Include="Src\Framework\Utility\KdRandomGenerator.cpp" />
     <ClCompile Include="src\Pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

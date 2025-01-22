@@ -55,7 +55,7 @@ public:
 		m_wpCamera = camera;
 	}
 
-	const std::list<std::shared_ptr<KdEffekseerObject>> const GetnowEffectPlayList();
+	const std::list<std::shared_ptr<KdEffekseerObject>> const GetnowEffectPlayList(){ return m_nowEffectPlayList; }
 
 private:
 

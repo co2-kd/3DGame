@@ -1,11 +1,9 @@
 ﻿#include "ResultScene.h"
 #include "../SceneManager.h"
 
-#include"../../GameObject/Scene/Title/Title.h"
-
 void ResultScene::Event()
 {
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (!m_keyFlg)
 		{
@@ -26,12 +24,5 @@ void ResultScene::Event()
 void ResultScene::Init()
 {
 	ShowCursor(true);
-
-	std::shared_ptr<Title> _title;
-	_title = std::make_shared<Title>();
-	_title->Init();
-	AddObject(_title);
-
-	//BGM再生
-	KdAudioManager::Instance().Play("Asset/Sounds/Title.wav", true);
+	m_keyFlg = true;
 }

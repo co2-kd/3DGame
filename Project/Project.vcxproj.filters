@@ -82,9 +82,6 @@
     <Filter Include="Src\Application\GameObject\Camera\TPSCamera">
       <UniqueIdentifier>{c8cf7720-4d00-4c0b-a1cf-bc64280b295f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\GameObject\Ground">
-      <UniqueIdentifier>{62dc0c73-548d-4454-aced-a5b2ed45b02f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\GameObject\Chara">
       <UniqueIdentifier>{a052ff01-ee42-4bf7-ba30-09e56d986636}</UniqueIdentifier>
     </Filter>
@@ -132,6 +129,15 @@
     </Filter>
     <Filter Include="Src\Application\GameObject\Chara\Enemy\ExpDrone">
       <UniqueIdentifier>{a57161c0-8656-4aa8-a7d9-bf8f413a1264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Bullet\E_D_Bullet">
+      <UniqueIdentifier>{5fdd423e-66cb-495f-95d6-bb78cde8e9ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Ground">
+      <UniqueIdentifier>{62dc0c73-548d-4454-aced-a5b2ed45b02f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Ground\Stage1">
+      <UniqueIdentifier>{9c05c6c7-1af7-4d95-bcd5-a2338a06055d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -372,6 +378,18 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.h">
       <Filter>Src\Application\GameObject\Chara\Enemy\ExpDrone</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Framework\Utility\KdRandomGenerator.h">
+      <Filter>Src\Framework\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Bullet\E_D_Bullet\E_D_Bullet.h">
+      <Filter>Src\Application\GameObject\Bullet\E_D_Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1.h">
+      <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.h">
+      <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -583,6 +601,18 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\ExpDrone\ExpDrone.cpp">
       <Filter>Src\Application\GameObject\Chara\Enemy\ExpDrone</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Framework\Utility\KdRandomGenerator.cpp">
+      <Filter>Src\Framework\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Bullet\E_D_Bullet\E_D_Bullet.cpp">
+      <Filter>Src\Application\GameObject\Bullet\E_D_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1.cpp">
+      <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.cpp">
+      <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
