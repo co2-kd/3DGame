@@ -8,6 +8,7 @@
 #include"../../GameObject/Chara/Player/Player_Nuke-tube.h"
 
 #include"../../GameObject/Chara/Enemy/Enemy.h"
+#include"../../GameObject/Chara/Enemy/Wall/Wall.h"
 #include"../../GameObject/Chara/Enemy/Drone/Drone.h"
 #include"../../GameObject/Chara/Enemy/ExpDrone/ExpDrone.h"
 #include"../../GameObject/Chara/Enemy/Turret/T_Pedestal.h"
@@ -40,6 +41,11 @@ void GameScene::Init()
 	_stage1col = std::make_shared<Stage1Col>();
 	_stage1col->Init();
 	AddObject(_stage1col);
+	//壁
+	std::shared_ptr<Wall> _wall = std::make_shared<Wall>();
+	_wall->SetPos({ 0,-60,490 });
+	_wall->Init();
+	AddObject(_wall);
 
 	//背景（仮）
 	std::shared_ptr<Back> _back;
@@ -109,11 +115,13 @@ void GameScene::Init()
 	_camera->SetTarget(_player);
 	_camera->RegistHitObject(_stage1);
 	_camera->RegistHitObject(_stage1col);
+	_camera->RegistHitObject(_wall);
 	_camera->RegistHitObject(_t_pedestal);
 
 	_player->RegistHitObject(_t_pedestal);
 	_player->RegistHitObject(_stage1);
 	_player->RegistHitObject(_stage1col);
+	_player->RegistHitObject(_wall);
 	_player->SetCamera(_camera);
 	_player->SetBattery(_player_battery);
 

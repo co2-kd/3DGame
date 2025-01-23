@@ -173,6 +173,7 @@
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.h" />
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Wall\Wall.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Battery.h" />
     <ClInclude Include="Src\Application\GameObject\Chara\Player\Player_Cannon.h" />
@@ -251,6 +252,7 @@
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Leg.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Pedestal.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Turret\T_Type\T_Laser\T_Laser.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Wall\Wall.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Battery.cpp" />
     <ClCompile Include="Src\Application\GameObject\Chara\Player\Player_Cannon.cpp" />

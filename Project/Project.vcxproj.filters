@@ -139,6 +139,9 @@
     <Filter Include="Src\Application\GameObject\Ground\Stage1">
       <UniqueIdentifier>{9c05c6c7-1af7-4d95-bcd5-a2338a06055d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Chara\Enemy\Wall">
+      <UniqueIdentifier>{cd71e388-425e-44b0-ba8c-87ba26d39cb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -390,6 +393,9 @@
     <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.h">
       <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Chara\Enemy\Wall\Wall.h">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Wall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -613,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.cpp">
       <Filter>Src\Application\GameObject\Ground\Stage1</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Chara\Enemy\Wall\Wall.cpp">
+      <Filter>Src\Application\GameObject\Chara\Enemy\Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

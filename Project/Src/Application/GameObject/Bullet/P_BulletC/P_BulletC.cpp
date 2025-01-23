@@ -104,6 +104,7 @@ void P_BulletC::UpdateCollision()
 			if (obj->Intersects(sphereInfo, nullptr))
 			{
 				m_expFlg = true;
+				obj->OnHit(m_dmg);
 			}
 		}
 	}

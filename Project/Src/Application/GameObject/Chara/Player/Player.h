@@ -78,9 +78,9 @@ private:
 	bool m_jumpFlg = false;
 	float m_jumpspeed = 0;
 	const float m_jumpspeedPow = 0.1f;
-	//const float m_jumpspeedMax = 1.8f;
+	const float m_jumpspeedMax = 1.8f;
 	//デバッグ
-	const float m_jumpspeedMax = 2.8f;
+	//const float m_jumpspeedMax = 2.8f;
 	const float m_jumpspeedStart = 0.5f;
 
 	//ステップ・ブースト
@@ -90,13 +90,13 @@ private:
 	int m_stepFlame = m_stepFlamefixed;
 
 
-	//const float m_stepspeed = 0.8f;
+	const float m_stepspeed = 0.8f;
 	//デバッグ
-	const float m_stepspeed = 2.8f;
+	//const float m_stepspeed = 2.8f;
 
-	//const float m_boostspeed = 0.5f;
+	const float m_boostspeed = 0.5f;
 	//デバッグ
-	const float m_boostspeed = 2.5f;
+	//const float m_boostspeed = 2.5f;
 
 	//ドライブブースト
 	bool m_driveFlg = false;
