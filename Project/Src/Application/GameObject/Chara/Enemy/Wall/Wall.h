@@ -18,6 +18,6 @@ private:
 	bool m_destFlg = false;
 
 	//HP
-	const int m_hpMax = 100;
+	const int m_hpMax = 20;
 	int m_hp = m_hpMax;
 };

@@ -5,12 +5,13 @@
 
 void TitleScene::Event()
 {
-	if (GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (!m_keyFlg)
 		{
 			m_keyFlg = true;
 			KdAudioManager::Instance().StopAllSound();
+			ShowCursor(false);
 			SceneManager::Instance().SetNextScene
 			(
 				SceneManager::SceneType::Game
@@ -31,6 +32,8 @@ void TitleScene::Init()
 	_title = std::make_shared<Title>();
 	_title->Init();
 	AddObject(_title);
+
+	m_keyFlg = true;
 
 	//BGM再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Title.wav", true);

@@ -26,6 +26,7 @@ public:
 
 	void StopAllEffect();
 	void StopEffect(const std::string& name);
+	void StopEffect(const int handle);
 
 	void OnPauseEfkUpdate()
 	{

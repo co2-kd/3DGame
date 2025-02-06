@@ -100,6 +100,11 @@ void KdEffekseerManager::StopEffect(const std::string& name)
 	m_efkManager->StopEffect(foundItr->second->GetHandle());
 }
 
+void KdEffekseerManager::StopEffect(const int handle)
+{
+	m_efkManager->StopEffect(handle);
+}
+
 void KdEffekseerManager::Release()
 {
 	Reset();

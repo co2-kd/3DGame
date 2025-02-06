@@ -46,10 +46,10 @@ void T_Laser::Update()
 	Math::Vector3 _muzzlePos;
 	_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
-	{
-		m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
-	}
+	//if (!(GetAsyncKeyState('Q') & 0x8000))
+	//{
+	//	m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
+	//}
 
 	//弾発射
 	if (_spParent)
@@ -81,10 +81,10 @@ void T_Laser::Update()
 				_rayInfo.m_range = m_dir.Length();
 				_rayInfo.m_type = KdCollider::TypeDamage | KdCollider::TypeGround;
 
-				if (!(GetAsyncKeyState('Q') & 0x8000))
+				/*if (!(GetAsyncKeyState('Q') & 0x8000))
 				{
 					m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
-				}
+				}*/
 
 				//２重ループしている 重くなったら改善
 				std::list<KdCollider::CollisionResult> _resultList;

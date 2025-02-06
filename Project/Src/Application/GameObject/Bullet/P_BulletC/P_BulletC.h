@@ -11,8 +11,22 @@ public:
 
 	void Update()override;
 
+	void PostUpdate()override;
+
 	void DrawBright() override;
 
+	//エフェクト関係
+	// オブジェクトリストを取得
+	const std::list<std::shared_ptr<KdEffekseerObject>>& GetEfkList()
+	{
+		return m_efkList;
+	}
+
+	// オブジェクトリストに追加
+	void AddEffect(const std::shared_ptr<KdEffekseerObject>& efk)
+	{
+		m_efkList.push_back(efk);
+	}
 
 private:
 	// 当たり判定
@@ -31,4 +45,7 @@ private:
 
 	//ダメージ
 	const int m_dmg = 10;
+
+	//エフェクト関係
+	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
 };

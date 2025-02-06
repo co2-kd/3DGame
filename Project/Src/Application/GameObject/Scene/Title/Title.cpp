@@ -4,7 +4,7 @@ void Title::Init()
 {
 	m_Title.Load("Asset/Textures/Title.png");
 	m_Titlebar.Load("Asset/Textures/Titlebar.png");
-	m_Titlestart.Load("Asset/Textures/Titlestart.png");
+	m_Titlestart.Load("Asset/Textures/Titlestart2.png");
 
 	m_angle = 0.5f;
 }

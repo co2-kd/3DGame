@@ -48,17 +48,17 @@ void Player_Cannon::Update()
 
 	m_muzzlePos = ((m_localmuzzleMat * m_localMat) * _parentMat).Translation();
 
-	//銃口位置をデバッグ表示
-	if (!(GetAsyncKeyState('Q') & 0x8000))
-	{
-		m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
-	}
+	////銃口位置をデバッグ表示
+	//if (!(GetAsyncKeyState('Q') & 0x8000))
+	//{
+	//	m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
+	//}
 
-	//デバッグ表示
-	if (!(GetAsyncKeyState('Q') & 0x8000))
-	{
-		m_pDebugWire->AddDebugSphere(GetMatrix().Translation(), 0.1f, kWhiteColor);
-	}
+	////デバッグ表示
+	//if (!(GetAsyncKeyState('Q') & 0x8000))
+	//{
+	//	m_pDebugWire->AddDebugSphere(GetMatrix().Translation(), 0.1f, kWhiteColor);
+	//}
 
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
@@ -169,12 +169,12 @@ void Player_Cannon::ActionShoting::Update(Player_Cannon& owner)
 		//_rayInfo.m_dir = _parentMat.Backward();
 		_rayInfo.m_range = _range;
 		//_rayInfo.m_range = 10000;
-		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage | KdCollider::TypeBump;
+		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
-		if (!(GetAsyncKeyState('Q') & 0x8000))
-		{
-			owner.m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
-		}
+		//if (!(GetAsyncKeyState('Q') & 0x8000))
+		//{
+		//	owner.m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
+		//}
 
 		//衝突情報リスト
 		std::list<KdCollider::CollisionResult> _resultList;

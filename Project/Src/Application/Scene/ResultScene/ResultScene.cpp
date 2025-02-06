@@ -1,6 +1,8 @@
 ﻿#include "ResultScene.h"
 #include "../SceneManager.h"
 
+#include"../../GameObject/Scene/Result/Result.h"
+
 void ResultScene::Event()
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
@@ -24,5 +26,12 @@ void ResultScene::Event()
 void ResultScene::Init()
 {
 	ShowCursor(true);
+
+
+	std::shared_ptr<Result> _result;
+	_result = std::make_shared<Result>();
+	_result->Init();
+	AddObject(_result);
+
 	m_keyFlg = true;
 }

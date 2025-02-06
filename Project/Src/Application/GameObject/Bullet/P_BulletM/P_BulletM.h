@@ -19,7 +19,7 @@ private:
 	// 当たり判定
 	void UpdateCollision();
 
-	const float m_speed = 1.0f;
+	const float m_speed = 1.5f;
 	int m_timelimit = 30;
 
 	const int m_dmg = 1;

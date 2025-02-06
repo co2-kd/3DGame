@@ -64,10 +64,10 @@ void Drone::Update()
 	{
 		m_nowAction->Update(*this);
 	}
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
-	}
+	}*/
 
 	//移動
 	m_pos += m_moveVec * m_speed;
@@ -193,10 +193,10 @@ void Drone::UpdateCollision()
 	rayInfo.m_range = m_gravity - m_floating + enableStepHigh;
 	// 当たり判定をしたいタイプを設定
 	rayInfo.m_type = KdCollider::TypeBump | KdCollider::TypeGround;
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
-	}
+	}*/
 
 	// ②HIT判定対象オブジェクトに総当たり
 	for (std::weak_ptr<KdGameObject> wpGameObj : m_wpHitObjectList)
@@ -241,10 +241,10 @@ void Drone::UpdateCollision()
 	sphereInfo.m_sphere.Radius = 2.5f;
 	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
-	{
-		m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
-	}
+	//if (!(GetAsyncKeyState('Q') & 0x8000))
+	//{
+	//	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
+	//}
 
 	// ②HIT対象オブジェクトに総当たり
 	for (std::weak_ptr<KdGameObject> weGameObj : m_wpHitObjectList)
@@ -271,10 +271,10 @@ void Drone::ShotBullet()
 	Math::Vector3 _muzzlePos;
 	_muzzlePos = (m_localmuzzleMat * GetMatrix()).Translation();
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(_muzzlePos, 0.1f, kRedColor);
-	}
+	}*/
 	// レイ判定用パラメーター
 	KdCollider::RayInfo _rayInfo;
 
@@ -284,10 +284,10 @@ void Drone::ShotBullet()
 	_rayInfo.m_range = m_length;
 	_rayInfo.m_type = KdCollider::TypeDamage | KdCollider::TypeGround;
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
-	}
+	}*/
 
 	//２重ループしている 重くなったら改善
 	std::list<KdCollider::CollisionResult> _resultList;

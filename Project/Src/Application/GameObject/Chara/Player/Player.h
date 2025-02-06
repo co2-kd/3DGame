@@ -11,6 +11,7 @@ public:
 	~Player()			override	{}
 
 	void Init()				override;
+	void PreUpdate()		override;
 	void Update()			override;
 	void PostUpdate()		override;
 
@@ -35,6 +36,22 @@ public:
 
 	//ゲッター
 	const Math::Matrix GetAPBatteryMatrix()const { return m_APBatteryMat; }//アタッチポイント
+	const float GetVeloLength()const override{ return m_velocity.Length(); }//現在の速度
+	const Math::Vector3 GetVelocity()const override { return m_velocity; }//移動量
+	const float GetFloating()const override { return m_floating ; }
+
+	//エフェクト関係
+	// オブジェクトリストを取得
+	const std::list<std::shared_ptr<KdEffekseerObject>>& GetEfkList()
+	{
+		return m_efkList;
+	}
+
+	// オブジェクトリストに追加
+	void AddEffect(const std::shared_ptr<KdEffekseerObject>& efk)
+	{
+		m_efkList.push_back(efk);
+	}
 
 private:
 
@@ -66,7 +83,7 @@ private:
 	//プレイヤー座標補正
 	const float m_adjustHeight = 1.0f;
 	//重力
-	const float m_gravity = 1.5f;
+	const float m_gravity = 1.3f;
 	const float m_floatingWeak = 0.03f;
 	const float m_floatingMin = 0.0f;
 	float m_floating = 0;
@@ -121,13 +138,15 @@ private:
 	bool m_groundFlg = false;
 
 	//HP
-	const int m_hpMax = 100;
+	const int m_hpMax = 20;
 	int m_hp = m_hpMax;
 
 	//アタッチポイント関係
 	std::weak_ptr<Player_Battery> m_wpBattery;
 	Math::Matrix m_APBatteryMat = {};
 
+	//エフェクト関係
+	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
 
 //ステートパターン関係
 private:

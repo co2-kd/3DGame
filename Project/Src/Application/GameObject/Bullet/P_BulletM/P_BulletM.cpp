@@ -26,7 +26,7 @@ void P_BulletM::Update()
 	}
 
 	//移動回数
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		//座標更新
 		//座標 += 向き情報(1.0f) * 移動速度
@@ -57,34 +57,66 @@ void P_BulletM::DrawBright()
 
 void P_BulletM::UpdateCollision()
 {
-
-	//球判定用の変数を作成
-	KdCollider::SphereInfo sphereInfo;
-	//球の中心位置を設定
-	sphereInfo.m_sphere.Center = m_pos;
-	//球の判定を設定
-	sphereInfo.m_sphere.Radius = 1.0f;
-	//当たり判定をしたいタイプを設定
-	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage;
-
-	//デバッグ用
-	if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
-		m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
-	}
-	//全オブジェクトと当たり判定!!!!!
-	for (auto& obj : SceneManager::Instance().GetObjList())
-	{
-		if (obj->Intersects(sphereInfo, nullptr))
+		//球判定用の変数を作成
+		KdCollider::SphereInfo sphereInfo;
+		//球の中心位置を設定
+		sphereInfo.m_sphere.Center = m_pos + Math::Vector3(m_dir * m_speed);
+		//球の判定を設定
+		sphereInfo.m_sphere.Radius = 1.0f;
+		//当たり判定をしたいタイプを設定
+		sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage;
+
+		//デバッグ用
+		if (!(GetAsyncKeyState('Q') & 0x8000))
 		{
-			if (obj->GetObjectType() == ObjectType::Player)continue;
-			//敵なら当たった判定
-			if (obj->GetObjectType() == ObjectType::Enemy)
+			m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
+		}
+		//全オブジェクトと当たり判定!!!!!
+		for (auto& obj : SceneManager::Instance().GetObjList())
+		{
+			if (obj->Intersects(sphereInfo, nullptr))
 			{
-				obj->OnHit(m_dmg);
+				if (obj->GetObjectType() == ObjectType::Player)continue;
+				//敵なら当たった判定
+				if (obj->GetObjectType() == ObjectType::Enemy)
+				{
+					obj->OnHit(m_dmg);
+				}
+				m_timelimit = 0;
+				break;
 			}
-			m_timelimit = 0;
-			break;
+		}
+	}
+	{
+		//球判定用の変数を作成
+		KdCollider::SphereInfo sphereInfo;
+		//球の中心位置を設定
+		sphereInfo.m_sphere.Center = m_pos;
+		//球の判定を設定
+		sphereInfo.m_sphere.Radius = 1.0f;
+		//当たり判定をしたいタイプを設定
+		sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage;
+
+		//デバッグ用
+		if (!(GetAsyncKeyState('Q') & 0x8000))
+		{
+			m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
+		}
+		//全オブジェクトと当たり判定!!!!!
+		for (auto& obj : SceneManager::Instance().GetObjList())
+		{
+			if (obj->Intersects(sphereInfo, nullptr))
+			{
+				if (obj->GetObjectType() == ObjectType::Player)continue;
+				//敵なら当たった判定
+				if (obj->GetObjectType() == ObjectType::Enemy)
+				{
+					obj->OnHit(m_dmg);
+				}
+				m_timelimit = 0;
+				break;
+			}
 		}
 	}
 }

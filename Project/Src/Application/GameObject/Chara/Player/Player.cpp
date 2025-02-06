@@ -49,6 +49,53 @@ void Player::Init()
 
 	//初期状態を「待機状態」へ設定
 	ChangeActionState(std::make_shared<ActionIdle>());
+
+}
+void Player::PreUpdate()
+{
+	// Updateの前の更新処理
+	// オブジェクトリストの整理 ・・・ 無効なオブジェクトを削除
+	auto efklist = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+	auto efkit = efklist.begin();
+
+	while (efkit != efklist.end())
+	{
+		if (!(*efkit)->IsPlaying())	// IsPlaying() ・・・ハンドルが0( 未再生 or 再生終了 )でない場合はTrue, 
+		{
+			auto it = m_efkList.begin();
+			// 無効なエフェクトをリストから削除
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					//it = m_efkList.erase(it);
+					break;
+				}
+				else
+				{
+					++it;	// 次の要素へイテレータを進める
+				}
+			}
+			// 無効なエフェクトをリストから削除
+			efkit = efklist.erase(efkit);
+
+		}
+		else
+		{
+			auto it = m_efkList.begin();
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					KdEffekseerManager::GetInstance().SetWorldMatrix((*it)->GetHandle(), m_mWorld);
+				}
+				++it;
+			}
+			++efkit;	// 次の要素へイテレータを進める
+		}
+	}
+	//m_efkList = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+
 }
 
 //更新
@@ -123,6 +170,21 @@ void Player::Update()
 
 	// キャラクターの座標が確定してからコリジョンによる位置補正を行う
 	UpdateCollision();
+
+	//ブーストエフェクト
+	if (m_stepFlg&&!m_overheatFlg)
+	{
+		static auto _spEffect = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 0, 10, false).lock();
+		if (_spEffect)
+		{
+			bool _playFlg = _spEffect->IsPlaying();
+			if (!_playFlg)
+			{
+				_spEffect = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 1, 10, false).lock();
+				AddEffect(_spEffect);
+			}
+		}
+	}
 }
 
 //後更新
@@ -217,6 +279,7 @@ void Player::DrawSprite()
 //imguiの更新
 void Player::ImguiUpdate()
 {
+	ImGui::Text("player");
 	ImGui::Text("boostgauge : %d", m_boostgauge);
 	ImGui::Text("overhert : %d", m_overheatFlg);
 	ImGui::Text("NowAction : %s", *m_nowAction);
@@ -224,10 +287,17 @@ void Player::ImguiUpdate()
 	ImGui::Text("m_velocity.x : %f", m_velocity.x);
 	ImGui::Text("m_velocity.y : %f", m_velocity.y);
 	ImGui::Text("m_velocity.z : %f", m_velocity.z);
+	ImGui::Text("m_velocityLength : %f", m_velocity.Length());
 	ImGui::Text("m_groundflg : %d", m_groundFlg);
 	ImGui::Text("m_jumpflg : %d", m_jumpFlg);
 	ImGui::Text("m_floating : %f", m_floating);
-
+	auto it = m_efkList.begin();
+	while (it != m_efkList.end())
+	{
+		Application::Instance().m_log.AddLog("m_efkListh%d\n", (*it)->GetHandle());
+		Application::Instance().m_log.AddLog("m_efkListh%f\n", (*it)->GetPos().x);
+		++it;
+	}
 }
 
 void Player::OnHit(const int _dmg)
@@ -235,6 +305,7 @@ void Player::OnHit(const int _dmg)
 	m_hp -= _dmg;
 	if (m_hp <= 0)
 	{
+		m_destFlg = true;
 		m_isExpired = true;
 	}
 }
@@ -271,7 +342,15 @@ void Player::UpdateRotate(const Math::Vector3& srcMoveVec)
 		_betweenAng += 360;
 	}
 
-	float rotateAng = std::clamp(_betweenAng, -8.0f, 8.0f);
+	float rotateAng = 0;
+	if (!m_stepbeginFlg)
+	{
+		rotateAng = std::clamp(_betweenAng, -8.0f, 8.0f);
+	}
+	else
+	{
+		rotateAng = std::clamp(_betweenAng, -180.0f, 180.0f);
+	}
 	m_worldRot.y += rotateAng;
 	if (m_worldRot.y >= 360)
 	{
@@ -305,10 +384,10 @@ void Player::UpdateCollision()
 	rayInfo.m_range = m_gravity - m_floating + enableStepHigh;
 	// 当たり判定をしたいタイプを設定
 	rayInfo.m_type = KdCollider::TypeBump | KdCollider::TypeGround;
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugLine(rayInfo.m_pos, rayInfo.m_dir, rayInfo.m_range);
-	}
+	}*/
 
 	// ②HIT判定対象オブジェクトに総当たり
 	m_groundFlg = false;
@@ -344,6 +423,18 @@ void Player::UpdateCollision()
 				m_floating += maxOverLap;
 				//ブースト回復
 				m_groundFlg = true;
+
+				//接地エフェクト
+				static auto _spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 1, 5, false).lock();
+				AddEffect(_spEffect);
+				if (_spEffect)
+				{
+					bool _playFlg = _spEffect->IsPlaying();
+					if (!_playFlg)
+					{
+						_spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 1, 5, false).lock();
+					}
+				}
 			}
 		}
 	}
@@ -356,10 +447,10 @@ void Player::UpdateCollision()
 	sphereInfo.m_sphere.Radius = 2.0f;
 	sphereInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
-	{
-		m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
-	}
+	//if (!(GetAsyncKeyState('Q') & 0x8000))
+	//{
+	//	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius, kRedColor);
+	//}
 
 	// ②HIT対象オブジェクトに総当たり
 	for (std::weak_ptr<KdGameObject> weGameObj : m_wpHitObjectList)
@@ -564,6 +655,8 @@ void Player::ActionStep::Enter(Player& owner)
 	owner.m_stepFlg = false;
 	owner.m_stepFlame = owner.m_stepFlamefixed;
 
+
+
 	//SE再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Step.wav", false);
 }
@@ -589,6 +682,8 @@ void Player::ActionStep::Update(Player& owner)
 			}
 			owner.m_stepFlg = true;
 			owner.m_speed = owner.m_stepspeed;
+			//ステップエフェクト
+			KdEffekseerManager::GetInstance().Play("step/step.efk", owner.m_pos, owner.m_worldRot, 1, 2, false);
 		}
 		else
 		{

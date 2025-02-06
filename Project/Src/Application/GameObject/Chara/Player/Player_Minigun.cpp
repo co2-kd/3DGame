@@ -109,10 +109,10 @@ void Player_Minigun::Update()
 	Math::Matrix _muzzleMat = m_localmuzzleMat * GetMatrix();
 	m_muzzlePos = _muzzleMat.Translation();
 	//銃口位置をデバッグ表示
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(m_muzzlePos, 0.1f, kRedColor);
-	}
+	}*/
 
 	//現在の状態の更新呼び出し
 	if (m_nowAction)
@@ -319,12 +319,12 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 		//_rayInfo.m_dir = _parentMat.Backward();
 		_rayInfo.m_range = _range;
 		//_rayInfo.m_range = 10000;
-		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeDamage | KdCollider::TypeBump;
+		_rayInfo.m_type = KdCollider::TypeGround | KdCollider::TypeBump;
 
-		if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*	if (!(GetAsyncKeyState('Q') & 0x8000))
 		{
 			owner.m_pDebugWire->AddDebugLine(_rayInfo.m_pos, _rayInfo.m_dir, _rayInfo.m_range);
-		}
+		}*/
 
 		//衝突情報リスト
 		std::list<KdCollider::CollisionResult> _resultList;
@@ -366,7 +366,7 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 			KdAudioManager::Instance().Play("Asset/Sounds/P_BulletM.wav", false);
 			//エフェクト再生
 			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false).lock();
-			KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false);
+			//KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false);
 			if (_spEffect)
 			{
 				owner.AddEffect(_spEffect);

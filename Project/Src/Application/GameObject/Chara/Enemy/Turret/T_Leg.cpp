@@ -38,10 +38,10 @@ void T_Leg::Update()
 	{
 		_Mat = Math::Matrix::CreateTranslation(m_localMat.Translation()) * Math::Matrix::CreateTranslation(_spParent->GetMatrix().Translation());
 	}
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(_Mat.Translation(), 0.1f, kRedColor);
-	}
+	}*/
 
 	const std::shared_ptr<const KdGameObject> _spTarget = m_wpTarget.lock();
 	if (_spTarget)
@@ -59,10 +59,10 @@ void T_Leg::Update()
 		m_searchFlg = false;
 	}
 
-	if (!(GetAsyncKeyState('Q') & 0x8000))
+	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
 		m_pDebugWire->AddDebugSphere(m_pos, m_searchArea, kGreenColor);
-	}
+	}*/
 	if (m_searchFlg)
 	{
 		UpdateRotate(m_dir);

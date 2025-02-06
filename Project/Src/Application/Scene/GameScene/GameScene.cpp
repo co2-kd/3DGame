@@ -78,22 +78,31 @@ void GameScene::Init()
 	//敵
 	//ドローン
 	std::shared_ptr<Drone> _drone = std::make_shared<Drone>();
-	_drone->SetPos({ 0,-80,650 });
+	_drone->SetPos({ 0,-50,390 });
 	_drone->Init();
 	AddObject(_drone);
+	std::shared_ptr<Drone> _drone2 = std::make_shared<Drone>();
+	_drone2->SetPos({ -50,-80,620 });
+	_drone2->Init();
+	AddObject(_drone2);
+	std::shared_ptr<Drone> _drone3 = std::make_shared<Drone>();
+	_drone3->SetPos({ 50,-80,620 });
+	_drone3->Init();
+	AddObject(_drone3);
 
-	//自爆ドローン
-	std::shared_ptr<ExpDrone> _expdrone = std::make_shared<ExpDrone>();
-	_expdrone->Init();
-	_expdrone->SetPos({ 50,-20,360 });
-	AddObject(_expdrone);
+	////自爆ドローン
+	//std::shared_ptr<ExpDrone> _expdrone = std::make_shared<ExpDrone>();
+	//_expdrone->Init();
+	//_expdrone->SetPos({ 50,-20,360 });
+	//AddObject(_expdrone);
 
 
 	//タレット
 	std::shared_ptr<T_Pedestal> _t_pedestal = std::make_shared<T_Pedestal>();
 	_t_pedestal->Init();
-	_t_pedestal->SetPos({-150,-25.0f,150});
+	_t_pedestal->SetPos({0,-110,720});
 	AddObject(_t_pedestal);
+
 	std::shared_ptr<T_Leg> _t_leg = std::make_shared<T_Leg>();
 	_t_leg->Init();
 	AddObject(_t_leg);
@@ -141,8 +150,12 @@ void GameScene::Init()
 
 	_drone->SetTarget(_player);
 	_drone->RegistHitObject(_stage1);
+	_drone2->SetTarget(_player);
+	_drone2->RegistHitObject(_stage1);
+	_drone3->SetTarget(_player);
+	_drone3->RegistHitObject(_stage1);
 
-	_expdrone->SetTarget(_player);
+	//_expdrone->SetTarget(_player);
 
 	_t_pedestal->SetT_Leg(_t_leg);
 
@@ -153,6 +166,12 @@ void GameScene::Init()
 	_t_laser->SetParent(_t_leg);
 	_t_laser->SetTarget(_player);
 
+	m_player = _player;
+	m_drone2 = _drone2;
+	m_drone3 = _drone3;
+	m_turret = _t_leg;
+
+	m_keyFlg = true;
 
 	//BGM再生
 	KdAudioManager::Instance().Play("Asset/Sounds/Game.wav", true);
@@ -189,5 +208,26 @@ void GameScene::Event()
 	else
 	{
 		m_keyFlg = false;
+	}
+
+	if (m_drone2->IsExpired() && m_drone3->IsExpired() && m_turret->IsExpired())
+	{
+		KdAudioManager::Instance().StopAllSound();
+		SceneManager::Instance().SetNextScene
+		(
+			SceneManager::SceneType::Result
+		);
+	}
+
+	if (m_player->GetDestFlg())
+	{
+		if (!m_keyFlg)
+		{
+			KdAudioManager::Instance().StopAllSound();
+			SceneManager::Instance().SetNextScene
+			(
+				SceneManager::SceneType::Title
+			);
+		}
 	}
 }

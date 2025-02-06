@@ -53,7 +53,7 @@ public:
 	virtual Math::Vector3 GetPos() const { return m_mWorld.Translation(); }
 
 	//回転
-	virtual const Math::Vector3 GetWorldRot() const { return {}; }
+	virtual const Math::Vector3 GetWorldRot() const { return { m_mWorld._31,m_mWorld._32,m_mWorld._33 }; }
 
 	// 拡大率を変更する関数
 	void SetScale(float scalar);
@@ -88,6 +88,9 @@ public:
 	virtual void OnHit(const int _dmg){}
 	virtual const  bool GetDestFlg()const { return false; }
 	virtual const bool GetSearchFlg()const { return false; }
+	virtual const float GetFloating()const { return 0.0f; }
+	virtual const float GetVeloLength()const { return 0.0f; }
+	virtual const Math::Vector3 GetVelocity()const { return Math::Vector3::Zero; }
 
 protected:
 

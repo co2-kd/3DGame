@@ -182,6 +182,7 @@
     <ClInclude Include="Src\Application\GameObject\Ground\Ground.h" />
     <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1.h" />
     <ClInclude Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.h" />
+    <ClInclude Include="Src\Application\GameObject\Scene\Result\Result.h" />
     <ClInclude Include="Src\Application\GameObject\Scene\Title\Title.h" />
     <ClInclude Include="Src\Application\main.h" />
     <ClInclude Include="Src\Application\Scene\BaseScene\BaseScene.h" />
@@ -261,6 +262,7 @@
     <ClCompile Include="Src\Application\GameObject\Ground\Ground.cpp" />
     <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1.cpp" />
     <ClCompile Include="Src\Application\GameObject\Ground\Stage1\Stage1Col.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Scene\Result\Result.cpp" />
     <ClCompile Include="Src\Application\GameObject\Scene\Title\Title.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
     <ClCompile Include="Src\Application\Scene\BaseScene\BaseScene.cpp" />
