@@ -20,6 +20,8 @@ void TurretBase::Update()
 	if (_spTarget)
 	{
 		m_dir = m_pos - _spTarget->GetPos();
+		m_length = m_dir.Length();
+		m_dir.Normalize();
 	}
 }
 
@@ -59,4 +61,5 @@ void TurretBase::UpdateRotate(const Math::Vector3& srcMoveVec)
 	m_worldRot.x += rotateAng;
 	//砲塔の射角の制限
 	m_worldRot.x = std::clamp(m_worldRot.x, -30.0f, 30.0f);
+
 }

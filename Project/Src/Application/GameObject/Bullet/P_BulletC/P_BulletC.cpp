@@ -161,10 +161,10 @@ void P_BulletC::UpdateCollision()
 		sphereInfo.m_type = KdCollider::TypeGround;
 
 		//デバッグ用
-		if (!(GetAsyncKeyState('Q') & 0x8000))
-		{
-			m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
-		}
+		//if (!(GetAsyncKeyState('Q') & 0x8000))
+		//{
+		//	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
+		//}
 		//全オブジェクトと当たり判定!!!!!
 		for (auto& obj : SceneManager::Instance().GetObjList())
 		{
@@ -186,10 +186,10 @@ void P_BulletC::UpdateCollision()
 		sphereInfo.m_type = KdCollider::TypeGround;
 
 		//デバッグ用
-		if (!(GetAsyncKeyState('Q') & 0x8000))
-		{
-			m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
-		}
+		//if (!(GetAsyncKeyState('Q') & 0x8000))
+		//{
+		//	m_pDebugWire->AddDebugSphere(sphereInfo.m_sphere.Center, sphereInfo.m_sphere.Radius);
+		//}
 		//全オブジェクトと当たり判定!!!!!
 		for (auto& obj : SceneManager::Instance().GetObjList())
 		{

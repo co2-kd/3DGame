@@ -88,6 +88,9 @@ private:
 	const float m_floatingMin = 0.0f;
 	float m_floating = 0;
 
+	//着地フラグ
+	bool m_LandingFlg = false;
+
 	//ホバー
 	const float m_hoverspeed = 0.3f;
 	
@@ -147,6 +150,7 @@ private:
 
 	//エフェクト関係
 	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
+	bool m_jumpefkFlg = false;
 
 //ステートパターン関係
 private:

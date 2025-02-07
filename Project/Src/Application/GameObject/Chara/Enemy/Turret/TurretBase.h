@@ -27,5 +27,7 @@ protected:
 	const int m_Shotcool = 0;
 	int m_Shotcount = 0;
 
+	float m_length = 0;
+
 
 };

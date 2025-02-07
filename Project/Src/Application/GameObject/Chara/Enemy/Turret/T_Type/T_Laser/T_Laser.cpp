@@ -78,7 +78,7 @@ void T_Laser::Update()
 				//レイの各パラメータを設定
 				_rayInfo.m_pos = _muzzlePos;
 				_rayInfo.m_dir = m_mWorld.Backward();
-				_rayInfo.m_range = m_dir.Length();
+				_rayInfo.m_range = m_length;
 				_rayInfo.m_type = KdCollider::TypeDamage | KdCollider::TypeGround;
 
 				/*if (!(GetAsyncKeyState('Q') & 0x8000))

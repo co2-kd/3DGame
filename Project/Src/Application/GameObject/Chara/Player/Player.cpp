@@ -185,6 +185,20 @@ void Player::Update()
 			}
 		}
 	}
+
+	if(m_jumpefkFlg&&!m_overheatFlg)
+	{
+		static auto _spEffect = KdEffekseerManager::GetInstance().Play("jump/jump.efk", m_pos, m_worldRot, 0, 100, false).lock();
+		if (_spEffect)
+		{
+			bool _playFlg = _spEffect->IsPlaying();
+			if (!_playFlg)
+			{
+				_spEffect = KdEffekseerManager::GetInstance().Play("jump/jump.efk",m_pos, m_worldRot, 1, 5, false).lock();
+				AddEffect(_spEffect);
+			}
+		}
+	}
 }
 
 //後更新
@@ -229,6 +243,20 @@ void Player::PostUpdate()
 				}
 			}
 		}
+	}
+
+	//着地エフェクト
+	if (m_groundFlg)
+	{
+		if (!m_LandingFlg)
+		{
+			KdEffekseerManager::GetInstance().Play("landing/landing.efk", m_pos, m_worldRot, 1, 1, false);
+			m_LandingFlg = true;
+		}
+	}
+	else
+	{
+		m_LandingFlg = false;
 	}
 
 
@@ -425,14 +453,13 @@ void Player::UpdateCollision()
 				m_groundFlg = true;
 
 				//接地エフェクト
-				static auto _spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 1, 5, false).lock();
-				AddEffect(_spEffect);
+				static auto _spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 0, 100, false).lock();
 				if (_spEffect)
 				{
 					bool _playFlg = _spEffect->IsPlaying();
 					if (!_playFlg)
 					{
-						_spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 1, 5, false).lock();
+						_spEffect = KdEffekseerManager::GetInstance().Play("floating/floating.efk", m_pos, m_worldRot, 1, 2, false).lock();
 					}
 				}
 			}
@@ -552,6 +579,7 @@ void Player::ActionIdle::Exit(Player& owner)
 void Player::ActionJump::Enter(Player& owner)
 {
 	owner.m_jumpspeed = owner.m_gravity;
+	owner.m_jumpefkFlg = true;
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"), false);
 }
 
@@ -561,7 +589,6 @@ void Player::ActionJump::Update(Player& owner)
 	//ジャンプ
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000 && !owner.m_overheatFlg)
 	{
-
 		if (!owner.m_jumpFlg)
 		{
 			owner.m_jumpFlg = true;
@@ -610,12 +637,16 @@ void Player::ActionJump::Update(Player& owner)
 
 void Player::ActionJump::Exit(Player& owner)
 {
-
+	owner.m_jumpefkFlg = false;
 }
 
 void Player::ActionMove::Enter(Player& owner)
 {
 	owner.m_spAnimator->SetAnimation(owner.m_spModel->GetData()->GetAnimation("Stop"),false);
+
+	owner.m_stepFlg = false;
+	owner.m_jumpFlg = false;
+
 }
 
 void Player::ActionMove::Update(Player& owner)
@@ -654,7 +685,6 @@ void Player::ActionStep::Enter(Player& owner)
 	owner.m_stepbeginFlg = true;
 	owner.m_stepFlg = false;
 	owner.m_stepFlame = owner.m_stepFlamefixed;
-
 
 
 	//SE再生

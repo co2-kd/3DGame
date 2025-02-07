@@ -36,6 +36,7 @@ void E_B_Laser::Update()
 		Math::Matrix _transMat;
 		_transMat = Math::Matrix::CreateTranslation(m_pos);
 
+
 		m_mWorld = m_rotBulletMat * _transMat;
 
 		UpdateCollision();
