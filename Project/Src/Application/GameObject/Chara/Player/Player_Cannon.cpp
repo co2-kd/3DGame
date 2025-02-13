@@ -36,6 +36,52 @@ void Player_Cannon::Init()
 	ChangeActionState(std::make_shared<ActionUnShot>());
 }
 
+void Player_Cannon::PreUpdate()
+{
+	// Updateの前の更新処理
+// オブジェクトリストの整理 ・・・ 無効なオブジェクトを削除
+	auto efklist = KdEffekseerManager::GetInstance().GetnowEffectPlayList();
+	auto efkit = efklist.begin();
+
+	while (efkit != efklist.end())
+	{
+		if (!(*efkit)->IsPlaying())	// IsPlaying() ・・・ハンドルが0( 未再生 or 再生終了 )でない場合はTrue, 
+		{
+			auto it = m_efkList.begin();
+			// 無効なエフェクトをリストから削除
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					//it = m_efkList.erase(it);
+					break;
+				}
+				else
+				{
+					++it;	// 次の要素へイテレータを進める
+				}
+			}
+			// 無効なエフェクトをリストから削除
+			efkit = efklist.erase(efkit);
+
+		}
+		else
+		{
+			auto it = m_efkList.begin();
+			while (it != m_efkList.end())
+			{
+				if ((*it)->GetHandle() == (*efkit)->GetHandle())
+				{
+					KdEffekseerManager::GetInstance().SetPos((*it)->GetHandle(), m_muzzlePos);
+					(*it)->SetPos(m_muzzlePos);
+				}
+				++it;
+			}
+			++efkit;	// 次の要素へイテレータを進める
+		}
+	}
+}
+
 //更新
 void Player_Cannon::Update()
 {
@@ -43,10 +89,20 @@ void Player_Cannon::Update()
 	const std::shared_ptr<const KdGameObject> _spParent = m_wpParent.lock();
 	if (_spParent)
 	{
-		_parentMat = _spParent->GetMatrix();
+		const KdModelWork::Node* _pNode = _spParent->GetModel()->FindNode("APcannon");
+		if (_pNode)
+		{
+			m_localMat = _pNode->m_worldTransform;
+		}
+		m_worldRot = _spParent->GetWorldRot();
 	}
 
-	m_muzzlePos = ((m_localmuzzleMat * m_localMat) * _parentMat).Translation();
+	//座標を確定
+	CharaBase::Update();
+
+	//銃口の座標を作成
+	Math::Matrix _muzzleMat = m_localmuzzleMat * GetMatrix();
+	m_muzzlePos = _muzzleMat.Translation();
 
 	////銃口位置をデバッグ表示
 	//if (!(GetAsyncKeyState('Q') & 0x8000))
@@ -66,7 +122,6 @@ void Player_Cannon::Update()
 		m_nowAction->Update(*this);
 	}
 
-	CharaBase::Update();
 
 }
 
@@ -214,6 +269,13 @@ void Player_Cannon::ActionShoting::Update(Player_Cannon& owner)
 
 			//攻撃SE再生
 			//KdAudioManager::Instance().Play("Asset/Sounds/P_BulletC.wav", false);
+			//エフェクト再生
+			auto _spEffect = KdEffekseerManager::GetInstance().Play("muzzleflash/cannonflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false).lock();
+			//KdEffekseerManager::GetInstance().Play("muzzleflash/muzzleflash.efk", owner.m_muzzlePos, owner.m_worldRot, 1, 1.5, false);
+			if (_spEffect)
+			{
+				owner.AddEffect(_spEffect);
+			}
 		}
 		else
 		{

@@ -42,10 +42,13 @@ void Player::Init()
 		_spBattery->SetAPMatrix(m_APBatteryMat);
 	}
 
-	m_boostbackTex.Load("Asset/Textures/boost_bar_back.png");
-	m_boostflontTex.Load("Asset/Textures/boost_bar_flont.png");
-	m_boostTex.Load("Asset/Textures/boost_bar2.png");
-	m_tex.Load("Asset/Textures/cross.png");
+	m_barbackTex.Load("Asset/Textures/bar_back.png");
+	m_barflontTex.Load("Asset/Textures/bar_flont.png");
+	m_boostTex.Load("Asset/Textures/boost_bar.png");
+	m_reticleTex.Load("Asset/Textures/cross.png");
+
+	m_boostefk = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 0, 10, false).lock();
+	m_jumpefk = KdEffekseerManager::GetInstance().Play("jump/jump.efk", m_pos, m_worldRot, 0, 100, false).lock();
 
 	//初期状態を「待機状態」へ設定
 	ChangeActionState(std::make_shared<ActionIdle>());
@@ -88,6 +91,22 @@ void Player::PreUpdate()
 				if ((*it)->GetHandle() == (*efkit)->GetHandle())
 				{
 					KdEffekseerManager::GetInstance().SetWorldMatrix((*it)->GetHandle(), m_mWorld);
+				}
+				//ダッシュ終了時エフェクト停止、追加
+				if (m_boostefk->GetHandle() == (*efkit)->GetHandle())
+				{
+					if (m_boostendefkFlg)
+					{
+						KdEffekseerManager::GetInstance().StopEffect(m_boostefk->GetHandle());
+					}
+				}
+				//ジャンプ終了時エフェクト停止、追加
+				if (m_jumpefk->GetHandle() == (*efkit)->GetHandle())
+				{
+					if (!m_jumpFlg || m_overheatFlg)
+					{
+						KdEffekseerManager::GetInstance().StopEffect(m_jumpefk->GetHandle());
+					}
 				}
 				++it;
 			}
@@ -174,31 +193,51 @@ void Player::Update()
 	//ブーストエフェクト
 	if (m_stepFlg&&!m_overheatFlg)
 	{
-		static auto _spEffect = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 0, 10, false).lock();
-		if (_spEffect)
+		m_boostendefkFlg = false;
+		if (m_boostefk)
 		{
-			bool _playFlg = _spEffect->IsPlaying();
+			bool _playFlg = m_boostefk->IsPlaying();
 			if (!_playFlg)
 			{
-				_spEffect = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 1, 10, false).lock();
-				AddEffect(_spEffect);
+				m_boostefk = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 1, 1, false).lock();
+				AddEffect(m_boostefk);
 			}
 		}
+	}
+	else
+	{
+		if (!m_boostendefkFlg)
+		{
+			auto _spEffect = KdEffekseerManager::GetInstance().Play("boost/boostend.efk", m_pos, m_worldRot, 1, 1, false).lock();
+			AddEffect(_spEffect);
+		}
+		m_boostendefkFlg = true;
 	}
 
+	//ジャンプエフェクト
 	if(m_jumpefkFlg&&!m_overheatFlg)
 	{
-		static auto _spEffect = KdEffekseerManager::GetInstance().Play("jump/jump.efk", m_pos, m_worldRot, 0, 100, false).lock();
-		if (_spEffect)
+		m_jumpendefkFlg = false;
+		if (m_jumpefk)
 		{
-			bool _playFlg = _spEffect->IsPlaying();
+			bool _playFlg = m_jumpefk->IsPlaying();
 			if (!_playFlg)
 			{
-				_spEffect = KdEffekseerManager::GetInstance().Play("jump/jump.efk",m_pos, m_worldRot, 1, 5, false).lock();
-				AddEffect(_spEffect);
+				m_jumpefk = KdEffekseerManager::GetInstance().Play("jump/jump.efk",m_pos, m_worldRot, 1, 1, false).lock();
+				AddEffect(m_jumpefk);
 			}
 		}
 	}
+	else
+	{
+		if (!m_jumpendefkFlg)
+		{
+			auto _spEffect = KdEffekseerManager::GetInstance().Play("jump/jumpend.efk", m_pos, m_worldRot, 1, 1, false).lock();
+			AddEffect(_spEffect);
+		}
+		m_jumpendefkFlg = true;
+	}
+
 }
 
 //後更新
@@ -290,18 +329,49 @@ void Player::PostUpdate()
 //画像描画
 void Player::DrawSprite()
 {
-	m_boostbackRc = { 0,0,500,100 };
-	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostbackTex, 0, -300, 500, 100, &m_boostbackRc);
+	//ブーストゲージ関連
+	m_barbackRc = { 0,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_barbackTex, 0, -300, 450, 100, &m_barbackRc);
 
 	int boostbar;
-	boostbar = m_boostgauge * 0.625f;//←　画像幅の長さ（５００）・　ブーストゲージで求まる
-	m_boostRc = { 500 - boostbar,0,500,100 };
-	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostTex, 10, -300, 500, 100, &m_boostRc);
+	boostbar = m_boostgauge * 0.625f;//←　画像幅の長さ（５００）/　ブーストゲージで求まる
+	m_barRc = { 500 - boostbar,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostTex, 9, -300, 450, 100, &m_barRc);
 
-	m_boostbackRc = { 0,0,500,100 };
-	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostflontTex, 0, -300, 500, 100, &m_boostbackRc);
+	m_barbackRc = { 0,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_barflontTex, 0, -300, 450, 100, &m_barbackRc);
 
-	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_tex, 0, 0, 64, 64);
+
+
+	//HPゲージ関連
+	m_barbackRc = { 0,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_barbackTex, -450, -320, 300, 80, &m_barbackRc);
+
+	int hpbar;
+	hpbar = m_hp * 25.0f;//←　画像幅の長さ（５００）/　ブーストゲージで求まる
+	m_barRc = { 500 - hpbar,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostTex, -444, -320, 300, 80, &m_barRc);
+
+	m_barbackRc = { 0,0,500,100 };
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_barflontTex, -450, -320, 300, 80, &m_barbackRc);
+
+	{
+		//円形描画テスト用（消す）
+		KdTexture Tex;
+		Math::Rectangle Rect;
+		Math::Color Color;
+		float angle = 360.0f - m_hp * (270.0f / m_hpMax);
+		Tex.Load("Asset/Textures/test.png");
+		Color = { 1,1,1,1 };
+		Rect = { 0,0,128,128 };
+		KdShaderManager::Instance().m_spriteShader.DrawTexAnime(&Tex, -500, -250, 128, 128, angle, &Rect, &Color);
+	}
+
+
+	//レティクル
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_reticleTex, 0, 0, 64, 64);
+	
+
 }
 
 //imguiの更新
@@ -336,6 +406,12 @@ void Player::OnHit(const int _dmg)
 		m_destFlg = true;
 		m_isExpired = true;
 	}
+}
+
+void Player::CannonRecoil(const Math::Vector3 _dir,const float _str)
+{
+	Math::Vector3 _Dir = _dir;
+	m_velocity = m_velocity + (_Dir * _str);
 }
 
 //カメラから見た移動方向に向く処理

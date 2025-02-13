@@ -74,10 +74,12 @@ private:
 	std::weak_ptr<Player_Nuketube> m_wpNuketube;
 	Math::Matrix m_APNuketubeMat = {};
 
+	//射撃関係
 	const int m_Miniguncool = 5;
 	int m_Miniguncount = 0;
 	const int m_Cannoncool = 180;
 	int m_Cannoncount = 0;
+	const float m_recoilstr = 0.5f;
 
 
 //ステートパターン関係

@@ -86,6 +86,7 @@ public:
 	virtual const std::shared_ptr<KdModelWork> GetModel()const { return nullptr; }
 
 	virtual void OnHit(const int _dmg){}
+	virtual void CannonRecoil(const Math::Vector3 _dir,const float _str){}
 	virtual const  bool GetDestFlg()const { return false; }
 	virtual const bool GetSearchFlg()const { return false; }
 	virtual const float GetFloating()const { return 0.0f; }

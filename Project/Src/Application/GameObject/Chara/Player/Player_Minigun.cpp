@@ -1,6 +1,6 @@
 ﻿#include "Player_Minigun.h"
 #include"../../../Scene/SceneManager.h"
-#include"Application/main.h"
+#include"../../../main.h"
 #include"../../Camera/CameraBase.h"
 #include"../../Bullet/P_BulletM/P_BulletM.h"
 
@@ -25,11 +25,16 @@ void Player_Minigun::Init()
 	{
 		//blenderで作成したNULLポイントノードを探して取得
 		const KdModelWork::Node* _pNode = m_spModel->FindNode("APm_muzzle");
+		const KdModelWork::Node* _pNodeport = m_spModel->FindNode("AP_port");
 
 		//指定ノードが取得出来たら
 		if (_pNode)
 		{
 			m_localmuzzleMat = _pNode->m_worldTransform;
+		}
+		if (_pNodeport)
+		{
+			m_localportMat = _pNodeport->m_worldTransform;
 		}
 	}
 	//デバッグ用
@@ -77,7 +82,6 @@ void Player_Minigun::PreUpdate()
 				{
 					KdEffekseerManager::GetInstance().SetPos((*it)->GetHandle(), m_muzzlePos);
 					(*it)->SetPos(m_muzzlePos);
-					
 				}
 				++it;
 			}
@@ -108,6 +112,9 @@ void Player_Minigun::Update()
 	//銃口の座標を作成
 	Math::Matrix _muzzleMat = m_localmuzzleMat * GetMatrix();
 	m_muzzlePos = _muzzleMat.Translation();
+	//排莢口の座標を作成
+	Math::Matrix _portMat = m_localportMat * GetMatrix();
+	m_portPos = _portMat.Translation();
 	//銃口位置をデバッグ表示
 	/*if (!(GetAsyncKeyState('Q') & 0x8000))
 	{
@@ -371,6 +378,7 @@ void Player_Minigun::ActionShoting::Update(Player_Minigun& owner)
 			{
 				owner.AddEffect(_spEffect);
 			}
+			KdEffekseerManager::GetInstance().Play("cartridge/cartridge.efk", owner.m_portPos, owner.m_worldRot, 1, 1, false);
 		}
 		else
 		{

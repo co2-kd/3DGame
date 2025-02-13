@@ -10,6 +10,7 @@ public:
 	~Player_Cannon()			override	{}
 
 	void Init()				override;
+	void PreUpdate()		override;
 	void Update()			override;
 	void PostUpdate()		override;
 
@@ -29,6 +30,19 @@ public:
 	}
 
 	void ShotBullet();
+
+	//エフェクト関連
+	// オブジェクトリストを取得
+	const std::list<std::shared_ptr<KdEffekseerObject>>& GetEfkList()
+	{
+		return m_efkList;
+	}
+
+	// オブジェクトリストに追加
+	void AddEffect(const std::shared_ptr<KdEffekseerObject>& efk)
+	{
+		m_efkList.push_back(efk);
+	}
 
 private:
 
@@ -51,6 +65,9 @@ private:
 
 
 	bool m_shotFlg = false;
+
+	//エフェクト関連
+	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
 
 
 //ステートパターン関係

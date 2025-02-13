@@ -34,6 +34,10 @@ public:
 
 	void OnHit(const int _dmg)override;
 
+	void CannonRecoil(const Math::Vector3 _dir,const float _str)override;
+
+
+
 	//ゲッター
 	const Math::Matrix GetAPBatteryMatrix()const { return m_APBatteryMat; }//アタッチポイント
 	const float GetVeloLength()const override{ return m_velocity.Length(); }//現在の速度
@@ -63,12 +67,12 @@ private:
 	void UpdateJump();
 
 	KdTexture m_boostTex;
-	KdTexture m_boostbackTex;
-	KdTexture m_boostflontTex;
-	KdTexture m_tex;
+	KdTexture m_barbackTex;
+	KdTexture m_barflontTex;
+	KdTexture m_reticleTex;
 
-	Math::Rectangle m_boostRc;
-	Math::Rectangle m_boostbackRc;
+	Math::Rectangle m_barRc;
+	Math::Rectangle m_barbackRc;
 
 	Math::Matrix m_boostMat;
 
@@ -150,7 +154,15 @@ private:
 
 	//エフェクト関係
 	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
+
+	std::shared_ptr<KdEffekseerObject> m_boostefk;
+	std::shared_ptr<KdEffekseerObject> m_jumpefk;
+
+
+	bool m_boostendefkFlg = true;
 	bool m_jumpefkFlg = false;
+	bool m_jumpendefkFlg = true;
+
 
 //ステートパターン関係
 private:

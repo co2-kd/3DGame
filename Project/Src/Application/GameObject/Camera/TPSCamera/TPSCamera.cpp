@@ -6,7 +6,7 @@ void TPSCamera::Init()
 	CameraBase::Init();
 
 	// 注視点
-	m_mLocalPos = Math::Matrix::CreateTranslation(0, 1.8f, -5.0f);
+	m_mLocalPos = Math::Matrix::CreateTranslation(0, 3.1f, -5.0f);
 
 	SetCursorPos(m_FixMousePos.x, m_FixMousePos.y);
 }
@@ -58,7 +58,7 @@ void TPSCamera::PostUpdate()
 	m_LocalVeloLength = std::clamp(m_LocalVeloLength, m_OldLocalVeloLength - m_LocalVeloSpd, m_OldLocalVeloLength + m_LocalVeloSpd);
 
 
-	m_mLocalPos = Math::Matrix::CreateTranslation(0.0f, 1.8f - m_LocalFloating, -(5.0f + (m_LocalVeloLength * 3)));
+	m_mLocalPos = Math::Matrix::CreateTranslation(0.0f, 3.1f - m_LocalFloating, -(5.0f + (m_LocalVeloLength * 3)));
 	m_LocalVeloMat = Math::Matrix::CreateTranslation(-m_LocalPosVelo.x * 3.0f, 0.0f, -m_LocalPosVelo.z * 3.0f);
 	
 	//カメラの移動量を保存

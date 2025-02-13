@@ -61,9 +61,14 @@ private:
 	Math::Matrix m_localmuzzleMat;
 	Math::Vector3 m_muzzlePos;
 
+	//本体から排莢口へのローカル行列
+	Math::Matrix m_localportMat;
+	Math::Vector3 m_portPos;
+
 	bool m_shotFlg = false;
 	int m_handle;
 
+	//エフェクト関連
 	std::list<std::shared_ptr<KdEffekseerObject>> m_efkList;
 	
 

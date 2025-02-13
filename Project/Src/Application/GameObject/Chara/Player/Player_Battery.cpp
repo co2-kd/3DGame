@@ -124,6 +124,12 @@ void Player_Battery::Update()
 				_spCannon->ShotBullet();
 				//発射間隔
 				m_Cannoncount = m_Cannoncool;
+				//反動
+				const std::shared_ptr<KdGameObject> _spParent = m_wpParent.lock();
+				if (_spParent)
+				{
+					_spParent->CannonRecoil(-m_dir,m_recoilstr);
+				}
 			}
 		}
 	}
