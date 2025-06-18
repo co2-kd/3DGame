@@ -45,6 +45,7 @@ void Player::Init()
 	m_barbackTex.Load("Asset/Textures/bar_back.png");
 	m_barflontTex.Load("Asset/Textures/bar_flont.png");
 	m_boostTex.Load("Asset/Textures/boost_bar.png");
+	m_hpTex.Load("Asset/Textures/hp_bar.png");
 	m_reticleTex.Load("Asset/Textures/cross.png");
 
 	m_boostefk = KdEffekseerManager::GetInstance().Play("boost/boost.efk", m_pos, m_worldRot, 0, 10, false).lock();
@@ -350,7 +351,7 @@ void Player::DrawSprite()
 	int hpbar;
 	hpbar = m_hp * 25.0f;//←　画像幅の長さ（５００）/　ブーストゲージで求まる
 	m_barRc = { 500 - hpbar,0,500,100 };
-	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_boostTex, -444, -320, 300, 80, &m_barRc);
+	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_hpTex, -444, -320, 300, 80, &m_barRc);
 
 	m_barbackRc = { 0,0,500,100 };
 	KdShaderManager::Instance().m_spriteShader.DrawTex(&m_barflontTex, -450, -320, 300, 80, &m_barbackRc);

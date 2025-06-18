@@ -67,6 +67,7 @@ private:
 	void UpdateJump();
 
 	KdTexture m_boostTex;
+	KdTexture m_hpTex;
 	KdTexture m_barbackTex;
 	KdTexture m_barflontTex;
 	KdTexture m_reticleTex;
